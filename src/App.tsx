@@ -2914,7 +2914,6 @@ const TRANSLATIONS = {
     getHint: "GET A HINT ({used}/{max} used — lowers points)",
     noMoreHints: "NO MORE HINTS",
     fullTime: "FULL TIME",
-    pts: "PTS",
     niceReading: "Nice reading of the game.",
     playAgain: "PLAY AGAIN",
     changeMode: "CHANGE MODE",
@@ -2981,7 +2980,6 @@ const TRANSLATIONS = {
     getHint: "PEDIR DICA ({used}/{max} usadas — reduz pontos)",
     noMoreHints: "SEM MAIS DICAS",
     fullTime: "FIM DE JOGO",
-    pts: "PTS",
     niceReading: "Boa leitura de jogo.",
     playAgain: "JOGAR NOVAMENTE",
     changeMode: "TROCAR MODO",
@@ -3048,7 +3046,6 @@ const TRANSLATIONS = {
     getHint: "PEDIR PISTA ({used}/{max} usadas — reduce puntos)",
     noMoreHints: "SIN MÁS PISTAS",
     fullTime: "FIN DEL PARTIDO",
-    pts: "PTS",
     niceReading: "Buena lectura del partido.",
     playAgain: "JUGAR DE NUEVO",
     changeMode: "CAMBIAR MODO",
@@ -3068,6 +3065,13 @@ const TRANSLATIONS = {
 };
 
 // ============ HELPERS ============
+// Every correct answer is worth up to 10 points (never 0), scaled down by
+// how much time was left and, where relevant, how many hints were used -
+// so a full round of 10 questions always tops out at a simple 100.
+function questionScore(timeLeft, roundSeconds, hintFactor = 1) {
+  const timeFactor = 0.4 + 0.6 * Math.max(0, Math.min(1, timeLeft / roundSeconds));
+  return Math.max(1, Math.round(10 * timeFactor * hintFactor));
+}
 function shuffle(array) {
   const copy = [...array];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -3713,7 +3717,7 @@ export default function SoccerQuiz() {
     setAnswered(true);
     setFlipped(true);
     if (option === currentQuestion.answer) {
-      setScore((s) => s + 10 + cluesTimeLeft);
+      setScore((s) => s + questionScore(cluesTimeLeft, CLUES_ROUND_SECONDS));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3758,9 +3762,8 @@ export default function SoccerQuiz() {
     setLCorrect(correct);
     setLAnswered(true);
     if (correct) {
-      const base = 10 + lTimeLeft;
       const factor = HINT_SCORE_FACTORS[Math.min(hintsUsed, MAX_HINTS)];
-      setScore((s) => s + Math.round(base * factor));
+      setScore((s) => s + questionScore(lTimeLeft, LINEUP_ROUND_SECONDS, factor));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3804,9 +3807,8 @@ export default function SoccerQuiz() {
     setClubsCorrect(correct);
     setClubsAnswered(true);
     if (correct) {
-      const base = 10 + clubsTimeLeft;
       const factor = CLUBS_HINT_SCORE_FACTORS[Math.min(clubsHintsUsed, MAX_CLUBS_HINTS)];
-      setScore((s) => s + Math.round(base * factor));
+      setScore((s) => s + questionScore(clubsTimeLeft, CLUBS_ROUND_SECONDS, factor));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3848,7 +3850,7 @@ export default function SoccerQuiz() {
     setYearSelected(option);
     setYearAnswered(true);
     if (option === currentYearQuestion.answer) {
-      setScore((s) => s + 10 + yearTimeLeft);
+      setScore((s) => s + questionScore(yearTimeLeft, YEAR_ROUND_SECONDS));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3904,11 +3906,10 @@ export default function SoccerQuiz() {
     setRandomCorrect(correct);
     setRandomAnswered(true);
     if (correct) {
-      const base = 10 + randomTimeLeft;
       let factor = 1;
       if (item.kind === "lineup") factor = HINT_SCORE_FACTORS[Math.min(randomHintsUsed, MAX_HINTS)];
       if (item.kind === "clubs") factor = CLUBS_HINT_SCORE_FACTORS[Math.min(randomHintsUsed, MAX_CLUBS_HINTS)];
-      setScore((s) => s + Math.round(base * factor));
+      setScore((s) => s + questionScore(randomTimeLeft, timeForKind(item.kind), factor));
       playCorrectSound();
     } else {
       playWrongSound();
@@ -4435,7 +4436,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4539,7 +4540,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.lineupLabel}</div>
@@ -4713,7 +4714,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4828,7 +4829,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4929,7 +4930,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -5274,9 +5275,9 @@ export default function SoccerQuiz() {
         <div style={styles.centerCol}>
           <div style={styles.eyebrow}>{t.fullTime}</div>
           <div className="trophyGlow" style={styles.trophyEmoji}>
-            {score >= 400 ? "🏆" : score >= 200 ? "⚽" : "🎯"}
+            {score >= 80 ? "🏆" : score >= 50 ? "⚽" : "🎯"}
           </div>
-          <h1 className="fadeInUp" style={styles.title}>{score} {t.pts}</h1>
+          <h1 className="fadeInUp" style={styles.title}>{score}/100</h1>
           <p style={styles.subtitle}>{t.niceReading}</p>
 
           <button style={styles.primaryBtn} onClick={playAgain}>
