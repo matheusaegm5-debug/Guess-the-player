@@ -3121,7 +3121,7 @@ function GearIcon() {
 function GlobeIcon() {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <circle cx="32" cy="32" r="24" fill="#F7F5EE" />
+      <circle cx="32" cy="32" r="24" fill="#FFFFFF" />
       <path
         d="M22 16c-3 5-3 14 0 19s6 9 4 16c-6-2-11-8-13-16-2-9 2-16 9-19z"
         fill="#2FA84F"
@@ -3132,7 +3132,7 @@ function GlobeIcon() {
       />
       <path
         d="M32 8v48M8 32h48M12 18c8 6 32 6 40 0M12 46c8-6 32-6 40 0"
-        stroke="#0B5C27"
+        stroke="#0B6F27"
         strokeWidth="1.4"
         fill="none"
         opacity="0.35"
@@ -3143,12 +3143,12 @@ function GlobeIcon() {
 function FlagIcon() {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <rect x="9" y="15" width="46" height="34" rx="6" fill="#0B5C27" />
-      <polygon points="32,20 50,32 32,44 14,32" fill="#FFC94D" />
+      <rect x="9" y="15" width="46" height="34" rx="6" fill="#0B6F27" />
+      <polygon points="32,20 50,32 32,44 14,32" fill="#F4C542" />
       <circle cx="32" cy="32" r="8" fill="#173F8A" />
       <path
         d="M25 30a9 9 0 0114 0"
-        stroke="#F7F5EE"
+        stroke="#FFFFFF"
         strokeWidth="1.6"
         fill="none"
       />
@@ -3158,15 +3158,15 @@ function FlagIcon() {
 function PersonQuestionIcon() {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <path d="M12 54c2-11 9.5-17 20-17s18 6 20 17" fill="#F7F5EE" />
-      <circle cx="32" cy="24" r="12" fill="#F7F5EE" />
-      <circle cx="44" cy="46" r="11" fill="#FFC94D" />
+      <path d="M12 54c2-11 9.5-17 20-17s18 6 20 17" fill="#FFFFFF" />
+      <circle cx="32" cy="24" r="12" fill="#FFFFFF" />
+      <circle cx="44" cy="46" r="11" fill="#F4C542" />
       <text
         x="44"
         y="51"
         fontSize="15"
         textAnchor="middle"
-        fill="#0B5C27"
+        fill="#0B6F27"
         fontFamily="Oswald, sans-serif"
         fontWeight="700"
       >
@@ -3185,15 +3185,15 @@ function XIIcon() {
         height="40"
         rx="6"
         fill="none"
-        stroke="#F7F5EE"
+        stroke="#FFFFFF"
         strokeWidth="2.4"
       />
-      <line x1="12" y1="32" x2="52" y2="32" stroke="#F7F5EE" strokeWidth="2.4" />
-      <circle cx="32" cy="32" r="7" fill="none" stroke="#F7F5EE" strokeWidth="2.4" />
-      <circle cx="20" cy="42" r="3.2" fill="#FFC94D" />
-      <circle cx="32" cy="46" r="3.2" fill="#FFC94D" />
-      <circle cx="44" cy="42" r="3.2" fill="#FFC94D" />
-      <circle cx="32" cy="19" r="3.2" fill="#FFC94D" />
+      <line x1="12" y1="32" x2="52" y2="32" stroke="#FFFFFF" strokeWidth="2.4" />
+      <circle cx="32" cy="32" r="7" fill="none" stroke="#FFFFFF" strokeWidth="2.4" />
+      <circle cx="20" cy="42" r="3.2" fill="#F4C542" />
+      <circle cx="32" cy="46" r="3.2" fill="#F4C542" />
+      <circle cx="44" cy="42" r="3.2" fill="#F4C542" />
+      <circle cx="32" cy="19" r="3.2" fill="#F4C542" />
     </svg>
   );
 }
@@ -3202,16 +3202,16 @@ function ShirtIcon() {
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
       <path
         d="M22 8L10 16l4 9 6-3v33h24V22l6 3 4-9L42 8l-6 5H28l-6-5z"
-        fill="#F7F5EE"
+        fill="#FFFFFF"
       />
-      <rect x="26" y="10" width="12" height="5" rx="2.5" fill="#0B5C27" />
-      <circle cx="32" cy="34" r="7" fill="#FFC94D" />
+      <rect x="26" y="10" width="12" height="5" rx="2.5" fill="#0B6F27" />
+      <circle cx="32" cy="34" r="7" fill="#F4C542" />
       <text
         x="32"
         y="39"
         fontSize="10"
         textAnchor="middle"
-        fill="#0B5C27"
+        fill="#0B6F27"
         fontFamily="Oswald, sans-serif"
         fontWeight="700"
       >
@@ -3223,31 +3223,31 @@ function ShirtIcon() {
 function CalendarIcon() {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <rect x="20" y="6" width="6" height="14" rx="3" fill="#0B5C27" />
-      <rect x="38" y="6" width="6" height="14" rx="3" fill="#0B5C27" />
-      <rect x="9" y="13" width="46" height="45" rx="9" fill="#F7F5EE" />
-      <rect x="9" y="13" width="46" height="16" rx="9" fill="#0B5C27" />
-      <rect x="9" y="22" width="46" height="7" fill="#0B5C27" />
-      <g fill="#BFE7C9">
+      <rect x="20" y="6" width="6" height="14" rx="3" fill="#0B6F27" />
+      <rect x="38" y="6" width="6" height="14" rx="3" fill="#0B6F27" />
+      <rect x="9" y="13" width="46" height="45" rx="9" fill="#FFFFFF" />
+      <rect x="9" y="13" width="46" height="16" rx="9" fill="#0B6F27" />
+      <rect x="9" y="22" width="46" height="7" fill="#0B6F27" />
+      <g fill="rgba(255,255,255,0.4)">
         <rect x="16" y="34" width="9" height="8" rx="2" />
         <rect x="27.5" y="34" width="9" height="8" rx="2" />
         <rect x="16" y="45" width="9" height="8" rx="2" />
       </g>
-      <rect x="39" y="34" width="9" height="19" rx="2" fill="#FFC94D" />
-      <rect x="27.5" y="45" width="9" height="8" rx="2" fill="#BFE7C9" />
+      <rect x="39" y="34" width="9" height="19" rx="2" fill="#F4C542" />
+      <rect x="27.5" y="45" width="9" height="8" rx="2" fill="rgba(255,255,255,0.4)" />
     </svg>
   );
 }
 function DiceIcon() {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <rect x="20" y="20" width="34" height="34" rx="8" fill="#0B5C27" opacity="0.35" />
-      <rect x="10" y="10" width="34" height="34" rx="8" fill="#F7F5EE" />
-      <circle cx="19" cy="19" r="3.2" fill="#0B5C27" />
-      <circle cx="35" cy="19" r="3.2" fill="#0B5C27" />
-      <circle cx="19" cy="35" r="3.2" fill="#0B5C27" />
-      <circle cx="35" cy="35" r="3.2" fill="#0B5C27" />
-      <circle cx="27" cy="27" r="3.2" fill="#FFC94D" />
+      <rect x="20" y="20" width="34" height="34" rx="8" fill="#0B6F27" opacity="0.35" />
+      <rect x="10" y="10" width="34" height="34" rx="8" fill="#FFFFFF" />
+      <circle cx="19" cy="19" r="3.2" fill="#0B6F27" />
+      <circle cx="35" cy="19" r="3.2" fill="#0B6F27" />
+      <circle cx="19" cy="35" r="3.2" fill="#0B6F27" />
+      <circle cx="35" cy="35" r="3.2" fill="#0B6F27" />
+      <circle cx="27" cy="27" r="3.2" fill="#F4C542" />
     </svg>
   );
 }
@@ -5037,7 +5037,7 @@ export default function SoccerQuiz() {
 }
 
 const fontImport = `
-  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800;900&family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap');
 
   @keyframes correctPulse {
     0% { transform: scale(1); }
@@ -5224,7 +5224,7 @@ const styles = {
     opacity: 0.5,
   },
   lightEyebrow: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontWeight: 500,
     fontSize: "clamp(13px, 3.6vw, 16px)",
     letterSpacing: "7px",
@@ -5376,7 +5376,7 @@ const styles = {
     width: 132,
     height: 132,
     borderRadius: "50%",
-    background: "linear-gradient(160deg, #1E8F45 0%, #0B5C27 100%)",
+    background: "linear-gradient(180deg, #22C744 0%, #159533 48%, #0B6F27 100%)",
     boxShadow:
       "inset 0 -8px 12px rgba(0,0,0,0.18), inset 0 3px 5px rgba(255,255,255,0.22)",
     display: "flex",
@@ -5490,7 +5490,7 @@ const styles = {
     border: "1px solid #0B6F27",
   },
   eyebrow: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     letterSpacing: "0.3em",
     fontSize: 13,
     color: "#0B6F27",
