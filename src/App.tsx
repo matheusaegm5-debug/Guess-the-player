@@ -3105,7 +3105,7 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
-const CARD_ACCENT = { solid: "#1CB0F6", dark: "#0A91D1" };
+const CARD_ACCENT = { solid: "#22C744", dark: "#0B6F27" };
 const MODE_ACCENTS = {
   clues: CARD_ACCENT,
   lineup: CARD_ACCENT,
