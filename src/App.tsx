@@ -3105,14 +3105,15 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
+const GREEN_ACCENT = { solid: "#22C744", dark: "#0B6F27" };
 const MODE_ACCENTS = {
-  clues: { solid: "#1CB0F6", dark: "#0A91D1" },
-  lineup: { solid: "#CE82FF", dark: "#A659E0" },
-  clubs: { solid: "#FF9600", dark: "#E07C00" },
-  year: { solid: "#FF4B4B", dark: "#E23636" },
-  random: { solid: "#58CC02", dark: "#46A302" },
-  mundo: { solid: "#00C2B8", dark: "#009C94" },
-  brasil: { solid: "#FFC94D", dark: "#E0A82E" },
+  clues: GREEN_ACCENT,
+  lineup: GREEN_ACCENT,
+  clubs: GREEN_ACCENT,
+  year: GREEN_ACCENT,
+  random: GREEN_ACCENT,
+  mundo: GREEN_ACCENT,
+  brasil: GREEN_ACCENT,
 };
 
 function GearIcon() {
