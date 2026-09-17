@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import heroBanner from "./assets/hero-banner.webp";
-import iconMundo from "./assets/icons/icon-mundo.webp";
-import iconBrasil from "./assets/icons/icon-brasil.webp";
-import iconClues from "./assets/icons/icon-clues.webp";
-import iconLineup from "./assets/icons/icon-lineup.webp";
-import iconClubes from "./assets/icons/icon-clubes.webp";
-import iconAno from "./assets/icons/icon-ano.webp";
-import iconRandom from "./assets/icons/icon-random.webp";
 
 // ============ CLUES MODE DATA ============
 // clues are provided per language; options/answer are proper names (language-agnostic)
@@ -3850,14 +3843,14 @@ export default function SoccerQuiz() {
             {lang === "pt" ? (
               <>
                 <LightCard
-                  iconImage={iconMundo}
+                  icon={<GlobeIcon />}
                   title="🌍 Mundo"
                   desc="Craques e clubes históricos do futebol internacional — pistas, escalações de grandes finais e clubes por onde cada jogador passou."
                   cta="ENTRAR"
                   onClick={() => setScreen("worldModes")}
                 />
                 <LightCard
-                  iconImage={iconBrasil}
+                  icon={<FlagIcon />}
                   title="🇧🇷 Brasil"
                   desc="Ídolos e clubes do futebol brasileiro — de craques históricos como Pelé a escalações de grandes títulos deste século."
                   cta="ENTRAR"
@@ -3867,36 +3860,35 @@ export default function SoccerQuiz() {
             ) : (
               <>
                 <LightCard
-                  iconImage={iconClues}
+                  icon={<PersonQuestionIcon />}
                   title={t.cluesModeTitle}
                   desc={t.cluesModeDesc}
                   cta={t.playClues}
                   onClick={() => startClues(QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage={iconLineup}
+                  icon={<XIIcon />}
                   title={t.lineupModeTitle}
                   desc={t.lineupModeDesc}
                   cta={t.playLineup}
                   onClick={() => startLineup(LINEUP_POOL)}
                 />
                 <LightCard
-                  iconImage={iconClubes}
+                  icon={<ShirtIcon />}
                   title={t.clubsModeTitle}
                   desc={t.clubsModeDesc}
                   cta={t.playClubsMode}
                   onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage={iconAno}
-                  imageScale={1.35}
+                  icon={<CalendarIcon />}
                   title={t.yearModeTitle}
                   desc={t.yearModeDesc}
                   cta={t.playYearMode}
                   onClick={() => startYearMode(YEAR_QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage={iconRandom}
+                  icon={<DiceIcon />}
                   title={t.randomModeTitle}
                   desc={t.randomModeDesc}
                   cta={t.playRandomMode}
@@ -3960,36 +3952,35 @@ export default function SoccerQuiz() {
 
           <div className="gtpModeGrid">
             <LightCard
-              iconImage={iconClues}
+              icon={<PersonQuestionIcon />}
               title={t.cluesModeTitle}
               desc={t.cluesModeDesc}
               cta={t.playClues}
               onClick={() => startClues(QUESTION_POOL)}
             />
             <LightCard
-              iconImage={iconLineup}
+              icon={<XIIcon />}
               title={t.lineupModeTitle}
               desc={t.lineupModeDesc}
               cta={t.playLineup}
               onClick={() => startLineup(LINEUP_POOL)}
             />
             <LightCard
-              iconImage={iconClubes}
+              icon={<ShirtIcon />}
               title={t.clubsModeTitle}
               desc={t.clubsModeDesc}
               cta={t.playClubsMode}
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
             />
             <LightCard
-              iconImage={iconAno}
-              imageScale={1.35}
+              icon={<CalendarIcon />}
               title={t.yearModeTitle}
               desc={t.yearModeDesc}
               cta={t.playYearMode}
               onClick={() => startYearMode(YEAR_QUESTION_POOL)}
             />
             <LightCard
-              iconImage={iconRandom}
+              icon={<DiceIcon />}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
@@ -4053,36 +4044,35 @@ export default function SoccerQuiz() {
 
           <div className="gtpModeGrid">
             <LightCard
-              iconImage={iconClues}
+              icon={<PersonQuestionIcon />}
               title="Modo Pistas"
               desc="Craques do futebol brasileiro, de Pelé a Marta. Leia três pistas e escolha o nome certo entre quatro opções."
               cta="JOGAR MODO PISTAS"
               onClick={() => startClues(BRAZIL_QUESTION_POOL)}
             />
             <LightCard
-              iconImage={iconLineup}
+              icon={<XIIcon />}
               title="Modo Escalação"
               desc="A escalação de um grande clube brasileiro deste século — falta um jogador. Digite o nome para completar. Até 3 dicas opcionais, mas cada uma reduz os pontos que você pode ganhar."
               cta="JOGAR MODO ESCALAÇÃO"
               onClick={() => startLineup(BRAZIL_LINEUP_POOL)}
             />
             <LightCard
-              iconImage={iconAno}
-              imageScale={1.35}
+              icon={<CalendarIcon />}
               title="Modo Ano"
               desc="Leia um fato marcante do futebol brasileiro e adivinhe em que ano ele aconteceu, entre quatro opções."
               cta="JOGAR MODO ANO"
               onClick={() => startYearMode(BRAZIL_YEAR_QUESTION_POOL)}
             />
             <LightCard
-              iconImage={iconClubes}
+              icon={<ShirtIcon />}
               title="Modo Clubes"
               desc="Veja os clubes de craques brasileiros e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar."
               cta="JOGAR MODO CLUBES"
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL_BRAZIL)}
             />
             <LightCard
-              iconImage={iconRandom}
+              icon={<DiceIcon />}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
