@@ -2885,6 +2885,12 @@ const TRANSLATIONS = {
     randomModeDesc: "A mix of all four modes — clues, lineups, clubs, and years — in one 10-question game.",
     playRandomMode: "PLAY RANDOM MODE",
     playYearMode: "PLAY YEAR MODE",
+    multiplayerTitle: "Multiplayer",
+    multiplayerDesc: "Challenge a friend to a live 1v1 duel. Coming soon.",
+    multiplayerCta: "COMING SOON",
+    multiplayerComingTitle: "1V1 DUELS",
+    multiplayerComingDesc:
+      "Live head-to-head matches, a ranked ladder, and a global leaderboard are in the works. Keep playing to sharpen your football knowledge in the meantime!",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -2941,6 +2947,12 @@ const TRANSLATIONS = {
     randomModeDesc: "Uma mistura dos quatro modos — pistas, escalações, clubes e anos — em uma partida de 10 perguntas.",
     playRandomMode: "JOGAR MODO ALEATÓRIO",
     playYearMode: "JOGAR MODO ANO",
+    multiplayerTitle: "Multiplayer",
+    multiplayerDesc: "Desafie um amigo num duelo 1x1 ao vivo. Em breve.",
+    multiplayerCta: "EM BREVE",
+    multiplayerComingTitle: "DUELOS 1X1",
+    multiplayerComingDesc:
+      "Partidas ao vivo contra outros jogadores, ranking e um placar global estão em desenvolvimento. Enquanto isso, continue jogando pra afiar seu conhecimento de futebol!",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -2997,6 +3009,12 @@ const TRANSLATIONS = {
     randomModeDesc: "Una mezcla de los cuatro modos — pistas, alineaciones, clubes y años — en una partida de 10 preguntas.",
     playRandomMode: "JUGAR MODO ALEATORIO",
     playYearMode: "JUGAR MODO AÑO",
+    multiplayerTitle: "Multijugador",
+    multiplayerDesc: "Desafía a un amigo a un duelo 1v1 en vivo. Próximamente.",
+    multiplayerCta: "PRÓXIMAMENTE",
+    multiplayerComingTitle: "DUELOS 1V1",
+    multiplayerComingDesc:
+      "Partidas en vivo contra otros jugadores, ranking y una tabla global están en desarrollo. ¡Mientras tanto, sigue jugando para afinar tu conocimiento de fútbol!",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3107,6 +3125,7 @@ const MODE_ACCENTS = {
   random: { solid: "#00C2B8", dark: "#009C94" },
   mundo: { solid: "#1CB0F6", dark: "#0A91D1" },
   brasil: { solid: "#FFC94D", dark: "#E0A82E" },
+  multiplayer: { solid: "#AAB4BE", dark: "#818C97" },
 };
 
 function GearIcon() {
@@ -3252,6 +3271,28 @@ function DiceIcon({ accent = "#0B6F27" }) {
       <circle cx="19" cy="35" r="3.4" fill={accent} />
       <circle cx="35" cy="35" r="3.4" fill={accent} />
       <circle cx="27" cy="27" r="3.4" fill={accent} />
+    </svg>
+  );
+}
+function VersusIcon({ accent = "#0B6F27" }) {
+  return (
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <circle cx="17" cy="20" r="9" fill="#FFFFFF" />
+      <path d="M2 54c1.5-9 7-14 15-14s13.5 5 15 14" fill="#FFFFFF" />
+      <circle cx="47" cy="20" r="9" fill="#FFFFFF" opacity="0.75" />
+      <path d="M32 54c1.5-9 7-14 15-14s13.5 5 15 14" fill="#FFFFFF" opacity="0.75" />
+      <circle cx="32" cy="34" r="11" fill={accent} />
+      <text
+        x="32"
+        y="39"
+        fontSize="11"
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontFamily="Baloo 2, sans-serif"
+        fontWeight="700"
+      >
+        VS
+      </text>
     </svg>
   );
 }
@@ -3865,6 +3906,7 @@ export default function SoccerQuiz() {
           "brazilModes",
           "settings",
           "roundEnd",
+          "multiplayer",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -3882,6 +3924,7 @@ export default function SoccerQuiz() {
         "brazilModes",
         "settings",
         "roundEnd",
+        "multiplayer",
       ].includes(screen) && <div style={styles.turfOverlay} />}
 
       {screen === "start" && (
@@ -3928,6 +3971,14 @@ export default function SoccerQuiz() {
 
 
           <div className="gtpModeGrid">
+            <LightCard
+              icon={<VersusIcon accent={MODE_ACCENTS.multiplayer.dark} />}
+              accent={MODE_ACCENTS.multiplayer}
+              title={t.multiplayerTitle}
+              desc={t.multiplayerDesc}
+              cta={t.multiplayerCta}
+              onClick={() => setScreen("multiplayer")}
+            />
             {lang === "pt" ? (
               <>
                 <LightCard
@@ -4169,6 +4220,45 @@ export default function SoccerQuiz() {
               cta={t.playRandomMode}
               onClick={() => startRandomMode(true)}
             />
+          </div>
+
+          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
+            {t.menu}
+          </button>
+        </div>
+      )}
+
+      {screen === "multiplayer" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
+            <button
+              style={{ ...styles.lightIconBtn, fontSize: 22, color: "#101820" }}
+              onClick={() => setScreen("start")}
+              aria-label={t.menu}
+            >
+              ‹
+            </button>
+          </div>
+
+          <div style={styles.comingSoonWrap}>
+            <div
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 148,
+                height: 148,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -8px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <VersusIcon accent={MODE_ACCENTS.multiplayer.dark} />
+            </div>
+            <span style={styles.comingSoonBadge}>{t.multiplayerCta}</span>
+            <h1 style={{ ...styles.lightTitle, fontSize: "clamp(28px, 8vw, 44px)" }}>
+              {t.multiplayerComingTitle}
+            </h1>
+            <p style={{ ...styles.lightSubtitle, maxWidth: 340 }}>
+              {t.multiplayerComingDesc}
+            </p>
           </div>
 
           <button style={styles.menuBtn} onClick={() => setScreen("start")}>
@@ -5593,6 +5683,24 @@ const styles = {
     fontSize: 12.5,
     fontWeight: 700,
     letterSpacing: "0.03em",
+  },
+  comingSoonWrap: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    gap: 14,
+    padding: "40px 16px 48px",
+  },
+  comingSoonBadge: {
+    fontFamily: "'Oswald', sans-serif",
+    fontWeight: 700,
+    fontSize: 12,
+    letterSpacing: "0.08em",
+    color: "#FFFFFF",
+    background: "#AAB4BE",
+    padding: "6px 16px",
+    borderRadius: 999,
   },
   menuBtn: {
     fontFamily: "'Inter', sans-serif",
