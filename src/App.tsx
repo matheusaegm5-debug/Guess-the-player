@@ -3105,6 +3105,16 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
+const MODE_ACCENTS = {
+  clues: { solid: "#1CB0F6", dark: "#0A91D1" },
+  lineup: { solid: "#CE82FF", dark: "#A659E0" },
+  clubs: { solid: "#FF9600", dark: "#E07C00" },
+  year: { solid: "#FF4B4B", dark: "#E23636" },
+  random: { solid: "#58CC02", dark: "#46A302" },
+  mundo: { solid: "#00C2B8", dark: "#009C94" },
+  brasil: { solid: "#FFC94D", dark: "#E0A82E" },
+};
+
 function GearIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -3118,21 +3128,21 @@ function GearIcon() {
     </svg>
   );
 }
-function GlobeIcon() {
+function GlobeIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
       <circle cx="32" cy="32" r="24" fill="#FFFFFF" />
       <path
         d="M22 16c-3 5-3 14 0 19s6 9 4 16c-6-2-11-8-13-16-2-9 2-16 9-19z"
-        fill="#2FA84F"
+        fill={accent}
       />
       <path
         d="M42 20c3 4 4 10 1 15-2 4-1 9 2 12 4-3 7-9 6-15-1-6-5-10-9-12z"
-        fill="#2FA84F"
+        fill={accent}
       />
       <path
         d="M32 8v48M8 32h48M12 18c8 6 32 6 40 0M12 46c8-6 32-6 40 0"
-        stroke="#0B6F27"
+        stroke={accent}
         strokeWidth="1.4"
         fill="none"
         opacity="0.35"
@@ -3155,19 +3165,19 @@ function FlagIcon() {
     </svg>
   );
 }
-function PersonQuestionIcon() {
+function PersonQuestionIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
       <path d="M12 54c2-11 9.5-17 20-17s18 6 20 17" fill="#FFFFFF" />
       <circle cx="32" cy="24" r="12" fill="#FFFFFF" />
-      <circle cx="44" cy="46" r="11" fill="#F4C542" />
+      <circle cx="44" cy="46" r="11" fill={accent} />
       <text
         x="44"
         y="51"
         fontSize="15"
         textAnchor="middle"
-        fill="#0B6F27"
-        fontFamily="Oswald, sans-serif"
+        fill="#FFFFFF"
+        fontFamily="Baloo 2, sans-serif"
         fontWeight="700"
       >
         ?
@@ -3175,7 +3185,7 @@ function PersonQuestionIcon() {
     </svg>
   );
 }
-function XIIcon() {
+function XIIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
       <rect
@@ -3190,29 +3200,29 @@ function XIIcon() {
       />
       <line x1="12" y1="32" x2="52" y2="32" stroke="#FFFFFF" strokeWidth="2.4" />
       <circle cx="32" cy="32" r="7" fill="none" stroke="#FFFFFF" strokeWidth="2.4" />
-      <circle cx="20" cy="42" r="3.2" fill="#F4C542" />
-      <circle cx="32" cy="46" r="3.2" fill="#F4C542" />
-      <circle cx="44" cy="42" r="3.2" fill="#F4C542" />
-      <circle cx="32" cy="19" r="3.2" fill="#F4C542" />
+      <circle cx="20" cy="42" r="3.4" fill={accent} />
+      <circle cx="32" cy="46" r="3.4" fill={accent} />
+      <circle cx="44" cy="42" r="3.4" fill={accent} />
+      <circle cx="32" cy="19" r="3.4" fill={accent} />
     </svg>
   );
 }
-function ShirtIcon() {
+function ShirtIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
       <path
         d="M22 8L10 16l4 9 6-3v33h24V22l6 3 4-9L42 8l-6 5H28l-6-5z"
         fill="#FFFFFF"
       />
-      <rect x="26" y="10" width="12" height="5" rx="2.5" fill="#0B6F27" />
-      <circle cx="32" cy="34" r="7" fill="#F4C542" />
+      <rect x="26" y="10" width="12" height="5" rx="2.5" fill={accent} />
+      <circle cx="32" cy="34" r="7" fill={accent} />
       <text
         x="32"
         y="39"
         fontSize="10"
         textAnchor="middle"
-        fill="#0B6F27"
-        fontFamily="Oswald, sans-serif"
+        fill="#FFFFFF"
+        fontFamily="Baloo 2, sans-serif"
         fontWeight="700"
       >
         ?
@@ -3220,40 +3230,49 @@ function ShirtIcon() {
     </svg>
   );
 }
-function CalendarIcon() {
+function CalendarIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <rect x="20" y="6" width="6" height="14" rx="3" fill="#0B6F27" />
-      <rect x="38" y="6" width="6" height="14" rx="3" fill="#0B6F27" />
+      <rect x="20" y="6" width="6" height="14" rx="3" fill={accent} />
+      <rect x="38" y="6" width="6" height="14" rx="3" fill={accent} />
       <rect x="9" y="13" width="46" height="45" rx="9" fill="#FFFFFF" />
-      <rect x="9" y="13" width="46" height="16" rx="9" fill="#0B6F27" />
-      <rect x="9" y="22" width="46" height="7" fill="#0B6F27" />
+      <rect x="9" y="13" width="46" height="16" rx="9" fill={accent} />
+      <rect x="9" y="22" width="46" height="7" fill={accent} />
       <g fill="rgba(255,255,255,0.4)">
         <rect x="16" y="34" width="9" height="8" rx="2" />
         <rect x="27.5" y="34" width="9" height="8" rx="2" />
         <rect x="16" y="45" width="9" height="8" rx="2" />
       </g>
-      <rect x="39" y="34" width="9" height="19" rx="2" fill="#F4C542" />
+      <rect x="39" y="34" width="9" height="19" rx="2" fill={accent} />
       <rect x="27.5" y="45" width="9" height="8" rx="2" fill="rgba(255,255,255,0.4)" />
     </svg>
   );
 }
-function DiceIcon() {
+function DiceIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
-      <rect x="20" y="20" width="34" height="34" rx="8" fill="#0B6F27" opacity="0.35" />
+      <rect x="20" y="20" width="34" height="34" rx="8" fill="#FFFFFF" opacity="0.35" />
       <rect x="10" y="10" width="34" height="34" rx="8" fill="#FFFFFF" />
-      <circle cx="19" cy="19" r="3.2" fill="#0B6F27" />
-      <circle cx="35" cy="19" r="3.2" fill="#0B6F27" />
-      <circle cx="19" cy="35" r="3.2" fill="#0B6F27" />
-      <circle cx="35" cy="35" r="3.2" fill="#0B6F27" />
-      <circle cx="27" cy="27" r="3.2" fill="#F4C542" />
+      <circle cx="19" cy="19" r="3.4" fill={accent} />
+      <circle cx="35" cy="19" r="3.4" fill={accent} />
+      <circle cx="19" cy="35" r="3.4" fill={accent} />
+      <circle cx="35" cy="35" r="3.4" fill={accent} />
+      <circle cx="27" cy="27" r="3.4" fill={accent} />
     </svg>
   );
 }
-function LightCard({ icon, iconImage, imageScale, title, desc, cta, onClick }) {
+function LightCard({
+  icon,
+  iconImage,
+  imageScale,
+  title,
+  desc,
+  cta,
+  onClick,
+  accent = MODE_ACCENTS.random,
+}) {
   return (
-    <div style={styles.lightCard}>
+    <div style={{ ...styles.lightCard, borderColor: `${accent.solid}33` }}>
       <div style={styles.lightCardIconCircle}>
         {iconImage ? (
           <img
@@ -3265,17 +3284,34 @@ function LightCard({ icon, iconImage, imageScale, title, desc, cta, onClick }) {
             }}
           />
         ) : (
-          <div style={styles.lightCardIconBadge}>{icon}</div>
+          <div
+            style={{
+              ...styles.lightCardIconBadge,
+              background: accent.solid,
+              boxShadow: `inset 0 -7px 0 ${accent.dark}`,
+            }}
+          >
+            {icon}
+          </div>
         )}
       </div>
       <div style={styles.lightCardBody}>
         <div style={styles.lightCardTitleRow}>
           <div style={styles.lightCardTitle}>{title}</div>
-          <span style={styles.lightCardChevron}>›</span>
+          <span style={{ ...styles.lightCardChevron, color: accent.dark }}>
+            ›
+          </span>
         </div>
         <p style={styles.lightCardDesc}>{desc}</p>
-        <button style={styles.lightCardBtn} onClick={onClick}>
-          <span style={styles.lightCardBtnLabel}>{cta}</span>
+        <button
+          style={{
+            ...styles.lightCardBtn,
+            background: accent.solid,
+            boxShadow: `0 4px 0 ${accent.dark}`,
+          }}
+          onClick={onClick}
+        >
+          {cta}
         </button>
       </div>
     </div>
@@ -3901,7 +3937,8 @@ export default function SoccerQuiz() {
             {lang === "pt" ? (
               <>
                 <LightCard
-                  icon={<GlobeIcon />}
+                  icon={<GlobeIcon accent={MODE_ACCENTS.mundo.dark} />}
+                  accent={MODE_ACCENTS.mundo}
                   title="🌍 Mundo"
                   desc="Craques e clubes históricos do futebol internacional — pistas, escalações de grandes finais e clubes por onde cada jogador passou."
                   cta="ENTRAR"
@@ -3909,6 +3946,7 @@ export default function SoccerQuiz() {
                 />
                 <LightCard
                   icon={<FlagIcon />}
+                  accent={MODE_ACCENTS.brasil}
                   title="🇧🇷 Brasil"
                   desc="Ídolos e clubes do futebol brasileiro — de craques históricos como Pelé a escalações de grandes títulos deste século."
                   cta="ENTRAR"
@@ -3918,35 +3956,40 @@ export default function SoccerQuiz() {
             ) : (
               <>
                 <LightCard
-                  icon={<PersonQuestionIcon />}
+                  icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+              accent={MODE_ACCENTS.clues}
                   title={t.cluesModeTitle}
                   desc={t.cluesModeDesc}
                   cta={t.playClues}
                   onClick={() => startClues(QUESTION_POOL)}
                 />
                 <LightCard
-                  icon={<XIIcon />}
+                  icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+              accent={MODE_ACCENTS.lineup}
                   title={t.lineupModeTitle}
                   desc={t.lineupModeDesc}
                   cta={t.playLineup}
                   onClick={() => startLineup(LINEUP_POOL)}
                 />
                 <LightCard
-                  icon={<ShirtIcon />}
+                  icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+              accent={MODE_ACCENTS.clubs}
                   title={t.clubsModeTitle}
                   desc={t.clubsModeDesc}
                   cta={t.playClubsMode}
                   onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
                 />
                 <LightCard
-                  icon={<CalendarIcon />}
+                  icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+              accent={MODE_ACCENTS.year}
                   title={t.yearModeTitle}
                   desc={t.yearModeDesc}
                   cta={t.playYearMode}
                   onClick={() => startYearMode(YEAR_QUESTION_POOL)}
                 />
                 <LightCard
-                  icon={<DiceIcon />}
+                  icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+              accent={MODE_ACCENTS.random}
                   title={t.randomModeTitle}
                   desc={t.randomModeDesc}
                   cta={t.playRandomMode}
@@ -4003,35 +4046,40 @@ export default function SoccerQuiz() {
 
           <div className="gtpModeGrid">
             <LightCard
-              icon={<PersonQuestionIcon />}
+              icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+              accent={MODE_ACCENTS.clues}
               title={t.cluesModeTitle}
               desc={t.cluesModeDesc}
               cta={t.playClues}
               onClick={() => startClues(QUESTION_POOL)}
             />
             <LightCard
-              icon={<XIIcon />}
+              icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+              accent={MODE_ACCENTS.lineup}
               title={t.lineupModeTitle}
               desc={t.lineupModeDesc}
               cta={t.playLineup}
               onClick={() => startLineup(LINEUP_POOL)}
             />
             <LightCard
-              icon={<ShirtIcon />}
+              icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+              accent={MODE_ACCENTS.clubs}
               title={t.clubsModeTitle}
               desc={t.clubsModeDesc}
               cta={t.playClubsMode}
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
             />
             <LightCard
-              icon={<CalendarIcon />}
+              icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+              accent={MODE_ACCENTS.year}
               title={t.yearModeTitle}
               desc={t.yearModeDesc}
               cta={t.playYearMode}
               onClick={() => startYearMode(YEAR_QUESTION_POOL)}
             />
             <LightCard
-              icon={<DiceIcon />}
+              icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+              accent={MODE_ACCENTS.random}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
@@ -4088,35 +4136,40 @@ export default function SoccerQuiz() {
 
           <div className="gtpModeGrid">
             <LightCard
-              icon={<PersonQuestionIcon />}
+              icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+              accent={MODE_ACCENTS.clues}
               title="Modo Pistas"
               desc="Craques do futebol brasileiro, de Pelé a Marta. Leia três pistas e escolha o nome certo entre quatro opções."
               cta="JOGAR MODO PISTAS"
               onClick={() => startClues(BRAZIL_QUESTION_POOL)}
             />
             <LightCard
-              icon={<XIIcon />}
+              icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+              accent={MODE_ACCENTS.lineup}
               title="Modo Escalação"
               desc="A escalação de um grande clube brasileiro deste século — falta um jogador. Digite o nome para completar. Até 3 dicas opcionais, mas cada uma reduz os pontos que você pode ganhar."
               cta="JOGAR MODO ESCALAÇÃO"
               onClick={() => startLineup(BRAZIL_LINEUP_POOL)}
             />
             <LightCard
-              icon={<CalendarIcon />}
+              icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+              accent={MODE_ACCENTS.year}
               title="Modo Ano"
               desc="Leia um fato marcante do futebol brasileiro e adivinhe em que ano ele aconteceu, entre quatro opções."
               cta="JOGAR MODO ANO"
               onClick={() => startYearMode(BRAZIL_YEAR_QUESTION_POOL)}
             />
             <LightCard
-              icon={<ShirtIcon />}
+              icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+              accent={MODE_ACCENTS.clubs}
               title="Modo Clubes"
               desc="Veja os clubes de craques brasileiros e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar."
               cta="JOGAR MODO CLUBES"
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL_BRAZIL)}
             />
             <LightCard
-              icon={<DiceIcon />}
+              icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+              accent={MODE_ACCENTS.random}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
@@ -5037,7 +5090,7 @@ export default function SoccerQuiz() {
 }
 
 const fontImport = `
-  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600;700;800&family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap');
 
   @keyframes correctPulse {
     0% { transform: scale(1); }
@@ -5232,26 +5285,16 @@ const styles = {
     color: "#0B6F27",
   },
   lightTitle: {
-    fontFamily: "'Anton', sans-serif",
-    fontStyle: "italic",
-    fontSize: "clamp(40px, 12vw, 84px)",
-    fontWeight: 900,
-    lineHeight: 0.88,
-    letterSpacing: "-2px",
-    textTransform: "uppercase",
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: "clamp(36px, 11vw, 72px)",
+    fontWeight: 800,
+    lineHeight: 0.98,
     color: "#101820",
     margin: 0,
     textAlign: "center",
-    transform: "skewX(-7deg)",
   },
   lightTitleAccent: {
-    fontSize: "clamp(44px, 13vw, 91px)",
-    background:
-      "linear-gradient(to bottom, #22C744 0%, #159533 55%, #0B6F27 100%)",
-    WebkitBackgroundClip: "text",
-    backgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    filter: "drop-shadow(0 3px 6px rgba(0,0,0,.14))",
+    color: "#58CC02",
   },
   lightSubtitle: {
     fontFamily: "'Inter', sans-serif",
@@ -5345,40 +5388,35 @@ const styles = {
   lightCard: {
     width: "100%",
     margin: "0 0 18px 0",
-    background: "rgba(255,255,255,0.96)",
-    borderRadius: 30,
-    border: "1px solid rgba(11,111,39,0.08)",
-    padding: "24px 28px",
+    background: "#FFFFFF",
+    borderRadius: 24,
+    border: "2px solid",
+    padding: "22px 24px",
     display: "flex",
     alignItems: "flex-start",
-    gap: 22,
-    boxShadow:
-      "0 12px 28px rgba(16,24,32,0.12), inset 0 1px 0 rgba(255,255,255,0.9)",
+    gap: 20,
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
   },
   lightCardIconCircle: {
     position: "relative",
-    width: 148,
-    height: 148,
-    minWidth: 140,
+    width: 140,
+    height: 140,
+    minWidth: 132,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    filter: "drop-shadow(0 5px 8px rgba(11,111,39,0.15))",
   },
   lightCardIconImage: {
-    width: 140,
-    height: 140,
+    width: 132,
+    height: 132,
     objectFit: "contain",
     filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))",
   },
   lightCardIconBadge: {
     position: "relative",
-    width: 132,
-    height: 132,
+    width: 124,
+    height: 124,
     borderRadius: "50%",
-    background: "linear-gradient(180deg, #22C744 0%, #159533 48%, #0B6F27 100%)",
-    boxShadow:
-      "inset 0 -8px 12px rgba(0,0,0,0.18), inset 0 3px 5px rgba(255,255,255,0.22)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -5388,58 +5426,44 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   lightCardTitle: {
-    fontFamily: "'Anton', sans-serif",
-    fontWeight: 900,
-    fontStyle: "italic",
-    fontSize: 29,
-    letterSpacing: "-0.5px",
-    lineHeight: 1,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 800,
+    fontSize: 22,
+    lineHeight: 1.15,
     color: "#101820",
-    textTransform: "uppercase",
-    transform: "skewX(-6deg)",
   },
   lightCardChevron: {
-    color: "#0B6F27",
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: 700,
     lineHeight: 1,
     marginLeft: 8,
   },
   lightCardDesc: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 400,
-    lineHeight: 1.35,
-    color: "#555B61",
+    lineHeight: 1.4,
+    color: "#5F666B",
     margin: 0,
-    marginBottom: 20,
+    marginBottom: 18,
   },
   lightCardBtn: {
     width: "100%",
-    height: 44,
-    background: "linear-gradient(180deg, #22C744 0%, #159533 45%, #0B6F27 100%)",
+    height: 46,
     color: "#FFFFFF",
     border: "none",
-    borderRadius: 999,
+    borderRadius: 14,
     padding: "0 20px",
-    fontFamily: "'Anton', sans-serif",
-    fontWeight: 900,
-    fontStyle: "italic",
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 700,
     fontSize: 15,
     letterSpacing: "0.4px",
     textTransform: "uppercase",
     cursor: "pointer",
-    boxShadow:
-      "0 7px 14px rgba(11,111,39,0.28), inset 0 1px 0 rgba(255,255,255,0.25)",
-    transition: "filter 150ms ease, transform 150ms ease",
-    transform: "skewX(-6deg)",
-  },
-  lightCardBtnLabel: {
-    display: "inline-block",
-    transform: "skewX(6deg)",
+    transition: "transform 100ms ease, box-shadow 100ms ease",
   },
   statsBar: {
     marginTop: 8,
