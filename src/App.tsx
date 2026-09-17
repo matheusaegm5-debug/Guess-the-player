@@ -3105,15 +3105,15 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
-const GREEN_ACCENT = { solid: "#22C744", dark: "#0B6F27" };
+const CARD_ACCENT = { solid: "#1CB0F6", dark: "#0A91D1" };
 const MODE_ACCENTS = {
-  clues: GREEN_ACCENT,
-  lineup: GREEN_ACCENT,
-  clubs: GREEN_ACCENT,
-  year: GREEN_ACCENT,
-  random: GREEN_ACCENT,
-  mundo: GREEN_ACCENT,
-  brasil: GREEN_ACCENT,
+  clues: CARD_ACCENT,
+  lineup: CARD_ACCENT,
+  clubs: CARD_ACCENT,
+  year: CARD_ACCENT,
+  random: CARD_ACCENT,
+  mundo: CARD_ACCENT,
+  brasil: CARD_ACCENT,
 };
 
 function GearIcon() {
