@@ -3937,6 +3937,16 @@ export default function SoccerQuiz() {
     setRandomHintsUsed(0);
   }
 
+  function changeLang(code) {
+    setLang(code);
+    if (
+      code !== "pt" &&
+      (screen === "worldModes" || screen === "brazilModes")
+    ) {
+      setScreen("singlePlayer");
+    }
+  }
+
   function goToMenuFromGame() {
     if (lang !== "pt") {
       setScreen("singlePlayer");
@@ -4009,7 +4019,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
@@ -4072,7 +4082,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
@@ -4178,7 +4188,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
@@ -4268,7 +4278,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
