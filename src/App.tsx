@@ -5106,7 +5106,7 @@ const fontImport = `
   .correctPulse { animation: correctPulse 0.4s ease; }
   .fadeInUp { animation: fadeInUp 0.35s ease; }
   .trophyGlow { display: inline-block; animation: trophyGlow 1.8s ease-in-out infinite; }
-  button { transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+  button { transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; touch-action: manipulation; }
   button:active:not(:disabled) { transform: scale(0.97); }
   input, textarea, select { font-size: 16px !important; }
   * { box-sizing: border-box; }
@@ -5246,11 +5246,14 @@ const styles = {
     color: "#5B5B52",
     fontFamily: "'Oswald', sans-serif",
     fontWeight: 600,
-    fontSize: 13,
+    fontSize: 14,
     letterSpacing: "0.04em",
-    padding: "7px 16px",
+    minWidth: 40,
+    minHeight: 36,
+    padding: "8px 14px",
     borderRadius: 999,
     cursor: "pointer",
+    touchAction: "manipulation",
   },
   lightLangPillActive: {
     background: "linear-gradient(180deg, #22C744, #0B6F27)",
