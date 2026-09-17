@@ -2872,12 +2872,10 @@ const TRANSLATIONS = {
     cluesModeDesc: "Read three clues, pick the player from four options.",
     playClues: "PLAY CLUES MODE",
     lineupModeTitle: "Lineup Mode",
-    lineupModeDesc:
-      "A famous European club's XI from a given year — one player is missing. Type the name to fill the gap. Up to 3 optional hints are available, but each one lowers the points you can earn.",
+    lineupModeDesc: "Guess the missing player in a famous lineup. Up to 3 hints available.",
     playLineup: "PLAY LINEUP MODE",
     clubsModeTitle: "Clubs Mode",
-    clubsModeDesc:
-      "See a player's career clubs and guess who it is by typing the name. Up to 5 optional hints are available, but each one lowers the points you can earn.",
+    clubsModeDesc: "Guess the player from the clubs on their career. Up to 5 hints available.",
     playClubsMode: "PLAY CLUBS MODE",
     clubsLabel: "CLUBS",
     clubsGuessPlaceholder: "Type the player's name",
@@ -2930,12 +2928,10 @@ const TRANSLATIONS = {
     cluesModeDesc: "Leia três pistas e escolha o jogador entre quatro opções.",
     playClues: "JOGAR MODO PISTAS",
     lineupModeTitle: "Modo Escalação",
-    lineupModeDesc:
-      "A escalação de um clube europeu famoso em um determinado ano — falta um jogador. Digite o nome para completar. Há até 3 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar.",
+    lineupModeDesc: "Adivinhe o jogador que falta numa escalação famosa. Até 3 dicas.",
     playLineup: "JOGAR MODO ESCALAÇÃO",
     clubsModeTitle: "Modo Clubes",
-    clubsModeDesc:
-      "Veja os clubes por onde o jogador passou na carreira e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar.",
+    clubsModeDesc: "Adivinhe o jogador pelos clubes da carreira dele. Até 5 dicas.",
     playClubsMode: "JOGAR MODO CLUBES",
     clubsLabel: "CLUBES",
     clubsGuessPlaceholder: "Digite o nome do jogador",
@@ -2988,12 +2984,10 @@ const TRANSLATIONS = {
     cluesModeDesc: "Lee tres pistas y elige al jugador entre cuatro opciones.",
     playClues: "JUGAR MODO PISTAS",
     lineupModeTitle: "Modo Alineación",
-    lineupModeDesc:
-      "La alineación de un club europeo famoso en un año determinado — falta un jugador. Escribe el nombre para completar. Hay hasta 3 pistas opcionales disponibles, pero cada una reduce los puntos que puedes ganar.",
+    lineupModeDesc: "Adivina al jugador que falta en una alineación famosa. Hasta 3 pistas.",
     playLineup: "JUGAR MODO ALINEACIÓN",
     clubsModeTitle: "Modo Clubes",
-    clubsModeDesc:
-      "Mira los clubes por los que pasó el jugador en su carrera y adivina quién es escribiendo el nombre. Hay hasta 5 pistas opcionales disponibles, pero cada una reduce los puntos que puedes ganar.",
+    clubsModeDesc: "Adivina al jugador por los clubes de su carrera. Hasta 5 pistas.",
     playClubsMode: "JUGAR MODO CLUBES",
     clubsLabel: "CLUBES",
     clubsGuessPlaceholder: "Escribe el nombre del jugador",
@@ -3105,15 +3099,14 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
-const CARD_ACCENT = { solid: "#22C744", dark: "#0B6F27" };
 const MODE_ACCENTS = {
-  clues: CARD_ACCENT,
-  lineup: CARD_ACCENT,
-  clubs: CARD_ACCENT,
-  year: CARD_ACCENT,
-  random: CARD_ACCENT,
-  mundo: CARD_ACCENT,
-  brasil: CARD_ACCENT,
+  clues: { solid: "#1CB0F6", dark: "#0A91D1" },
+  lineup: { solid: "#FF9600", dark: "#E07C00" },
+  clubs: { solid: "#58CC02", dark: "#46A302" },
+  year: { solid: "#FF4B4B", dark: "#E23636" },
+  random: { solid: "#00C2B8", dark: "#009C94" },
+  mundo: { solid: "#1CB0F6", dark: "#0A91D1" },
+  brasil: { solid: "#FFC94D", dark: "#E0A82E" },
 };
 
 function GearIcon() {
@@ -3941,7 +3934,7 @@ export default function SoccerQuiz() {
                   icon={<GlobeIcon accent={MODE_ACCENTS.mundo.dark} />}
                   accent={MODE_ACCENTS.mundo}
                   title="🌍 Mundo"
-                  desc="Craques e clubes históricos do futebol internacional — pistas, escalações de grandes finais e clubes por onde cada jogador passou."
+                  desc="Craques e clubes do futebol mundial."
                   cta="ENTRAR"
                   onClick={() => setScreen("worldModes")}
                 />
@@ -3949,7 +3942,7 @@ export default function SoccerQuiz() {
                   icon={<FlagIcon />}
                   accent={MODE_ACCENTS.brasil}
                   title="🇧🇷 Brasil"
-                  desc="Ídolos e clubes do futebol brasileiro — de craques históricos como Pelé a escalações de grandes títulos deste século."
+                  desc="Ídolos e clubes do futebol brasileiro."
                   cta="ENTRAR"
                   onClick={() => setScreen("brazilModes")}
                 />
@@ -4140,7 +4133,7 @@ export default function SoccerQuiz() {
               icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
               accent={MODE_ACCENTS.clues}
               title="Modo Pistas"
-              desc="Craques do futebol brasileiro, de Pelé a Marta. Leia três pistas e escolha o nome certo entre quatro opções."
+              desc="Leia três pistas e adivinhe o craque brasileiro."
               cta="JOGAR MODO PISTAS"
               onClick={() => startClues(BRAZIL_QUESTION_POOL)}
             />
@@ -4148,7 +4141,7 @@ export default function SoccerQuiz() {
               icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
               accent={MODE_ACCENTS.lineup}
               title="Modo Escalação"
-              desc="A escalação de um grande clube brasileiro deste século — falta um jogador. Digite o nome para completar. Até 3 dicas opcionais, mas cada uma reduz os pontos que você pode ganhar."
+              desc="Falta um jogador na escalação. Digite o nome. Até 3 dicas."
               cta="JOGAR MODO ESCALAÇÃO"
               onClick={() => startLineup(BRAZIL_LINEUP_POOL)}
             />
@@ -4156,7 +4149,7 @@ export default function SoccerQuiz() {
               icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
               accent={MODE_ACCENTS.year}
               title="Modo Ano"
-              desc="Leia um fato marcante do futebol brasileiro e adivinhe em que ano ele aconteceu, entre quatro opções."
+              desc="Adivinhe o ano de um fato marcante do futebol brasileiro."
               cta="JOGAR MODO ANO"
               onClick={() => startYearMode(BRAZIL_YEAR_QUESTION_POOL)}
             />
@@ -4164,7 +4157,7 @@ export default function SoccerQuiz() {
               icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
               accent={MODE_ACCENTS.clubs}
               title="Modo Clubes"
-              desc="Veja os clubes de craques brasileiros e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar."
+              desc="Adivinhe o craque pelos clubes da carreira dele. Até 5 dicas."
               cta="JOGAR MODO CLUBES"
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL_BRAZIL)}
             />
