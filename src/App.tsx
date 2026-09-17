@@ -2868,6 +2868,11 @@ const TRANSLATIONS = {
     eyebrow: "KICKOFF QUIZ",
     title: "GUESS THE PLAYER",
     chooseMode: "Choose a mode to start playing.",
+    singlePlayerTitle: "Single Player",
+    singlePlayerDesc: "Test your football knowledge across 5 solo game modes.",
+    singlePlayerCta: "PLAY SOLO",
+    singlePlayerEyebrow: "SINGLE PLAYER",
+    singlePlayerHeading: "Choose Your Mode",
     cluesModeTitle: "Clues Mode",
     cluesModeDesc: "Read three clues, pick the player from four options.",
     playClues: "PLAY CLUES MODE",
@@ -2930,6 +2935,11 @@ const TRANSLATIONS = {
     eyebrow: "PONTAPÉ INICIAL",
     title: "ADIVINHE O JOGADOR",
     chooseMode: "Escolha um modo para começar a jogar.",
+    singlePlayerTitle: "Um Jogador",
+    singlePlayerDesc: "Teste seu conhecimento de futebol em 5 modos solo.",
+    singlePlayerCta: "JOGAR SOZINHO",
+    singlePlayerEyebrow: "UM JOGADOR",
+    singlePlayerHeading: "Escolha seu Modo",
     cluesModeTitle: "Modo Pistas",
     cluesModeDesc: "Leia três pistas e escolha o jogador entre quatro opções.",
     playClues: "JOGAR MODO PISTAS",
@@ -2992,6 +3002,11 @@ const TRANSLATIONS = {
     eyebrow: "SAQUE INICIAL",
     title: "ADIVINA AL JUGADOR",
     chooseMode: "Elige un modo para empezar a jugar.",
+    singlePlayerTitle: "Un Jugador",
+    singlePlayerDesc: "Pon a prueba tu conocimiento de fútbol en 5 modos individuales.",
+    singlePlayerCta: "JUGAR SOLO",
+    singlePlayerEyebrow: "UN JUGADOR",
+    singlePlayerHeading: "Elige tu Modo",
     cluesModeTitle: "Modo Pistas",
     cluesModeDesc: "Lee tres pistas y elige al jugador entre cuatro opciones.",
     playClues: "JUGAR MODO PISTAS",
@@ -3126,6 +3141,7 @@ const MODE_ACCENTS = {
   mundo: { solid: "#1CB0F6", dark: "#0A91D1" },
   brasil: { solid: "#FFC94D", dark: "#E0A82E" },
   multiplayer: { solid: "#AAB4BE", dark: "#818C97" },
+  singlePlayer: { solid: "#22C744", dark: "#0B6F27" },
 };
 
 function GearIcon() {
@@ -3293,6 +3309,23 @@ function VersusIcon({ accent = "#0B6F27" }) {
       >
         VS
       </text>
+    </svg>
+  );
+}
+function SoloIcon({ accent = "#0B6F27" }) {
+  return (
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="21" r="13" fill="#FFFFFF" />
+      <path d="M10 56c2-13 10-20 22-20s20 7 22 20" fill="#FFFFFF" />
+      <circle cx="47" cy="46" r="10" fill={accent} />
+      <path
+        d="M43 46l3 3 6-6"
+        stroke="#FFFFFF"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
     </svg>
   );
 }
@@ -3873,7 +3906,7 @@ export default function SoccerQuiz() {
 
   function goToMenuFromGame() {
     if (lang !== "pt") {
-      setScreen("start");
+      setScreen("singlePlayer");
       return;
     }
     setScreen(mode.startsWith("brazil") ? "brazilModes" : "worldModes");
@@ -3907,6 +3940,7 @@ export default function SoccerQuiz() {
           "settings",
           "roundEnd",
           "multiplayer",
+          "singlePlayer",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -3925,6 +3959,7 @@ export default function SoccerQuiz() {
         "settings",
         "roundEnd",
         "multiplayer",
+        "singlePlayer",
       ].includes(screen) && <div style={styles.turfOverlay} />}
 
       {screen === "start" && (
@@ -3969,8 +4004,15 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>{t.chooseMode}</p>
           <div style={styles.lightSubtitleRule} />
 
-
           <div className="gtpModeGrid">
+            <LightCard
+              icon={<SoloIcon accent={MODE_ACCENTS.singlePlayer.dark} />}
+              accent={MODE_ACCENTS.singlePlayer}
+              title={t.singlePlayerTitle}
+              desc={t.singlePlayerDesc}
+              cta={t.singlePlayerCta}
+              onClick={() => setScreen("singlePlayer")}
+            />
             <LightCard
               icon={<VersusIcon accent={MODE_ACCENTS.multiplayer.dark} />}
               accent={MODE_ACCENTS.multiplayer}
@@ -3979,6 +4021,47 @@ export default function SoccerQuiz() {
               cta={t.multiplayerCta}
               onClick={() => setScreen("multiplayer")}
             />
+          </div>
+        </div>
+      )}
+
+      {screen === "singlePlayer" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => setScreen("start")}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={styles.lightLangRow}>
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => setLang(l.code)}
+                  style={{
+                    ...styles.lightLangPill,
+                    ...(lang === l.code ? styles.lightLangPillActive : {}),
+                  }}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.singlePlayerEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.singlePlayerHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.chooseMode}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          <div className="gtpModeGrid">
             {lang === "pt" ? (
               <>
                 <LightCard
@@ -4002,7 +4085,7 @@ export default function SoccerQuiz() {
               <>
                 <LightCard
                   icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
-              accent={MODE_ACCENTS.clues}
+                  accent={MODE_ACCENTS.clues}
                   title={t.cluesModeTitle}
                   desc={t.cluesModeDesc}
                   cta={t.playClues}
@@ -4010,7 +4093,7 @@ export default function SoccerQuiz() {
                 />
                 <LightCard
                   icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
-              accent={MODE_ACCENTS.lineup}
+                  accent={MODE_ACCENTS.lineup}
                   title={t.lineupModeTitle}
                   desc={t.lineupModeDesc}
                   cta={t.playLineup}
@@ -4018,7 +4101,7 @@ export default function SoccerQuiz() {
                 />
                 <LightCard
                   icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
-              accent={MODE_ACCENTS.clubs}
+                  accent={MODE_ACCENTS.clubs}
                   title={t.clubsModeTitle}
                   desc={t.clubsModeDesc}
                   cta={t.playClubsMode}
@@ -4026,7 +4109,7 @@ export default function SoccerQuiz() {
                 />
                 <LightCard
                   icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
-              accent={MODE_ACCENTS.year}
+                  accent={MODE_ACCENTS.year}
                   title={t.yearModeTitle}
                   desc={t.yearModeDesc}
                   cta={t.playYearMode}
@@ -4034,7 +4117,7 @@ export default function SoccerQuiz() {
                 />
                 <LightCard
                   icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
-              accent={MODE_ACCENTS.random}
+                  accent={MODE_ACCENTS.random}
                   title={t.randomModeTitle}
                   desc={t.randomModeDesc}
                   cta={t.playRandomMode}
@@ -4132,7 +4215,7 @@ export default function SoccerQuiz() {
             />
           </div>
 
-          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
+          <button style={styles.menuBtn} onClick={() => setScreen("singlePlayer")}>
             {t.menu}
           </button>
         </div>
@@ -4222,7 +4305,7 @@ export default function SoccerQuiz() {
             />
           </div>
 
-          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
+          <button style={styles.menuBtn} onClick={() => setScreen("singlePlayer")}>
             {t.menu}
           </button>
         </div>
