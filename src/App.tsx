@@ -1,4 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import heroBanner from "./assets/hero-banner.webp";
+import iconMundo from "./assets/icons/icon-mundo.webp";
+import iconBrasil from "./assets/icons/icon-brasil.webp";
+import iconClues from "./assets/icons/icon-clues.webp";
+import iconLineup from "./assets/icons/icon-lineup.webp";
+import iconClubes from "./assets/icons/icon-clubes.webp";
+import iconAno from "./assets/icons/icon-ano.webp";
+import iconRandom from "./assets/icons/icon-random.webp";
 
 // ============ CLUES MODE DATA ============
 // clues are provided per language; options/answer are proper names (language-agnostic)
@@ -3832,7 +3840,7 @@ export default function SoccerQuiz() {
 
           <div style={styles.heroFlow}>
             <img
-              src="https://i.postimg.cc/kXB8RqPt/Chat-GPT-Image-Aug-2-2026-11-51-23-PM.png"
+              src={heroBanner}
               alt=""
               style={styles.heroFlowImage}
             />
@@ -3842,14 +3850,14 @@ export default function SoccerQuiz() {
             {lang === "pt" ? (
               <>
                 <LightCard
-                  iconImage="https://i.postimg.cc/pd55GQfT/5d2caace-08e8-4973-b968-3671c05cbad7.jpg"
+                  iconImage={iconMundo}
                   title="🌍 Mundo"
                   desc="Craques e clubes históricos do futebol internacional — pistas, escalações de grandes finais e clubes por onde cada jogador passou."
                   cta="ENTRAR"
                   onClick={() => setScreen("worldModes")}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/ydXdtLkH/ffde4eae-c0bf-4f2e-80b1-7941c0f01d3f.jpg"
+                  iconImage={iconBrasil}
                   title="🇧🇷 Brasil"
                   desc="Ídolos e clubes do futebol brasileiro — de craques históricos como Pelé a escalações de grandes títulos deste século."
                   cta="ENTRAR"
@@ -3859,28 +3867,28 @@ export default function SoccerQuiz() {
             ) : (
               <>
                 <LightCard
-                  iconImage="https://i.postimg.cc/jjrvsGfk/Chat-GPT-Image-Aug-2-2026-10-25-59-PM.png"
+                  iconImage={iconClues}
                   title={t.cluesModeTitle}
                   desc={t.cluesModeDesc}
                   cta={t.playClues}
                   onClick={() => startClues(QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/rpnJSzbr/Chat-GPT-Image-Aug-2-2026-10-29-25-PM.png"
+                  iconImage={iconLineup}
                   title={t.lineupModeTitle}
                   desc={t.lineupModeDesc}
                   cta={t.playLineup}
                   onClick={() => startLineup(LINEUP_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/6pxCRCpD/Chat-GPT-Image-Aug-2-2026-10-27-33-PM.png"
+                  iconImage={iconClubes}
                   title={t.clubsModeTitle}
                   desc={t.clubsModeDesc}
                   cta={t.playClubsMode}
                   onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/4NG9xVN9/Chat-GPT-Image-Aug-2-2026-11-01-26-PM.png"
+                  iconImage={iconAno}
                   imageScale={1.35}
                   title={t.yearModeTitle}
                   desc={t.yearModeDesc}
@@ -3888,7 +3896,7 @@ export default function SoccerQuiz() {
                   onClick={() => startYearMode(YEAR_QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/g2x1XFnk/Chat-GPT-Image-Aug-2-2026-10-24-38-PM-(1).png"
+                  iconImage={iconRandom}
                   title={t.randomModeTitle}
                   desc={t.randomModeDesc}
                   cta={t.playRandomMode}
@@ -3944,7 +3952,7 @@ export default function SoccerQuiz() {
 
           <div style={styles.heroFlow}>
             <img
-              src="https://i.postimg.cc/kXB8RqPt/Chat-GPT-Image-Aug-2-2026-11-51-23-PM.png"
+              src={heroBanner}
               alt=""
               style={styles.heroFlowImage}
             />
@@ -3952,28 +3960,28 @@ export default function SoccerQuiz() {
 
           <div className="gtpModeGrid">
             <LightCard
-              iconImage="https://i.postimg.cc/jjrvsGfk/Chat-GPT-Image-Aug-2-2026-10-25-59-PM.png"
+              iconImage={iconClues}
               title={t.cluesModeTitle}
               desc={t.cluesModeDesc}
               cta={t.playClues}
               onClick={() => startClues(QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/rpnJSzbr/Chat-GPT-Image-Aug-2-2026-10-29-25-PM.png"
+              iconImage={iconLineup}
               title={t.lineupModeTitle}
               desc={t.lineupModeDesc}
               cta={t.playLineup}
               onClick={() => startLineup(LINEUP_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/6pxCRCpD/Chat-GPT-Image-Aug-2-2026-10-27-33-PM.png"
+              iconImage={iconClubes}
               title={t.clubsModeTitle}
               desc={t.clubsModeDesc}
               cta={t.playClubsMode}
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/4NG9xVN9/Chat-GPT-Image-Aug-2-2026-11-01-26-PM.png"
+              iconImage={iconAno}
               imageScale={1.35}
               title={t.yearModeTitle}
               desc={t.yearModeDesc}
@@ -3981,7 +3989,7 @@ export default function SoccerQuiz() {
               onClick={() => startYearMode(YEAR_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/g2x1XFnk/Chat-GPT-Image-Aug-2-2026-10-24-38-PM-(1).png"
+              iconImage={iconRandom}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
@@ -4037,7 +4045,7 @@ export default function SoccerQuiz() {
 
           <div style={styles.heroFlow}>
             <img
-              src="https://i.postimg.cc/kXB8RqPt/Chat-GPT-Image-Aug-2-2026-11-51-23-PM.png"
+              src={heroBanner}
               alt=""
               style={styles.heroFlowImage}
             />
@@ -4045,21 +4053,21 @@ export default function SoccerQuiz() {
 
           <div className="gtpModeGrid">
             <LightCard
-              iconImage="https://i.postimg.cc/jjrvsGfk/Chat-GPT-Image-Aug-2-2026-10-25-59-PM.png"
+              iconImage={iconClues}
               title="Modo Pistas"
               desc="Craques do futebol brasileiro, de Pelé a Marta. Leia três pistas e escolha o nome certo entre quatro opções."
               cta="JOGAR MODO PISTAS"
               onClick={() => startClues(BRAZIL_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/rpnJSzbr/Chat-GPT-Image-Aug-2-2026-10-29-25-PM.png"
+              iconImage={iconLineup}
               title="Modo Escalação"
               desc="A escalação de um grande clube brasileiro deste século — falta um jogador. Digite o nome para completar. Até 3 dicas opcionais, mas cada uma reduz os pontos que você pode ganhar."
               cta="JOGAR MODO ESCALAÇÃO"
               onClick={() => startLineup(BRAZIL_LINEUP_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/4NG9xVN9/Chat-GPT-Image-Aug-2-2026-11-01-26-PM.png"
+              iconImage={iconAno}
               imageScale={1.35}
               title="Modo Ano"
               desc="Leia um fato marcante do futebol brasileiro e adivinhe em que ano ele aconteceu, entre quatro opções."
@@ -4067,14 +4075,14 @@ export default function SoccerQuiz() {
               onClick={() => startYearMode(BRAZIL_YEAR_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/6pxCRCpD/Chat-GPT-Image-Aug-2-2026-10-27-33-PM.png"
+              iconImage={iconClubes}
               title="Modo Clubes"
               desc="Veja os clubes de craques brasileiros e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar."
               cta="JOGAR MODO CLUBES"
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL_BRAZIL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/g2x1XFnk/Chat-GPT-Image-Aug-2-2026-10-24-38-PM-(1).png"
+              iconImage={iconRandom}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
