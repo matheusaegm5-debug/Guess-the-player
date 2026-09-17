@@ -3144,6 +3144,39 @@ const MODE_ACCENTS = {
   singlePlayer: { solid: "#22C744", dark: "#0B6F27" },
 };
 
+const TEAM_KIT = {
+  "AC Milan": { bg: "#D81920", text: "#FFFFFF" },
+  Ajax: { bg: "#D2122E", text: "#FFFFFF" },
+  Arsenal: { bg: "#EF0107", text: "#FFFFFF" },
+  "Atlético Mineiro": { bg: "#1A1A1A", text: "#FFFFFF" },
+  "Bayern Munich": { bg: "#DC052D", text: "#FFFFFF" },
+  Botafogo: { bg: "#1A1A1A", text: "#FFFFFF" },
+  Chelsea: { bg: "#034694", text: "#FFFFFF" },
+  Corinthians: { bg: "#FFFFFF", text: "#101820" },
+  Cruzeiro: { bg: "#003DA5", text: "#FFFFFF" },
+  "FC Barcelona": { bg: "#A50044", text: "#FFFFFF" },
+  "FC Porto": { bg: "#003399", text: "#FFFFFF" },
+  Flamengo: { bg: "#E30613", text: "#FFFFFF" },
+  Fluminense: { bg: "#8A1538", text: "#FFFFFF" },
+  "Grêmio": { bg: "#0033A0", text: "#FFFFFF" },
+  "Inter Milan": { bg: "#0068A8", text: "#FFFFFF" },
+  Internacional: { bg: "#C8102E", text: "#FFFFFF" },
+  Juventus: { bg: "#1A1A1A", text: "#FFFFFF" },
+  Liverpool: { bg: "#C8102E", text: "#FFFFFF" },
+  "Manchester City": { bg: "#6CABDD", text: "#101820" },
+  "Manchester United": { bg: "#DA291C", text: "#FFFFFF" },
+  Palmeiras: { bg: "#006437", text: "#FFFFFF" },
+  "Paris Saint-Germain": { bg: "#004170", text: "#FFFFFF" },
+  "Real Madrid": { bg: "#FFFFFF", text: "#101820" },
+  Santos: { bg: "#FFFFFF", text: "#101820" },
+  "São Paulo FC": { bg: "#FFFFFF", text: "#B0121A" },
+  "Vasco da Gama": { bg: "#1A1A1A", text: "#FFFFFF" },
+};
+
+function getTeamKit(team) {
+  return TEAM_KIT[team] || { bg: "#FFFFFF", text: "#0B6F27" };
+}
+
 function GearIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -4549,12 +4582,15 @@ export default function SoccerQuiz() {
                       const showAsWrong = isHidden && lAnswered && !lCorrect;
                       const showAsRight = isHidden && lAnswered && lCorrect;
                       const lastName = p.shortName || p.name.split(" ").slice(-1)[0];
+                      const kit = getTeamKit(currentLineup.team);
                       return (
                         <div key={p.i} style={styles.chipWrap}>
                           <div
                             className={showAsRight ? "correctPulse" : ""}
                             style={{
                               ...styles.chip,
+                              background: kit.bg,
+                              color: kit.text,
                               ...(isHidden ? styles.chipHidden : {}),
                               ...(showAsRight ? styles.chipCorrect : {}),
                               ...(showAsWrong ? styles.chipWrong : {}),
@@ -5020,12 +5056,15 @@ export default function SoccerQuiz() {
                             const showAsWrong = isHidden && randomAnswered && !randomCorrect;
                             const showAsRight = isHidden && randomAnswered && randomCorrect;
                             const lastName = p.shortName || p.name.split(" ").slice(-1)[0];
+                            const kit = getTeamKit(currentRandomItem.data.team);
                             return (
                               <div key={p.i} style={styles.chipWrap}>
                                 <div
                                   className={showAsRight ? "correctPulse" : ""}
                                   style={{
                                     ...styles.chip,
+                                    background: kit.bg,
+                                    color: kit.text,
                                     ...(isHidden ? styles.chipHidden : {}),
                                     ...(showAsRight ? styles.chipCorrect : {}),
                                     ...(showAsWrong ? styles.chipWrong : {}),
