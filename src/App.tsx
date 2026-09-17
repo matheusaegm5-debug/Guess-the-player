@@ -3939,12 +3939,7 @@ export default function SoccerQuiz() {
 
   function changeLang(code) {
     setLang(code);
-    if (
-      code !== "pt" &&
-      (screen === "worldModes" || screen === "brazilModes")
-    ) {
-      setScreen("singlePlayer");
-    }
+    setScreen("start");
   }
 
   function goToMenuFromGame() {
