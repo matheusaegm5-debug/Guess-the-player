@@ -3251,26 +3251,6 @@ function DiceIcon() {
     </svg>
   );
 }
-function HeroStats() {
-  const items = [
-    { number: "5", label: "MODOS\nDE JOGO" },
-    { number: "3", label: "IDIOMAS\nPT · EN · ES" },
-    { number: "∞", label: "JOGUE\nOFFLINE" },
-  ];
-  return (
-    <div style={styles.heroStats}>
-      {items.map((item, i) => (
-        <div key={item.label} style={styles.heroStatItemWrap}>
-          <div style={styles.heroStatItem}>
-            <div style={styles.heroStatNumber}>{item.number}</div>
-            <div style={styles.heroStatLabel}>{item.label}</div>
-          </div>
-          {i < items.length - 1 && <div style={styles.heroStatDivider} />}
-        </div>
-      ))}
-    </div>
-  );
-}
 function LightCard({ icon, iconImage, imageScale, title, desc, cta, onClick }) {
   return (
     <div style={styles.lightCard}>
@@ -3916,7 +3896,6 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>{t.chooseMode}</p>
           <div style={styles.lightSubtitleRule} />
 
-          <HeroStats />
 
           <div className="gtpModeGrid">
             {lang === "pt" ? (
@@ -4021,7 +4000,6 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>Craques e clubes do futebol mundial.</p>
           <div style={styles.lightSubtitleRule} />
 
-          <HeroStats />
 
           <div className="gtpModeGrid">
             <LightCard
@@ -4107,7 +4085,6 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>Craques e clubes do futebol brasileiro.</p>
           <div style={styles.lightSubtitleRule} />
 
-          <HeroStats />
 
           <div className="gtpModeGrid">
             <LightCard
@@ -5181,50 +5158,6 @@ const styles = {
     marginLeft: "auto",
     marginRight: "auto",
   },
-  heroStats: {
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 18,
-    borderRadius: 22,
-    background: "linear-gradient(160deg, #1E8F45 0%, #0B5C27 100%)",
-    boxShadow:
-      "0 12px 30px rgba(11,92,39,0.28), inset 0 1px 0 rgba(255,255,255,0.15)",
-    display: "flex",
-    padding: "20px 8px",
-  },
-  heroStatItemWrap: {
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-  },
-  heroStatItem: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-    gap: 4,
-  },
-  heroStatNumber: {
-    fontFamily: "'Anton', sans-serif",
-    fontSize: 26,
-    color: "#FFC94D",
-    lineHeight: 1,
-  },
-  heroStatLabel: {
-    fontFamily: "'Oswald', sans-serif",
-    fontWeight: 600,
-    fontSize: 10.5,
-    letterSpacing: "0.04em",
-    color: "#EFFBF2",
-    lineHeight: 1.35,
-    whiteSpace: "pre-line",
-  },
-  heroStatDivider: {
-    width: 1,
-    height: 34,
-    background: "rgba(255,255,255,0.2)",
-  },
   heroSpacer: {
     height: 260,
   },
@@ -5334,7 +5267,7 @@ const styles = {
     height: 3,
     background: "#159533",
     borderRadius: 999,
-    margin: "10px auto 0",
+    margin: "10px auto 28px",
   },
   ballWrap: {
     position: "relative",
