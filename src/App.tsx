@@ -5197,7 +5197,8 @@ const styles = {
     justifyContent: "center",
     fontFamily: "'Inter', sans-serif",
     boxSizing: "border-box",
-    padding: "20px 16px 32px",
+    padding: "16px 16px 32px",
+    paddingTop: "calc(env(safe-area-inset-top, 0px) + 48px)",
   },
   lightPage: {
     width: "100%",
