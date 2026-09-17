@@ -3121,64 +3121,134 @@ function GearIcon() {
 }
 function GlobeIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="#F4F1EA" strokeWidth="1.7" />
-      <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#F4F1EA" strokeWidth="1.5" />
-      <line x1="3" y1="12" x2="21" y2="12" stroke="#F4F1EA" strokeWidth="1.5" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="24" fill="#F7F5EE" />
+      <path
+        d="M22 16c-3 5-3 14 0 19s6 9 4 16c-6-2-11-8-13-16-2-9 2-16 9-19z"
+        fill="#2FA84F"
+      />
+      <path
+        d="M42 20c3 4 4 10 1 15-2 4-1 9 2 12 4-3 7-9 6-15-1-6-5-10-9-12z"
+        fill="#2FA84F"
+      />
+      <path
+        d="M32 8v48M8 32h48M12 18c8 6 32 6 40 0M12 46c8-6 32-6 40 0"
+        stroke="#0B5C27"
+        strokeWidth="1.4"
+        fill="none"
+        opacity="0.35"
+      />
     </svg>
   );
 }
 function FlagIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <line x1="5" y1="3" x2="5" y2="21" stroke="#F4F1EA" strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M5 4h14l-3.5 4L19 12H5V4z" stroke="#F4F1EA" strokeWidth="1.5" strokeLinejoin="round" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect x="9" y="15" width="46" height="34" rx="6" fill="#0B5C27" />
+      <polygon points="32,20 50,32 32,44 14,32" fill="#FFC94D" />
+      <circle cx="32" cy="32" r="8" fill="#173F8A" />
+      <path
+        d="M25 30a9 9 0 0114 0"
+        stroke="#F7F5EE"
+        strokeWidth="1.6"
+        fill="none"
+      />
     </svg>
   );
 }
 function PersonQuestionIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <path d="M5 20c1-3.6 3.6-5.4 7-5.4s6 1.8 7 5.4" stroke="#F4F1EA" strokeWidth="1.8" strokeLinecap="round" />
-      <circle cx="12" cy="9" r="4" fill="#0F1D16" opacity="0" />
-      <text x="12" y="12.5" fontSize="10" textAnchor="middle" fill="#F4F1EA" fontFamily="Oswald, sans-serif" fontWeight="700">?</text>
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <path d="M12 54c2-11 9.5-17 20-17s18 6 20 17" fill="#F7F5EE" />
+      <circle cx="32" cy="24" r="12" fill="#F7F5EE" />
+      <circle cx="44" cy="46" r="11" fill="#FFC94D" />
+      <text
+        x="44"
+        y="51"
+        fontSize="15"
+        textAnchor="middle"
+        fill="#0B5C27"
+        fontFamily="Oswald, sans-serif"
+        fontWeight="700"
+      >
+        ?
+      </text>
     </svg>
   );
 }
 function XIIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="#F4F1EA" strokeWidth="1.6" />
-      <text x="12" y="16" fontSize="10" textAnchor="middle" fill="#F4F1EA" fontFamily="Oswald, sans-serif" fontWeight="700">XI</text>
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect
+        x="12"
+        y="12"
+        width="40"
+        height="40"
+        rx="6"
+        fill="none"
+        stroke="#F7F5EE"
+        strokeWidth="2.4"
+      />
+      <line x1="12" y1="32" x2="52" y2="32" stroke="#F7F5EE" strokeWidth="2.4" />
+      <circle cx="32" cy="32" r="7" fill="none" stroke="#F7F5EE" strokeWidth="2.4" />
+      <circle cx="20" cy="42" r="3.2" fill="#FFC94D" />
+      <circle cx="32" cy="46" r="3.2" fill="#FFC94D" />
+      <circle cx="44" cy="42" r="3.2" fill="#FFC94D" />
+      <circle cx="32" cy="19" r="3.2" fill="#FFC94D" />
     </svg>
   );
 }
 function ShirtIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <path d="M8 4L4 7l2 3 2-1.3V20h8V8.7L18 10l2-3-4-3-2 2h-4L8 4z" stroke="#F4F1EA" strokeWidth="1.6" strokeLinejoin="round" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <path
+        d="M22 8L10 16l4 9 6-3v33h24V22l6 3 4-9L42 8l-6 5H28l-6-5z"
+        fill="#F7F5EE"
+      />
+      <rect x="26" y="10" width="12" height="5" rx="2.5" fill="#0B5C27" />
+      <circle cx="32" cy="34" r="7" fill="#FFC94D" />
+      <text
+        x="32"
+        y="39"
+        fontSize="10"
+        textAnchor="middle"
+        fill="#0B5C27"
+        fontFamily="Oswald, sans-serif"
+        fontWeight="700"
+      >
+        ?
+      </text>
     </svg>
   );
 }
 function CalendarIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="5" width="16" height="15" rx="1.5" stroke="#F4F1EA" strokeWidth="1.6" />
-      <line x1="4" y1="9.5" x2="20" y2="9.5" stroke="#F4F1EA" strokeWidth="1.6" />
-      <line x1="8" y1="3" x2="8" y2="7" stroke="#F4F1EA" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="16" y1="3" x2="16" y2="7" stroke="#F4F1EA" strokeWidth="1.6" strokeLinecap="round" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect x="20" y="6" width="6" height="14" rx="3" fill="#0B5C27" />
+      <rect x="38" y="6" width="6" height="14" rx="3" fill="#0B5C27" />
+      <rect x="9" y="13" width="46" height="45" rx="9" fill="#F7F5EE" />
+      <rect x="9" y="13" width="46" height="16" rx="9" fill="#0B5C27" />
+      <rect x="9" y="22" width="46" height="7" fill="#0B5C27" />
+      <g fill="#BFE7C9">
+        <rect x="16" y="34" width="9" height="8" rx="2" />
+        <rect x="27.5" y="34" width="9" height="8" rx="2" />
+        <rect x="16" y="45" width="9" height="8" rx="2" />
+      </g>
+      <rect x="39" y="34" width="9" height="19" rx="2" fill="#FFC94D" />
+      <rect x="27.5" y="45" width="9" height="8" rx="2" fill="#BFE7C9" />
     </svg>
   );
 }
 function DiceIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="4" width="16" height="16" rx="3" stroke="#F4F1EA" strokeWidth="1.6" />
-      <circle cx="8.3" cy="8.3" r="1.3" fill="#F4F1EA" />
-      <circle cx="15.7" cy="8.3" r="1.3" fill="#F4F1EA" />
-      <circle cx="8.3" cy="15.7" r="1.3" fill="#F4F1EA" />
-      <circle cx="15.7" cy="15.7" r="1.3" fill="#F4F1EA" />
-      <circle cx="12" cy="12" r="1.3" fill="#F4F1EA" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect x="20" y="20" width="34" height="34" rx="8" fill="#0B5C27" opacity="0.35" />
+      <rect x="10" y="10" width="34" height="34" rx="8" fill="#F7F5EE" />
+      <circle cx="19" cy="19" r="3.2" fill="#0B5C27" />
+      <circle cx="35" cy="19" r="3.2" fill="#0B5C27" />
+      <circle cx="19" cy="35" r="3.2" fill="#0B5C27" />
+      <circle cx="35" cy="35" r="3.2" fill="#0B5C27" />
+      <circle cx="27" cy="27" r="3.2" fill="#FFC94D" />
     </svg>
   );
 }
@@ -3196,11 +3266,7 @@ function LightCard({ icon, iconImage, imageScale, title, desc, cta, onClick }) {
             }}
           />
         ) : (
-          <>
-            <div style={styles.lightCardSplashA} />
-            <div style={styles.lightCardSplashB} />
-            <div style={styles.lightCardIconInner}>{icon}</div>
-          </>
+          <div style={styles.lightCardIconBadge}>{icon}</div>
         )}
       </div>
       <div style={styles.lightCardBody}>
@@ -5343,26 +5409,14 @@ const styles = {
     objectFit: "contain",
     filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))",
   },
-  lightCardSplashA: {
-    position: "absolute",
-    width: 120,
-    height: 120,
-    background: "linear-gradient(140deg, #69C326 0%, #165D14 100%)",
-    borderRadius: "42% 58% 55% 45% / 48% 42% 58% 52%",
-    animation: "splashPulse 4s ease-in-out infinite",
-  },
-  lightCardSplashB: {
-    position: "absolute",
-    width: 96,
-    height: 96,
-    background: "#2F8F17",
-    opacity: 0.35,
-    borderRadius: "55% 45% 48% 52% / 42% 55% 45% 58%",
-    animation: "splashPulse 4s ease-in-out infinite 0.6s",
-  },
-  lightCardIconInner: {
+  lightCardIconBadge: {
     position: "relative",
-    zIndex: 1,
+    width: 132,
+    height: 132,
+    borderRadius: "50%",
+    background: "linear-gradient(160deg, #1E8F45 0%, #0B5C27 100%)",
+    boxShadow:
+      "inset 0 -8px 12px rgba(0,0,0,0.18), inset 0 3px 5px rgba(255,255,255,0.22)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
