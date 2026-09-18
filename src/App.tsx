@@ -3290,6 +3290,29 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
+// Strips common club prefixes/suffixes (FC Porto vs Porto, AC Milan vs
+// Milan) so the same club matches regardless of which form the data uses.
+function normalizeClubName(name) {
+  return (name || "")
+    .toLowerCase()
+    .replace(/\b(fc|cf|ac|afc|sc|cd)\b\.?/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// The "Clubs" hint in Lineup mode lists a player's career clubs, but
+// the current team is already shown on the pitch above - repeating it
+// in the hint gives the answer away for free. Drop it from the list.
+function otherClubsHint(clubsStr, currentTeam) {
+  if (!clubsStr) return clubsStr;
+  const normTeam = normalizeClubName(currentTeam);
+  const filtered = clubsStr
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => normalizeClubName(c) !== normTeam);
+  return filtered.length > 0 ? filtered.join(", ") : clubsStr;
+}
+
 const MODE_ACCENTS = {
   clues: { solid: "#1CB0F6", dark: "#0A91D1" },
   lineup: { solid: "#FF9600", dark: "#E07C00" },
@@ -5802,7 +5825,7 @@ export default function SoccerQuiz() {
                   <div style={styles.clueRow}>
                     <span style={styles.clueNumber}>2</span>
                     <span style={styles.clueText}>
-                      {t.clubs} {hiddenPlayerObj.clubs}
+                      {t.clubs} {otherClubsHint(hiddenPlayerObj.clubs, currentLineup.team)}
                     </span>
                   </div>
                 )}
@@ -6302,7 +6325,7 @@ export default function SoccerQuiz() {
                         <div style={styles.clueRow}>
                           <span style={styles.clueNumber}>2</span>
                           <span style={styles.clueText}>
-                            {t.clubs} {hiddenP.clubs}
+                            {t.clubs} {otherClubsHint(hiddenP.clubs, currentRandomItem.data.team)}
                           </span>
                         </div>
                       )}
