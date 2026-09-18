@@ -2899,6 +2899,8 @@ const TRANSLATIONS = {
       "Sign in, pick a nickname, and get matched instantly with another player for a live 10-question duel.",
     authEmailLabel: "Email",
     authPasswordLabel: "Password",
+    showPasswordLabel: "Show password",
+    hidePasswordLabel: "Hide password",
     authLoginBtn: "LOG IN",
     authSignupBtn: "CREATE ACCOUNT",
     authToggleToSignup: "No account yet? Create one",
@@ -3013,6 +3015,8 @@ const TRANSLATIONS = {
       "Entre, escolha um apelido e seja pareado na hora com outro jogador pra um duelo ao vivo de 10 perguntas.",
     authEmailLabel: "Email",
     authPasswordLabel: "Senha",
+    showPasswordLabel: "Mostrar senha",
+    hidePasswordLabel: "Esconder senha",
     authLoginBtn: "ENTRAR",
     authSignupBtn: "CRIAR CONTA",
     authToggleToSignup: "Não tem conta? Criar uma",
@@ -3127,6 +3131,8 @@ const TRANSLATIONS = {
       "Inicia sesión, elige un apodo y emparéjate al instante con otro jugador para un duelo en vivo de 10 preguntas.",
     authEmailLabel: "Correo",
     authPasswordLabel: "Contraseña",
+    showPasswordLabel: "Mostrar contraseña",
+    hidePasswordLabel: "Ocultar contraseña",
     authLoginBtn: "INICIAR SESIÓN",
     authSignupBtn: "CREAR CUENTA",
     authToggleToSignup: "¿No tienes cuenta? Crea una",
@@ -3494,6 +3500,31 @@ function VersusIcon({ accent = "#0B6F27" }) {
     </svg>
   );
 }
+function EyeIcon({ open }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"
+        stroke="#5F666B"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="3" stroke="#5F666B" strokeWidth="2" />
+      {!open && (
+        <line
+          x1="3"
+          y1="21"
+          x2="21"
+          y2="3"
+          stroke="#5F666B"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      )}
+    </svg>
+  );
+}
 function SoloIcon({ accent = "#0B6F27" }) {
   return (
     <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
@@ -3689,6 +3720,7 @@ export default function SoccerQuiz() {
   const [authMode, setAuthMode] = useState("login"); // login | signup
   const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState("");
   const [authMessage, setAuthMessage] = useState("");
@@ -5348,16 +5380,26 @@ export default function SoccerQuiz() {
                   onChange={(e) => setAuthEmail(e.target.value)}
                   style={styles.authInput}
                 />
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  autoComplete={authMode === "signup" ? "new-password" : "current-password"}
-                  placeholder={t.authPasswordLabel}
-                  value={authPassword}
-                  onChange={(e) => setAuthPassword(e.target.value)}
-                  style={styles.authInput}
-                />
+                <div style={styles.passwordFieldWrap}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    minLength={6}
+                    autoComplete={authMode === "signup" ? "new-password" : "current-password"}
+                    placeholder={t.authPasswordLabel}
+                    value={authPassword}
+                    onChange={(e) => setAuthPassword(e.target.value)}
+                    style={{ ...styles.authInput, paddingRight: 44 }}
+                  />
+                  <button
+                    type="button"
+                    style={styles.passwordToggleBtn}
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? t.hidePasswordLabel : t.showPasswordLabel}
+                  >
+                    <EyeIcon open={showPassword} />
+                  </button>
+                </div>
                 {authError && <div style={styles.authError}>{authError}</div>}
                 {authMessage && <div style={styles.authMessage}>{authMessage}</div>}
                 <button
@@ -7078,6 +7120,25 @@ const styles = {
     borderRadius: 12,
     padding: "0 14px",
     boxSizing: "border-box",
+  },
+  passwordFieldWrap: {
+    position: "relative",
+    width: "100%",
+  },
+  passwordToggleBtn: {
+    position: "absolute",
+    right: 4,
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: 40,
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    padding: 0,
   },
   authSubmitBtn: {
     width: "100%",
