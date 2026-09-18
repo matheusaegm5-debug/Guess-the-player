@@ -4058,6 +4058,21 @@ export default function SoccerQuiz() {
   async function leaveRoom() {
     if (room && authUser) {
       await supabase.from("room_players").delete().eq("room_id", room.id).eq("user_id", authUser.id);
+      if (room.status === "active") {
+        const { data: remaining } = await supabase
+          .from("room_players")
+          .select("*")
+          .eq("room_id", room.id);
+        // Down to one player (or none) mid-game - end it instead of
+        // leaving them stuck waiting for someone who already left.
+        if ((remaining?.length ?? 0) <= 1) {
+          await supabase
+            .from("rooms")
+            .update({ status: "finished" })
+            .eq("id", room.id)
+            .eq("status", "active");
+        }
+      }
     }
     setRoomActive(false);
     setIsRoomHost(false);
@@ -4688,7 +4703,16 @@ export default function SoccerQuiz() {
     }
   }
 
-  function leaveDuel() {
+  async function leaveDuel() {
+    if (currentMatch && currentMatch.status !== "finished" && myPlayerSlot) {
+      const opponentId =
+        myPlayerSlot === "player1" ? currentMatch.player2_id : currentMatch.player1_id;
+      await supabase
+        .from("matches")
+        .update({ status: "finished", winner_id: opponentId })
+        .eq("id", currentMatch.id)
+        .eq("status", "active");
+    }
     setDuelActive(false);
     setMyPlayerSlot(null);
     setCurrentMatch(null);
