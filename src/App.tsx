@@ -2915,6 +2915,7 @@ const TRANSLATIONS = {
     nicknameLabel: "Pick a nickname",
     nicknamePlaceholder: "Your nickname",
     nicknameSaveBtn: "SAVE AND CONTINUE",
+    changeNicknameBtn: "Change nickname",
     findMatchBtn: "FIND RANDOM MATCH",
     searchingText: "Looking for an opponent...",
     cancelSearchBtn: "CANCEL",
@@ -3031,6 +3032,7 @@ const TRANSLATIONS = {
     nicknameLabel: "Escolha um apelido",
     nicknamePlaceholder: "Seu apelido",
     nicknameSaveBtn: "SALVAR E CONTINUAR",
+    changeNicknameBtn: "Trocar apelido",
     findMatchBtn: "BUSCAR PARTIDA ALEATÓRIA",
     searchingText: "Procurando um oponente...",
     cancelSearchBtn: "CANCELAR",
@@ -3147,6 +3149,7 @@ const TRANSLATIONS = {
     nicknameLabel: "Elige un apodo",
     nicknamePlaceholder: "Tu apodo",
     nicknameSaveBtn: "GUARDAR Y CONTINUAR",
+    changeNicknameBtn: "Cambiar apodo",
     findMatchBtn: "BUSCAR PARTIDA ALEATORIA",
     searchingText: "Buscando un oponente...",
     cancelSearchBtn: "CANCELAR",
@@ -3777,6 +3780,7 @@ export default function SoccerQuiz() {
   const [profile, setProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [nicknameInput, setNicknameInput] = useState("");
+  const [editingNickname, setEditingNickname] = useState(false);
   const [profileBusy, setProfileBusy] = useState(false);
   const [profileError, setProfileError] = useState("");
 
@@ -3828,7 +3832,7 @@ export default function SoccerQuiz() {
     setProfileError("");
     const { data, error } = await supabase
       .from("profiles")
-      .insert({ id: authUser.id, nickname: nicknameInput.trim() })
+      .upsert({ id: authUser.id, nickname: nicknameInput.trim() })
       .select()
       .single();
     setProfileBusy(false);
@@ -3837,6 +3841,7 @@ export default function SoccerQuiz() {
       return;
     }
     setProfile(data);
+    setEditingNickname(false);
   }
 
   async function findRandomMatch() {
@@ -5220,7 +5225,66 @@ export default function SoccerQuiz() {
             ) : authUser && profile ? (
               <div style={styles.authLoggedInCard}>
                 <span style={styles.authMessage}>{t.authLoggedInAs}</span>
-                <strong>{profile.nickname}</strong>
+                {editingNickname ? (
+                  <form
+                    style={{ ...styles.authForm, marginTop: 4 }}
+                    onSubmit={handleSaveNickname}
+                  >
+                    <input
+                      type="text"
+                      required
+                      maxLength={20}
+                      value={nicknameInput}
+                      onChange={(e) => setNicknameInput(e.target.value)}
+                      style={styles.authInput}
+                      autoFocus
+                    />
+                    {profileError && <div style={styles.authError}>{profileError}</div>}
+                    <div style={{ display: "flex", gap: 8, width: "100%" }}>
+                      <button
+                        type="submit"
+                        disabled={profileBusy}
+                        style={{
+                          ...styles.authSubmitBtn,
+                          marginTop: 0,
+                          flex: 1,
+                          opacity: profileBusy ? 0.6 : 1,
+                        }}
+                      >
+                        {t.nicknameSaveBtn}
+                      </button>
+                      <button
+                        type="button"
+                        style={{
+                          ...styles.authSubmitBtn,
+                          marginTop: 0,
+                          flex: 1,
+                          background: "#AAB4BE",
+                        }}
+                        onClick={() => {
+                          setEditingNickname(false);
+                          setProfileError("");
+                        }}
+                      >
+                        {t.cancelSearchBtn}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <strong>{profile.nickname}</strong>
+                    <button
+                      type="button"
+                      style={styles.authToggleLink}
+                      onClick={() => {
+                        setNicknameInput(profile.nickname);
+                        setEditingNickname(true);
+                      }}
+                    >
+                      {t.changeNicknameBtn}
+                    </button>
+                  </>
+                )}
 
                 {currentMatch ? (
                   <>
