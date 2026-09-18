@@ -2928,6 +2928,23 @@ const TRANSLATIONS = {
     duelBackBtn: "BACK TO MULTIPLAYER",
     duelGetReady: "GET READY",
     duelVsWord: "vs",
+    roomOrLabel: "or invite friends",
+    createRoomBtn: "CREATE ROOM",
+    joinRoomBtn: "JOIN WITH CODE",
+    pickModeLabel: "Choose a mode for the room",
+    roomCodePlaceholder: "6-digit code",
+    joinRoomSubmitBtn: "JOIN",
+    roomNotFound: "Room not found or already started.",
+    roomCodeLabel: "ROOM CODE",
+    roomShareHint: "Share this code with your friends",
+    roomCopyBtn: "COPY CODE",
+    roomCodeCopiedMsg: "Copied!",
+    roomPlayersLabel: "PLAYERS",
+    roomWaitingHostLabel: "Waiting for the host to start the game...",
+    roomStartBtn: "START GAME",
+    roomLeaveBtn: "LEAVE ROOM",
+    roomWaitingTitle: "Waiting for everyone to finish...",
+    roomEndTitle: "FINAL RESULTS",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -3025,6 +3042,23 @@ const TRANSLATIONS = {
     duelBackBtn: "VOLTAR AO MULTIPLAYER",
     duelGetReady: "PREPARA AÍ",
     duelVsWord: "vs",
+    roomOrLabel: "ou convide amigos",
+    createRoomBtn: "CRIAR SALA",
+    joinRoomBtn: "ENTRAR COM CÓDIGO",
+    pickModeLabel: "Escolha um modo pra sala",
+    roomCodePlaceholder: "código de 6 dígitos",
+    joinRoomSubmitBtn: "ENTRAR",
+    roomNotFound: "Sala não encontrada ou já começou.",
+    roomCodeLabel: "CÓDIGO DA SALA",
+    roomShareHint: "Compartilhe esse código com seus amigos",
+    roomCopyBtn: "COPIAR CÓDIGO",
+    roomCodeCopiedMsg: "Copiado!",
+    roomPlayersLabel: "JOGADORES",
+    roomWaitingHostLabel: "Aguardando o anfitrião iniciar a partida...",
+    roomStartBtn: "INICIAR PARTIDA",
+    roomLeaveBtn: "SAIR DA SALA",
+    roomWaitingTitle: "Aguardando todo mundo terminar...",
+    roomEndTitle: "RESULTADO FINAL",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -3122,6 +3156,23 @@ const TRANSLATIONS = {
     duelBackBtn: "VOLVER A MULTIJUGADOR",
     duelGetReady: "PREPÁRATE",
     duelVsWord: "vs",
+    roomOrLabel: "o invita amigos",
+    createRoomBtn: "CREAR SALA",
+    joinRoomBtn: "UNIRSE CON CÓDIGO",
+    pickModeLabel: "Elige un modo para la sala",
+    roomCodePlaceholder: "código de 6 dígitos",
+    joinRoomSubmitBtn: "UNIRSE",
+    roomNotFound: "Sala no encontrada o ya comenzó.",
+    roomCodeLabel: "CÓDIGO DE SALA",
+    roomShareHint: "Comparte este código con tus amigos",
+    roomCopyBtn: "COPIAR CÓDIGO",
+    roomCodeCopiedMsg: "¡Copiado!",
+    roomPlayersLabel: "JUGADORES",
+    roomWaitingHostLabel: "Esperando a que el anfitrión inicie la partida...",
+    roomStartBtn: "INICIAR PARTIDA",
+    roomLeaveBtn: "SALIR DE LA SALA",
+    roomWaitingTitle: "Esperando a que todos terminen...",
+    roomEndTitle: "RESULTADO FINAL",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3525,6 +3576,35 @@ function StatItem({ icon, label }) {
   );
 }
 
+function RoomLeaderboard({ players, myUserId, medals = false }) {
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+  return (
+    <div style={styles.roomLeaderboard}>
+      {sorted.map((p, i) => (
+        <div
+          key={p.id}
+          style={{
+            ...styles.roomLeaderboardRow,
+            ...(p.user_id === myUserId ? styles.roomLeaderboardRowMe : {}),
+          }}
+        >
+          <span style={styles.roomLeaderboardRank}>
+            {medals && i === 0
+              ? "🥇"
+              : medals && i === 1
+              ? "🥈"
+              : medals && i === 2
+              ? "🥉"
+              : `${i + 1}.`}
+          </span>
+          <span style={styles.roomLeaderboardName}>{p.nickname}</span>
+          <span style={styles.roomLeaderboardScore}>{p.score}/100</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function buildLineupRound(pool = LINEUP_POOL) {
   return shuffle(pool)
     .slice(0, LINEUPS_PER_GAME)
@@ -3567,6 +3647,31 @@ function buildRandomRound(
     if (kind === "clubs") return { kind, data: clubsPicks[cli++] };
     return { kind, data: yearPicks[yi++] };
   });
+}
+
+// Wraps any single mode's pool into the same {kind, data} shape
+// buildRandomRound() produces, so room games can reuse the same
+// "random" screen rendering regardless of which mode the host picked.
+function buildRoomQuestions(selectedMode) {
+  if (selectedMode === "clues") {
+    return shuffle(QUESTION_POOL)
+      .slice(0, QUESTIONS_PER_GAME)
+      .map((q) => ({ kind: "clues", data: { ...q, options: shuffle(q.options) } }));
+  }
+  if (selectedMode === "lineup") {
+    return buildLineupRound(LINEUP_POOL).map((team) => ({ kind: "lineup", data: team }));
+  }
+  if (selectedMode === "clubs") {
+    return shuffle(CLUBS_QUESTION_POOL)
+      .slice(0, CLUBS_PER_GAME)
+      .map((q) => ({ kind: "clubs", data: q }));
+  }
+  if (selectedMode === "year") {
+    return shuffle(YEAR_QUESTION_POOL)
+      .slice(0, YEARS_PER_GAME)
+      .map((q) => ({ kind: "year", data: { ...q, options: shuffle(q.options) } }));
+  }
+  return buildRandomRound();
 }
 
 export default function SoccerQuiz() {
@@ -3651,6 +3756,20 @@ export default function SoccerQuiz() {
   const [myPlayerSlot, setMyPlayerSlot] = useState(null); // "player1" | "player2"
   const [duelCountdown, setDuelCountdown] = useState(3);
   const [pendingDuelMatch, setPendingDuelMatch] = useState(null);
+
+  // --- Friend rooms (Kahoot-style, N players) ---
+  const [room, setRoom] = useState(null);
+  const [roomPlayers, setRoomPlayers] = useState([]);
+  const [isRoomHost, setIsRoomHost] = useState(false);
+  const [roomBusy, setRoomBusy] = useState(false);
+  const [roomError, setRoomError] = useState("");
+  const [roomCodeInput, setRoomCodeInput] = useState("");
+  const [showCreateRoom, setShowCreateRoom] = useState(false);
+  const [showJoinRoom, setShowJoinRoom] = useState(false);
+  const [roomCodeCopied, setRoomCodeCopied] = useState(false);
+  const [roomActive, setRoomActive] = useState(false);
+  const [roomCountdown, setRoomCountdown] = useState(3);
+  const [pendingRoomQuestions, setPendingRoomQuestions] = useState(null);
 
   useEffect(() => {
     if (!authUser) {
@@ -3817,6 +3936,179 @@ export default function SoccerQuiz() {
       setScreen("duelEnd");
     }
   }, [currentMatch?.status, duelActive]);
+
+  function generateRoomCode() {
+    return String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  async function handleCreateRoom(selectedMode) {
+    if (!authUser || !profile) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const code = generateRoomCode();
+    const { data: newRoom, error } = await supabase
+      .from("rooms")
+      .insert({ code, mode: selectedMode, host_id: authUser.id })
+      .select()
+      .single();
+    if (error || !newRoom) {
+      setRoomBusy(false);
+      setRoomError(error?.message || t.authGenericError);
+      return;
+    }
+    await supabase
+      .from("room_players")
+      .insert({ room_id: newRoom.id, user_id: authUser.id, nickname: profile.nickname });
+    setRoomBusy(false);
+    setRoom(newRoom);
+    setIsRoomHost(true);
+    setShowCreateRoom(false);
+    setScreen("roomLobby");
+  }
+
+  async function handleJoinRoom(e) {
+    e.preventDefault();
+    if (!authUser || !profile) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const code = roomCodeInput.trim();
+    const { data: foundRoom } = await supabase
+      .from("rooms")
+      .select("*")
+      .eq("code", code)
+      .eq("status", "waiting")
+      .maybeSingle();
+    if (!foundRoom) {
+      setRoomBusy(false);
+      setRoomError(t.roomNotFound);
+      return;
+    }
+    const { error: joinError } = await supabase
+      .from("room_players")
+      .upsert(
+        { room_id: foundRoom.id, user_id: authUser.id, nickname: profile.nickname },
+        { onConflict: "room_id,user_id" }
+      );
+    setRoomBusy(false);
+    if (joinError) {
+      setRoomError(joinError.message || t.authGenericError);
+      return;
+    }
+    setRoom(foundRoom);
+    setIsRoomHost(foundRoom.host_id === authUser.id);
+    setShowJoinRoom(false);
+    setRoomCodeInput("");
+    setScreen("roomLobby");
+  }
+
+  async function handleStartRoom() {
+    if (!isRoomHost || !room) return;
+    const qs = buildRoomQuestions(room.mode);
+    await supabase.from("rooms").update({ questions: qs, status: "active" }).eq("id", room.id);
+  }
+
+  async function copyRoomCode() {
+    if (!room) return;
+    try {
+      await navigator.clipboard.writeText(room.code);
+      setRoomCodeCopied(true);
+      setTimeout(() => setRoomCodeCopied(false), 1500);
+    } catch (e) {
+      // clipboard unsupported/blocked — ignore
+    }
+  }
+
+  async function leaveRoom() {
+    if (room && authUser) {
+      await supabase.from("room_players").delete().eq("room_id", room.id).eq("user_id", authUser.id);
+    }
+    setRoomActive(false);
+    setIsRoomHost(false);
+    setRoom(null);
+    setRoomPlayers([]);
+    setPendingRoomQuestions(null);
+    setRoomCountdown(3);
+    setShowCreateRoom(false);
+    setShowJoinRoom(false);
+    setRoomError("");
+    setScreen("multiplayer");
+  }
+
+  // Live updates for the current room row: questions arriving, status changes.
+  useEffect(() => {
+    if (!room?.id) return;
+    const channel = supabase
+      .channel(`room-${room.id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "rooms", filter: `id=eq.${room.id}` },
+        (payload) => setRoom(payload.new)
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [room?.id]);
+
+  // Live player list + live scores for the current room.
+  useEffect(() => {
+    if (!room?.id) return;
+    let cancelled = false;
+    function refetchPlayers() {
+      Promise.all([
+        supabase.from("room_players").select("*").eq("room_id", room.id).order("joined_at"),
+        supabase.from("rooms").select("*").eq("id", room.id).maybeSingle(),
+      ]).then(([{ data: players }, { data: freshRoom }]) => {
+        if (cancelled) return;
+        setRoomPlayers(players ?? []);
+        if (freshRoom) maybeFinishRoom(freshRoom, players ?? []);
+      });
+    }
+    refetchPlayers();
+    const channel = supabase
+      .channel(`room-players-${room.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "room_players", filter: `room_id=eq.${room.id}` },
+        refetchPlayers
+      )
+      .subscribe();
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, [room?.id]);
+
+  // Once the host starts the room, kick off the pre-game countdown for everyone.
+  useEffect(() => {
+    if (roomActive || screen === "roomCountdown") return;
+    if (room?.status === "active" && room?.questions?.length > 0) {
+      setPendingRoomQuestions(room.questions);
+      setRoomCountdown(3);
+      setScreen("roomCountdown");
+    }
+  }, [room, roomActive, screen]);
+
+  // Ticks the room's "3, 2, 1" countdown, then blows the whistle and starts play.
+  useEffect(() => {
+    if (screen !== "roomCountdown") return;
+    if (roomCountdown <= 0) {
+      playWhistleSound();
+      const goTimer = setTimeout(() => {
+        if (pendingRoomQuestions) beginRoomMatch(pendingRoomQuestions);
+      }, 550);
+      return () => clearTimeout(goTimer);
+    }
+    const tickTimer = setTimeout(() => setRoomCountdown((c) => c - 1), 800);
+    return () => clearTimeout(tickTimer);
+  }, [screen, roomCountdown]);
+
+  // Once everyone has finished, move from "waiting" to the final standings.
+  useEffect(() => {
+    if (roomActive && room?.status === "finished" && screen !== "roomEnd") {
+      setScreen("roomEnd");
+    }
+  }, [room?.status, roomActive]);
 
   // --- Clues mode state ---
   const [questions, setQuestions] = useState(() =>
@@ -4304,6 +4596,7 @@ export default function SoccerQuiz() {
       playWrongSound();
     }
     if (duelActive) pushDuelState(score + gained, rIndex);
+    if (roomActive) pushRoomState(score + gained, rIndex);
   }
 
   function requestRandomHint() {
@@ -4318,6 +4611,9 @@ export default function SoccerQuiz() {
       if (duelActive) {
         setScreen("duelWaiting");
         finishDuel();
+      } else if (roomActive) {
+        setScreen("roomWaiting");
+        finishRoomPlayer();
       } else {
         setScreen("roundEnd");
       }
@@ -4332,6 +4628,7 @@ export default function SoccerQuiz() {
     setRandomTimeLeft(timeForKind(nextItem.kind));
     setRandomHintsUsed(0);
     if (duelActive) pushDuelState(score, rIndex + 1);
+    if (roomActive) pushRoomState(score, rIndex + 1);
   }
 
   function startDuel(match) {
@@ -4408,6 +4705,57 @@ export default function SoccerQuiz() {
     setScreen("multiplayer");
   }
 
+  function beginRoomMatch(qs) {
+    setMode("random");
+    setRandomQueue(qs);
+    setRIndex(0);
+    setScore(0);
+    setRandomPicked(null);
+    setRandomGuess("");
+    setRandomAnswered(false);
+    setRandomCorrect(false);
+    setRandomTimeLeft(timeForKind(qs[0].kind));
+    setRandomHintsUsed(0);
+    setRoomActive(true);
+    setScreen("random");
+  }
+
+  async function pushRoomState(scoreVal, indexVal) {
+    if (!room || !authUser) return;
+    await supabase
+      .from("room_players")
+      .update({ score: scoreVal, q_index: indexVal })
+      .eq("room_id", room.id)
+      .eq("user_id", authUser.id);
+  }
+
+  async function finishRoomPlayer() {
+    await pushRoomState(score, randomQueue.length);
+    const [{ data: freshRoom }, { data: players }] = await Promise.all([
+      supabase.from("rooms").select("*").eq("id", room.id).maybeSingle(),
+      supabase.from("room_players").select("*").eq("room_id", room.id),
+    ]);
+    if (freshRoom && players) {
+      setRoom(freshRoom);
+      setRoomPlayers(players);
+      maybeFinishRoom(freshRoom, players);
+    }
+  }
+
+  async function maybeFinishRoom(roomRow, players) {
+    if (!roomRow || roomRow.status === "finished") return;
+    const total = roomRow.questions?.length ?? 0;
+    if (total === 0 || players.length === 0) return;
+    const allDone = players.every((p) => p.q_index >= total);
+    if (allDone) {
+      await supabase
+        .from("rooms")
+        .update({ status: "finished" })
+        .eq("id", roomRow.id)
+        .eq("status", "active");
+    }
+  }
+
   function changeLang(code) {
     setLang(code);
     setScreen("start");
@@ -4416,6 +4764,10 @@ export default function SoccerQuiz() {
   function goToMenuFromGame() {
     if (duelActive) {
       leaveDuel();
+      return;
+    }
+    if (roomActive) {
+      leaveRoom();
       return;
     }
     if (lang !== "pt") {
@@ -4457,6 +4809,10 @@ export default function SoccerQuiz() {
           "duelWaiting",
           "duelEnd",
           "duelCountdown",
+          "roomLobby",
+          "roomCountdown",
+          "roomWaiting",
+          "roomEnd",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -4918,9 +5274,114 @@ export default function SoccerQuiz() {
                     >
                       {t.findMatchBtn}
                     </button>
-                    <p style={{ ...styles.authMessage, marginTop: 4 }}>
-                      {t.inviteComingSoon}
-                    </p>
+
+                    <div style={styles.authDivider}>
+                      <span style={styles.authDividerLine} />
+                      {t.roomOrLabel}
+                      <span style={styles.authDividerLine} />
+                    </div>
+
+                    {!showCreateRoom && !showJoinRoom && (
+                      <div style={{ display: "flex", gap: 8, width: "100%" }}>
+                        <button
+                          style={{
+                            ...styles.authSubmitBtn,
+                            marginTop: 0,
+                            flex: 1,
+                            background: MODE_ACCENTS.multiplayer.dark,
+                          }}
+                          onClick={() => setShowCreateRoom(true)}
+                        >
+                          {t.createRoomBtn}
+                        </button>
+                        <button
+                          style={{
+                            ...styles.authSubmitBtn,
+                            marginTop: 0,
+                            flex: 1,
+                            background: "transparent",
+                            color: MODE_ACCENTS.multiplayer.dark,
+                            boxShadow: "none",
+                            border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+                          }}
+                          onClick={() => setShowJoinRoom(true)}
+                        >
+                          {t.joinRoomBtn}
+                        </button>
+                      </div>
+                    )}
+
+                    {showCreateRoom && (
+                      <div style={{ width: "100%" }}>
+                        <p style={styles.authMessage}>{t.pickModeLabel}</p>
+                        <div style={styles.roomModeGrid}>
+                          {[
+                            ["random", t.randomModeTitle],
+                            ["clues", t.cluesModeTitle],
+                            ["lineup", t.lineupModeTitle],
+                            ["clubs", t.clubsModeTitle],
+                            ["year", t.yearModeTitle],
+                          ].map(([m, label]) => (
+                            <button
+                              key={m}
+                              style={{ ...styles.roomModeBtn, opacity: roomBusy ? 0.6 : 1 }}
+                              disabled={roomBusy}
+                              onClick={() => handleCreateRoom(m)}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                        {roomError && <div style={styles.authError}>{roomError}</div>}
+                        <button
+                          style={{ ...styles.authToggleLink, marginTop: 8 }}
+                          onClick={() => {
+                            setShowCreateRoom(false);
+                            setRoomError("");
+                          }}
+                        >
+                          {t.cancelSearchBtn}
+                        </button>
+                      </div>
+                    )}
+
+                    {showJoinRoom && (
+                      <form style={styles.authForm} onSubmit={handleJoinRoom}>
+                        <input
+                          type="text"
+                          required
+                          maxLength={6}
+                          inputMode="numeric"
+                          placeholder={t.roomCodePlaceholder}
+                          value={roomCodeInput}
+                          onChange={(e) => setRoomCodeInput(e.target.value.replace(/\D/g, ""))}
+                          style={styles.authInput}
+                        />
+                        {roomError && <div style={styles.authError}>{roomError}</div>}
+                        <button
+                          type="submit"
+                          disabled={roomBusy}
+                          style={{
+                            ...styles.authSubmitBtn,
+                            opacity: roomBusy ? 0.6 : 1,
+                            cursor: roomBusy ? "not-allowed" : "pointer",
+                          }}
+                        >
+                          {t.joinRoomSubmitBtn}
+                        </button>
+                        <button
+                          type="button"
+                          style={styles.authToggleLink}
+                          onClick={() => {
+                            setShowJoinRoom(false);
+                            setRoomError("");
+                            setRoomCodeInput("");
+                          }}
+                        >
+                          {t.cancelSearchBtn}
+                        </button>
+                      </form>
+                    )}
                   </>
                 )}
 
@@ -5558,6 +6019,9 @@ export default function SoccerQuiz() {
               </div>
             </div>
           )}
+          {roomActive && (
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+          )}
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
@@ -6015,6 +6479,103 @@ export default function SoccerQuiz() {
           >
             {duelCountdown > 0 ? duelCountdown : "⚽"}
           </div>
+        </div>
+      )}
+
+      {screen === "roomLobby" && room && (
+        <div style={styles.centerCol}>
+          <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
+            <button
+              style={{ ...styles.lightIconBtn, fontSize: 22, color: "#101820" }}
+              onClick={leaveRoom}
+              aria-label={t.menu}
+            >
+              ‹
+            </button>
+          </div>
+          <div style={styles.eyebrow}>{t.roomCodeLabel}</div>
+          <div style={styles.roomCodeBox}>
+            <div className="fadeInUp" style={styles.roomCodeValue}>
+              {room.code}
+            </div>
+          </div>
+          <p style={styles.subtitle}>{t.roomShareHint}</p>
+          <button
+            style={{
+              ...styles.primaryBtn,
+              background: "transparent",
+              color: MODE_ACCENTS.multiplayer.dark,
+              boxShadow: "none",
+              border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+              width: "auto",
+              padding: "10px 24px",
+            }}
+            onClick={copyRoomCode}
+          >
+            {roomCodeCopied ? t.roomCodeCopiedMsg : t.roomCopyBtn}
+          </button>
+
+          <div style={{ ...styles.eyebrow, marginTop: 24 }}>
+            {t.roomPlayersLabel} ({roomPlayers.length})
+          </div>
+          <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+
+          {isRoomHost ? (
+            <button style={styles.primaryBtn} onClick={handleStartRoom}>
+              {t.roomStartBtn}
+            </button>
+          ) : (
+            <p style={styles.subtitle}>{t.roomWaitingHostLabel}</p>
+          )}
+          <button
+            style={{ ...styles.authToggleLink, marginTop: 8 }}
+            onClick={leaveRoom}
+          >
+            {t.roomLeaveBtn}
+          </button>
+        </div>
+      )}
+
+      {screen === "roomCountdown" && (
+        <div style={styles.centerCol}>
+          <div style={styles.eyebrow}>{t.duelGetReady}</div>
+          <p style={styles.subtitle}>
+            {roomPlayers.length} {t.roomPlayersLabel}
+          </p>
+          <div
+            key={roomCountdown}
+            className="trophyGlow fadeInUp"
+            style={{ ...styles.trophyEmoji, fontSize: 88 }}
+          >
+            {roomCountdown > 0 ? roomCountdown : "⚽"}
+          </div>
+        </div>
+      )}
+
+      {screen === "roomWaiting" && (
+        <div style={styles.centerCol}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            ⏳
+          </div>
+          <h1 className="fadeInUp" style={styles.title}>
+            {t.roomWaitingTitle}
+          </h1>
+          <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+        </div>
+      )}
+
+      {screen === "roomEnd" && room && (
+        <div style={styles.centerCol}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            🏆
+          </div>
+          <h1 className="fadeInUp" style={styles.title}>
+            {t.roomEndTitle}
+          </h1>
+          <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
+          <button style={styles.primaryBtn} onClick={leaveRoom}>
+            {t.duelBackBtn}
+          </button>
         </div>
       )}
     </div>
@@ -6693,6 +7254,85 @@ const styles = {
     fontWeight: 700,
     color: "#AAB4BE",
     letterSpacing: "0.1em",
+  },
+  roomLeaderboard: {
+    width: "100%",
+    maxWidth: 340,
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 18,
+    padding: "8px 6px",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
+    maxHeight: 320,
+    overflowY: "auto",
+  },
+  roomLeaderboardRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "8px 10px",
+    borderRadius: 12,
+  },
+  roomLeaderboardRowMe: {
+    background: "rgba(28,176,246,0.12)",
+  },
+  roomLeaderboardRank: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 13,
+    fontWeight: 700,
+    color: "#5F666B",
+    minWidth: 22,
+  },
+  roomLeaderboardName: {
+    flex: 1,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: 15,
+    fontWeight: 700,
+    color: "#101820",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  roomLeaderboardScore: {
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: 15,
+    fontWeight: 800,
+    color: "#101820",
+  },
+  roomCodeBox: {
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 18,
+    padding: "18px 24px",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
+    textAlign: "center",
+  },
+  roomCodeValue: {
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: 40,
+    fontWeight: 800,
+    letterSpacing: "0.12em",
+    color: "#101820",
+  },
+  roomModeGrid: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 8,
+    justifyContent: "center",
+    width: "100%",
+    maxWidth: 340,
+  },
+  roomModeBtn: {
+    fontFamily: "'Oswald', sans-serif",
+    fontWeight: 700,
+    fontSize: 13,
+    letterSpacing: "0.04em",
+    color: "#101820",
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 12,
+    padding: "10px 14px",
+    cursor: "pointer",
   },
   scoreboardLabel: {
     fontFamily: "'Oswald', sans-serif",

@@ -110,3 +110,63 @@ begin
   end if;
 end;
 $$;
+
+-- ============ FRIEND ROOMS (Kahoot-style, N players) ============
+-- A shareable room: the host picks a mode and a short code, any number
+-- of signed-in players join with that code, and everyone races through
+-- the same question set once the host starts it.
+create table if not exists public.rooms (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,
+  mode text not null default 'random',
+  status text not null default 'waiting', -- waiting | active | finished
+  host_id uuid not null references auth.users(id),
+  questions jsonb not null default '[]'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+alter table public.rooms enable row level security;
+
+create policy "Rooms are viewable by everyone"
+  on public.rooms for select
+  using (true);
+
+create policy "Signed in users can create a room as themselves"
+  on public.rooms for insert
+  with check (auth.uid() = host_id);
+
+create policy "Host can update their room"
+  on public.rooms for update
+  using (auth.uid() = host_id);
+
+create table if not exists public.room_players (
+  id uuid primary key default gen_random_uuid(),
+  room_id uuid not null references public.rooms(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  nickname text not null,
+  score int not null default 0,
+  q_index int not null default 0,
+  joined_at timestamptz not null default now(),
+  unique (room_id, user_id)
+);
+
+alter table public.room_players enable row level security;
+
+create policy "Room players are viewable by everyone"
+  on public.room_players for select
+  using (true);
+
+create policy "Users can join a room as themselves"
+  on public.room_players for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can update their own room progress"
+  on public.room_players for update
+  using (auth.uid() = user_id);
+
+create policy "Users can remove themselves from a room"
+  on public.room_players for delete
+  using (auth.uid() = user_id);
+
+alter publication supabase_realtime add table public.rooms;
+alter publication supabase_realtime add table public.room_players;
