@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { supabase } from "./lib/supabaseClient";
 
 // ============ CLUES MODE DATA ============
 // clues are provided per language; options/answer are proper names (language-agnostic)
@@ -2895,7 +2896,20 @@ const TRANSLATIONS = {
     multiplayerCta: "COMING SOON",
     multiplayerComingTitle: "1V1 DUELS",
     multiplayerComingDesc:
-      "Live head-to-head matches, a ranked ladder, and a global leaderboard are in the works. Keep playing to sharpen your football knowledge in the meantime!",
+      "Live matches are still being built - but you can already create your account below, ready for launch.",
+    authEmailLabel: "Email",
+    authPasswordLabel: "Password",
+    authLoginBtn: "LOG IN",
+    authSignupBtn: "CREATE ACCOUNT",
+    authToggleToSignup: "No account yet? Create one",
+    authToggleToLogin: "Already have an account? Log in",
+    authGoogleBtn: "Continue with Google",
+    authOr: "or",
+    authCheckEmail: "Check your inbox to confirm your account.",
+    authGenericError: "Something went wrong. Try again.",
+    authLoggedInAs: "Signed in as",
+    authLogoutBtn: "LOG OUT",
+    authMatchmakingNote: "Matchmaking isn't ready yet - hang tight!",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -2961,7 +2975,20 @@ const TRANSLATIONS = {
     multiplayerCta: "EM BREVE",
     multiplayerComingTitle: "DUELOS 1X1",
     multiplayerComingDesc:
-      "Partidas ao vivo contra outros jogadores, ranking e um placar global estão em desenvolvimento. Enquanto isso, continue jogando pra afiar seu conhecimento de futebol!",
+      "As partidas ao vivo ainda estão sendo construídas - mas você já pode criar sua conta abaixo, pronta pro lançamento.",
+    authEmailLabel: "Email",
+    authPasswordLabel: "Senha",
+    authLoginBtn: "ENTRAR",
+    authSignupBtn: "CRIAR CONTA",
+    authToggleToSignup: "Não tem conta? Criar uma",
+    authToggleToLogin: "Já tem conta? Entrar",
+    authGoogleBtn: "Continuar com Google",
+    authOr: "ou",
+    authCheckEmail: "Confira seu email pra confirmar a conta.",
+    authGenericError: "Algo deu errado. Tenta de novo.",
+    authLoggedInAs: "Logado como",
+    authLogoutBtn: "SAIR",
+    authMatchmakingNote: "As partidas ainda não estão prontas - aguenta aí!",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -3027,7 +3054,20 @@ const TRANSLATIONS = {
     multiplayerCta: "PRÓXIMAMENTE",
     multiplayerComingTitle: "DUELOS 1V1",
     multiplayerComingDesc:
-      "Partidas en vivo contra otros jugadores, ranking y una tabla global están en desarrollo. ¡Mientras tanto, sigue jugando para afinar tu conocimiento de fútbol!",
+      "Las partidas en vivo todavía se están construyendo - pero ya puedes crear tu cuenta abajo, lista para el lanzamiento.",
+    authEmailLabel: "Correo",
+    authPasswordLabel: "Contraseña",
+    authLoginBtn: "INICIAR SESIÓN",
+    authSignupBtn: "CREAR CUENTA",
+    authToggleToSignup: "¿No tienes cuenta? Crea una",
+    authToggleToLogin: "¿Ya tienes cuenta? Inicia sesión",
+    authGoogleBtn: "Continuar con Google",
+    authOr: "o",
+    authCheckEmail: "Revisa tu correo para confirmar la cuenta.",
+    authGenericError: "Algo salió mal. Intenta de nuevo.",
+    authLoggedInAs: "Conectado como",
+    authLogoutBtn: "CERRAR SESIÓN",
+    authMatchmakingNote: "Las partidas todavía no están listas - ¡espera un poco!",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3483,6 +3523,64 @@ export default function SoccerQuiz() {
   const t = TRANSLATIONS[lang];
 
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // --- Multiplayer auth state ---
+  const [authUser, setAuthUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authMode, setAuthMode] = useState("login"); // login | signup
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [authMessage, setAuthMessage] = useState("");
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthUser(data.session?.user ?? null);
+      setAuthLoading(false);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  async function handleAuthSubmit(e) {
+    e.preventDefault();
+    setAuthError("");
+    setAuthMessage("");
+    setAuthBusy(true);
+    try {
+      if (authMode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email: authEmail,
+          password: authPassword,
+        });
+        if (error) throw error;
+        setAuthMessage(t.authCheckEmail);
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: authEmail,
+          password: authPassword,
+        });
+        if (error) throw error;
+      }
+    } catch (err) {
+      setAuthError(err.message || t.authGenericError);
+    } finally {
+      setAuthBusy(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    setAuthError("");
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+    if (error) setAuthError(error.message || t.authGenericError);
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+  }
 
   // --- Clues mode state ---
   const [questions, setQuestions] = useState(() =>
@@ -4381,6 +4479,82 @@ export default function SoccerQuiz() {
             <p style={{ ...styles.lightSubtitle, maxWidth: 340 }}>
               {t.multiplayerComingDesc}
             </p>
+
+            {authLoading ? null : authUser ? (
+              <div style={styles.authLoggedInCard}>
+                <span style={styles.authMessage}>{t.authLoggedInAs}</span>
+                <strong>{authUser.email}</strong>
+                <p style={{ ...styles.authMessage, marginTop: 4 }}>
+                  {t.authMatchmakingNote}
+                </p>
+                <button
+                  style={{ ...styles.authSubmitBtn, marginTop: 8 }}
+                  onClick={handleLogout}
+                >
+                  {t.authLogoutBtn}
+                </button>
+              </div>
+            ) : (
+              <form style={styles.authForm} onSubmit={handleAuthSubmit}>
+                <input
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder={t.authEmailLabel}
+                  value={authEmail}
+                  onChange={(e) => setAuthEmail(e.target.value)}
+                  style={styles.authInput}
+                />
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete={authMode === "signup" ? "new-password" : "current-password"}
+                  placeholder={t.authPasswordLabel}
+                  value={authPassword}
+                  onChange={(e) => setAuthPassword(e.target.value)}
+                  style={styles.authInput}
+                />
+                {authError && <div style={styles.authError}>{authError}</div>}
+                {authMessage && <div style={styles.authMessage}>{authMessage}</div>}
+                <button
+                  type="submit"
+                  disabled={authBusy}
+                  style={{
+                    ...styles.authSubmitBtn,
+                    opacity: authBusy ? 0.6 : 1,
+                    cursor: authBusy ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {authMode === "signup" ? t.authSignupBtn : t.authLoginBtn}
+                </button>
+                <button
+                  type="button"
+                  style={styles.authToggleLink}
+                  onClick={() => {
+                    setAuthMode((m) => (m === "signup" ? "login" : "signup"));
+                    setAuthError("");
+                    setAuthMessage("");
+                  }}
+                >
+                  {authMode === "signup" ? t.authToggleToLogin : t.authToggleToSignup}
+                </button>
+
+                <div style={styles.authDivider}>
+                  <span style={styles.authDividerLine} />
+                  {t.authOr}
+                  <span style={styles.authDividerLine} />
+                </div>
+
+                <button
+                  type="button"
+                  style={styles.authGoogleBtn}
+                  onClick={handleGoogleLogin}
+                >
+                  {t.authGoogleBtn}
+                </button>
+              </form>
+            )}
           </div>
 
           <button style={styles.menuBtn} onClick={() => setScreen("start")}>
@@ -5826,6 +6000,104 @@ const styles = {
     background: "#AAB4BE",
     padding: "6px 16px",
     borderRadius: 999,
+  },
+  authForm: {
+    width: "100%",
+    maxWidth: 340,
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+    marginTop: 8,
+  },
+  authInput: {
+    width: "100%",
+    height: 48,
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 16,
+    color: "#101820",
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 12,
+    padding: "0 14px",
+    boxSizing: "border-box",
+  },
+  authSubmitBtn: {
+    width: "100%",
+    height: 48,
+    background: MODE_ACCENTS.multiplayer.solid,
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: 14,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 700,
+    fontSize: 15,
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+    cursor: "pointer",
+    boxShadow: `0 4px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+  },
+  authToggleLink: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#0B6F27",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "center",
+    padding: "4px 0",
+  },
+  authError: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    color: "#D9432E",
+    textAlign: "center",
+  },
+  authMessage: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    color: "#0B6F27",
+    textAlign: "center",
+  },
+  authDivider: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    color: "#5F666B",
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 11,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+  },
+  authDividerLine: {
+    flex: 1,
+    height: 1,
+    background: "#E4E0D4",
+  },
+  authGoogleBtn: {
+    width: "100%",
+    height: 48,
+    background: "#FFFFFF",
+    color: "#101820",
+    border: "2px solid #E4E0D4",
+    borderRadius: 14,
+    fontFamily: "'Inter', sans-serif",
+    fontWeight: 600,
+    fontSize: 14,
+    cursor: "pointer",
+  },
+  authLoggedInCard: {
+    width: "100%",
+    maxWidth: 340,
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 16,
+    padding: "16px 20px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 8,
   },
   menuBtn: {
     fontFamily: "'Oswald', sans-serif",
