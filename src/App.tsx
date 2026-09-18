@@ -4030,17 +4030,51 @@ export default function SoccerQuiz() {
     if (!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(2200, ctx.currentTime);
-      osc.frequency.linearRampToValueAtTime(2600, ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.5);
+      const now = ctx.currentTime;
+      const duration = 0.8;
+
+      // A referee's pea whistle has a piercing ~3kHz tone with a fast
+      // amplitude "trill" from the pea rattling inside - simulate that
+      // trill with a fast LFO modulating the carrier tone's gain.
+      const carrier = ctx.createOscillator();
+      carrier.type = "triangle";
+      carrier.frequency.setValueAtTime(3100, now);
+
+      const carrierGain = ctx.createGain();
+      carrierGain.gain.setValueAtTime(0, now);
+      carrierGain.gain.linearRampToValueAtTime(0.3, now + 0.015);
+      carrierGain.gain.setValueAtTime(0.3, now + duration - 0.12);
+      carrierGain.gain.linearRampToValueAtTime(0, now + duration);
+
+      const lfo = ctx.createOscillator();
+      lfo.type = "sine";
+      lfo.frequency.setValueAtTime(28, now);
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.setValueAtTime(0.4, now);
+      lfo.connect(lfoGain);
+      lfoGain.connect(carrierGain.gain);
+
+      // A thin higher harmonic adds the sharp/bright edge of a real whistle.
+      const harmonic = ctx.createOscillator();
+      harmonic.type = "sine";
+      harmonic.frequency.setValueAtTime(6200, now);
+      const harmonicGain = ctx.createGain();
+      harmonicGain.gain.setValueAtTime(0, now);
+      harmonicGain.gain.linearRampToValueAtTime(0.06, now + 0.015);
+      harmonicGain.gain.setValueAtTime(0.06, now + duration - 0.12);
+      harmonicGain.gain.linearRampToValueAtTime(0, now + duration);
+
+      carrier.connect(carrierGain);
+      carrierGain.connect(ctx.destination);
+      harmonic.connect(harmonicGain);
+      harmonicGain.connect(ctx.destination);
+
+      carrier.start(now);
+      lfo.start(now);
+      harmonic.start(now);
+      carrier.stop(now + duration);
+      lfo.stop(now + duration);
+      harmonic.stop(now + duration);
     } catch (e) {
       // audio unsupported or blocked — fail silently
     }
