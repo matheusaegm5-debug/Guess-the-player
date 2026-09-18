@@ -3773,6 +3773,9 @@ export default function SoccerQuiz() {
         const { error } = await supabase.auth.signUp({
           email: authEmail,
           password: authPassword,
+          options: {
+            emailRedirectTo: window.location.origin + window.location.pathname,
+          },
         });
         if (error) throw error;
         setAuthMessage(t.authCheckEmail);
@@ -3792,7 +3795,10 @@ export default function SoccerQuiz() {
 
   async function handleGoogleLogin() {
     setAuthError("");
-    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + window.location.pathname },
+    });
     if (error) setAuthError(error.message || t.authGenericError);
   }
 
