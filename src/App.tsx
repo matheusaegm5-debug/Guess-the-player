@@ -3238,7 +3238,7 @@ const MODE_ACCENTS = {
   random: { solid: "#00C2B8", dark: "#009C94" },
   mundo: { solid: "#1CB0F6", dark: "#0A91D1" },
   brasil: { solid: "#FFC94D", dark: "#E0A82E" },
-  multiplayer: { solid: "#AAB4BE", dark: "#818C97" },
+  multiplayer: { solid: "#1CB0F6", dark: "#0A91D1" },
   singlePlayer: { solid: "#22C744", dark: "#0B6F27" },
 };
 
@@ -6543,7 +6543,7 @@ const styles = {
     fontSize: 12,
     letterSpacing: "0.08em",
     color: "#FFFFFF",
-    background: "#AAB4BE",
+    background: MODE_ACCENTS.multiplayer.dark,
     padding: "6px 16px",
     borderRadius: 999,
   },
