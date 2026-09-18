@@ -2892,11 +2892,11 @@ const TRANSLATIONS = {
     playRandomMode: "PLAY RANDOM MODE",
     playYearMode: "PLAY YEAR MODE",
     multiplayerTitle: "Multiplayer",
-    multiplayerDesc: "Challenge a friend to a live 1v1 duel. Coming soon.",
-    multiplayerCta: "COMING SOON",
+    multiplayerDesc: "Challenge a random opponent to a live 1v1 duel.",
+    multiplayerCta: "LIVE",
     multiplayerComingTitle: "1V1 DUELS",
     multiplayerComingDesc:
-      "Live matches are still being built - but you can already create your account below, ready for launch.",
+      "Sign in, pick a nickname, and get matched instantly with another player for a live 10-question duel.",
     authEmailLabel: "Email",
     authPasswordLabel: "Password",
     authLoginBtn: "LOG IN",
@@ -2918,6 +2918,14 @@ const TRANSLATIONS = {
     cancelSearchBtn: "CANCEL",
     matchFoundText: "Match found! Opponent:",
     inviteComingSoon: "Inviting a friend is coming soon.",
+    duelYouLabel: "YOU",
+    duelOpponentLabel: "OPPONENT",
+    duelWaitingTitle: "Waiting for opponent...",
+    duelWaitingDesc: "You finished! Hang tight while your opponent wraps up.",
+    duelEndWin: "You won! 🏆",
+    duelEndLose: "You lost",
+    duelEndDraw: "It's a draw",
+    duelBackBtn: "BACK TO MULTIPLAYER",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -2979,11 +2987,11 @@ const TRANSLATIONS = {
     playRandomMode: "JOGAR MODO ALEATÓRIO",
     playYearMode: "JOGAR MODO ANO",
     multiplayerTitle: "Multiplayer",
-    multiplayerDesc: "Desafie um amigo num duelo 1x1 ao vivo. Em breve.",
-    multiplayerCta: "EM BREVE",
+    multiplayerDesc: "Desafie um oponente aleatório num duelo 1x1 ao vivo.",
+    multiplayerCta: "AO VIVO",
     multiplayerComingTitle: "DUELOS 1X1",
     multiplayerComingDesc:
-      "As partidas ao vivo ainda estão sendo construídas - mas você já pode criar sua conta abaixo, pronta pro lançamento.",
+      "Entre, escolha um apelido e seja pareado na hora com outro jogador pra um duelo ao vivo de 10 perguntas.",
     authEmailLabel: "Email",
     authPasswordLabel: "Senha",
     authLoginBtn: "ENTRAR",
@@ -3005,6 +3013,14 @@ const TRANSLATIONS = {
     cancelSearchBtn: "CANCELAR",
     matchFoundText: "Partida encontrada! Oponente:",
     inviteComingSoon: "Convidar um amigo vem em breve.",
+    duelYouLabel: "VOCÊ",
+    duelOpponentLabel: "OPONENTE",
+    duelWaitingTitle: "Aguardando oponente...",
+    duelWaitingDesc: "Você terminou! Aguenta aí enquanto seu oponente termina.",
+    duelEndWin: "Você venceu! 🏆",
+    duelEndLose: "Você perdeu",
+    duelEndDraw: "Empate",
+    duelBackBtn: "VOLTAR AO MULTIPLAYER",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -3066,11 +3082,11 @@ const TRANSLATIONS = {
     playRandomMode: "JUGAR MODO ALEATORIO",
     playYearMode: "JUGAR MODO AÑO",
     multiplayerTitle: "Multijugador",
-    multiplayerDesc: "Desafía a un amigo a un duelo 1v1 en vivo. Próximamente.",
-    multiplayerCta: "PRÓXIMAMENTE",
+    multiplayerDesc: "Desafía a un oponente aleatorio a un duelo 1v1 en vivo.",
+    multiplayerCta: "EN VIVO",
     multiplayerComingTitle: "DUELOS 1V1",
     multiplayerComingDesc:
-      "Las partidas en vivo todavía se están construyendo - pero ya puedes crear tu cuenta abajo, lista para el lanzamiento.",
+      "Inicia sesión, elige un apodo y emparéjate al instante con otro jugador para un duelo en vivo de 10 preguntas.",
     authEmailLabel: "Correo",
     authPasswordLabel: "Contraseña",
     authLoginBtn: "INICIAR SESIÓN",
@@ -3092,6 +3108,14 @@ const TRANSLATIONS = {
     cancelSearchBtn: "CANCELAR",
     matchFoundText: "¡Partida encontrada! Oponente:",
     inviteComingSoon: "Invitar a un amigo llega pronto.",
+    duelYouLabel: "TÚ",
+    duelOpponentLabel: "OPONENTE",
+    duelWaitingTitle: "Esperando al oponente...",
+    duelWaitingDesc: "¡Terminaste! Espera un poco mientras tu oponente termina.",
+    duelEndWin: "¡Ganaste! 🏆",
+    duelEndLose: "Perdiste",
+    duelEndDraw: "Empate",
+    duelBackBtn: "VOLVER A MULTIJUGADOR",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3617,6 +3641,8 @@ export default function SoccerQuiz() {
   const [matchmakingError, setMatchmakingError] = useState("");
   const [currentMatch, setCurrentMatch] = useState(null);
   const [opponentProfile, setOpponentProfile] = useState(null);
+  const [duelActive, setDuelActive] = useState(false);
+  const [myPlayerSlot, setMyPlayerSlot] = useState(null); // "player1" | "player2"
 
   useEffect(() => {
     if (!authUser) {
@@ -3664,6 +3690,10 @@ export default function SoccerQuiz() {
       return;
     }
     if (data) {
+      // We're the one who just paired with a waiting opponent - we own
+      // generating the shared question set for this duel.
+      const queue = buildRandomRound();
+      await supabase.from("matches").update({ questions: queue }).eq("id", data);
       openMatch(data);
     }
     // If data is null, we're now waiting in the queue - the realtime
@@ -3724,6 +3754,46 @@ export default function SoccerQuiz() {
       supabase.removeChannel(channel);
     };
   }, [authUser, profile]);
+
+  // Live updates for the current match row: question set arriving,
+  // opponent's live score/progress, and the finished/winner state.
+  useEffect(() => {
+    if (!currentMatch?.id) return;
+    const channel = supabase
+      .channel(`match-row-${currentMatch.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "matches",
+          filter: `id=eq.${currentMatch.id}`,
+        },
+        (payload) => {
+          setCurrentMatch(payload.new);
+          maybeFinishMatch(payload.new);
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [currentMatch?.id]);
+
+  // Once the shared question set lands on the match row, jump into the duel.
+  useEffect(() => {
+    if (duelActive) return;
+    if (currentMatch?.questions?.length > 0) {
+      startDuel(currentMatch);
+    }
+  }, [currentMatch, duelActive]);
+
+  // Once both players have finished, move from "waiting" to the result screen.
+  useEffect(() => {
+    if (duelActive && currentMatch?.status === "finished" && screen !== "duelEnd") {
+      setScreen("duelEnd");
+    }
+  }, [currentMatch?.status, duelActive]);
 
   // --- Clues mode state ---
   const [questions, setQuestions] = useState(() =>
@@ -4146,15 +4216,18 @@ export default function SoccerQuiz() {
     }
     setRandomCorrect(correct);
     setRandomAnswered(true);
+    let gained = 0;
     if (correct) {
       let factor = 1;
       if (item.kind === "lineup") factor = HINT_SCORE_FACTORS[Math.min(randomHintsUsed, MAX_HINTS)];
       if (item.kind === "clubs") factor = CLUBS_HINT_SCORE_FACTORS[Math.min(randomHintsUsed, MAX_CLUBS_HINTS)];
-      setScore((s) => s + questionScore(randomTimeLeft, timeForKind(item.kind), factor));
+      gained = questionScore(randomTimeLeft, timeForKind(item.kind), factor);
+      setScore((s) => s + gained);
       playCorrectSound();
     } else {
       playWrongSound();
     }
+    if (duelActive) pushDuelState(score + gained, rIndex);
   }
 
   function requestRandomHint() {
@@ -4166,7 +4239,12 @@ export default function SoccerQuiz() {
 
   function nextRandomQuestion() {
     if (rIndex + 1 >= randomQueue.length) {
-      setScreen("roundEnd");
+      if (duelActive) {
+        setScreen("duelWaiting");
+        finishDuel();
+      } else {
+        setScreen("roundEnd");
+      }
       return;
     }
     const nextItem = randomQueue[rIndex + 1];
@@ -4177,6 +4255,73 @@ export default function SoccerQuiz() {
     setRandomCorrect(false);
     setRandomTimeLeft(timeForKind(nextItem.kind));
     setRandomHintsUsed(0);
+    if (duelActive) pushDuelState(score, rIndex + 1);
+  }
+
+  function startDuel(match) {
+    const slot = match.player1_id === authUser.id ? "player1" : "player2";
+    setMyPlayerSlot(slot);
+    setMode("random");
+    setRandomQueue(match.questions);
+    setRIndex(0);
+    setScore(0);
+    setRandomPicked(null);
+    setRandomGuess("");
+    setRandomAnswered(false);
+    setRandomCorrect(false);
+    setRandomTimeLeft(timeForKind(match.questions[0].kind));
+    setRandomHintsUsed(0);
+    setDuelActive(true);
+    setScreen("random");
+  }
+
+  async function pushDuelState(scoreVal, indexVal, extra = {}) {
+    if (!currentMatch || !myPlayerSlot) return;
+    const scoreCol = myPlayerSlot === "player1" ? "player1_score" : "player2_score";
+    const indexCol = myPlayerSlot === "player1" ? "player1_index" : "player2_index";
+    await supabase
+      .from("matches")
+      .update({ [scoreCol]: scoreVal, [indexCol]: indexVal, ...extra })
+      .eq("id", currentMatch.id);
+  }
+
+  async function finishDuel() {
+    await pushDuelState(score, randomQueue.length);
+    const { data: freshMatch } = await supabase
+      .from("matches")
+      .select("*")
+      .eq("id", currentMatch.id)
+      .maybeSingle();
+    if (freshMatch) {
+      setCurrentMatch(freshMatch);
+      maybeFinishMatch(freshMatch);
+    }
+  }
+
+  async function maybeFinishMatch(match) {
+    if (!match || match.status === "finished") return;
+    const total = match.questions?.length ?? 0;
+    if (total > 0 && match.player1_index >= total && match.player2_index >= total) {
+      const winner =
+        match.player1_score === match.player2_score
+          ? null
+          : match.player1_score > match.player2_score
+          ? match.player1_id
+          : match.player2_id;
+      await supabase
+        .from("matches")
+        .update({ status: "finished", winner_id: winner })
+        .eq("id", match.id)
+        .eq("status", "active");
+    }
+  }
+
+  function leaveDuel() {
+    setDuelActive(false);
+    setMyPlayerSlot(null);
+    setCurrentMatch(null);
+    setOpponentProfile(null);
+    setScreen("multiplayer");
   }
 
   function changeLang(code) {
@@ -4185,6 +4330,10 @@ export default function SoccerQuiz() {
   }
 
   function goToMenuFromGame() {
+    if (duelActive) {
+      leaveDuel();
+      return;
+    }
     if (lang !== "pt") {
       setScreen("singlePlayer");
       return;
@@ -4221,6 +4370,8 @@ export default function SoccerQuiz() {
           "roundEnd",
           "multiplayer",
           "singlePlayer",
+          "duelWaiting",
+          "duelEnd",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -5302,6 +5453,25 @@ export default function SoccerQuiz() {
           <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
+          {duelActive && (
+            <div style={styles.scoreboard}>
+              <div style={styles.scoreboardItem}>
+                <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
+                <div style={styles.scoreboardValue}>{score}/100</div>
+              </div>
+              <div style={styles.scoreboardItem}>
+                <div style={styles.scoreboardLabel}>
+                  {opponentProfile?.nickname ?? t.duelOpponentLabel}
+                </div>
+                <div style={styles.scoreboardValue}>
+                  {(myPlayerSlot === "player1"
+                    ? currentMatch?.player2_score
+                    : currentMatch?.player1_score) ?? 0}
+                  /100
+                </div>
+              </div>
+            </div>
+          )}
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
@@ -5669,6 +5839,75 @@ export default function SoccerQuiz() {
             onClick={() => goToMenuFromGame()}
           >
             {t.changeMode}
+          </button>
+        </div>
+      )}
+
+      {screen === "duelWaiting" && (
+        <div style={styles.centerCol}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            ⏳
+          </div>
+          <h1 className="fadeInUp" style={styles.title}>
+            {t.duelWaitingTitle}
+          </h1>
+          <p style={styles.subtitle}>{t.duelWaitingDesc}</p>
+          <div style={styles.scoreboard}>
+            <div style={styles.scoreboardItem}>
+              <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
+            </div>
+            <div style={styles.scoreboardItem}>
+              <div style={styles.scoreboardLabel}>
+                {opponentProfile?.nickname ?? t.duelOpponentLabel}
+              </div>
+              <div style={styles.scoreboardValue}>
+                {(myPlayerSlot === "player1"
+                  ? currentMatch?.player2_score
+                  : currentMatch?.player1_score) ?? 0}
+                /100
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {screen === "duelEnd" && currentMatch && (
+        <div style={styles.centerCol}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            {currentMatch.winner_id === authUser?.id
+              ? "🏆"
+              : currentMatch.winner_id
+              ? "😔"
+              : "🤝"}
+          </div>
+          <h1 className="fadeInUp" style={styles.title}>
+            {currentMatch.winner_id === authUser?.id
+              ? t.duelEndWin
+              : currentMatch.winner_id
+              ? t.duelEndLose
+              : t.duelEndDraw}
+          </h1>
+          <div style={styles.scoreboard}>
+            <div style={styles.scoreboardItem}>
+              <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
+              <div style={styles.scoreboardValue}>
+                {myPlayerSlot === "player1" ? currentMatch.player1_score : currentMatch.player2_score}
+                /100
+              </div>
+            </div>
+            <div style={styles.scoreboardItem}>
+              <div style={styles.scoreboardLabel}>
+                {opponentProfile?.nickname ?? t.duelOpponentLabel}
+              </div>
+              <div style={styles.scoreboardValue}>
+                {myPlayerSlot === "player1" ? currentMatch.player2_score : currentMatch.player1_score}
+                /100
+              </div>
+            </div>
+          </div>
+          <button style={styles.primaryBtn} onClick={leaveDuel}>
+            {t.duelBackBtn}
           </button>
         </div>
       )}
