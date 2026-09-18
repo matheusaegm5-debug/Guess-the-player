@@ -2926,6 +2926,8 @@ const TRANSLATIONS = {
     duelEndLose: "You lost",
     duelEndDraw: "It's a draw",
     duelBackBtn: "BACK TO MULTIPLAYER",
+    duelGetReady: "GET READY",
+    duelVsWord: "vs",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -3021,6 +3023,8 @@ const TRANSLATIONS = {
     duelEndLose: "Você perdeu",
     duelEndDraw: "Empate",
     duelBackBtn: "VOLTAR AO MULTIPLAYER",
+    duelGetReady: "PREPARA AÍ",
+    duelVsWord: "vs",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -3116,6 +3120,8 @@ const TRANSLATIONS = {
     duelEndLose: "Perdiste",
     duelEndDraw: "Empate",
     duelBackBtn: "VOLVER A MULTIJUGADOR",
+    duelGetReady: "PREPÁRATE",
+    duelVsWord: "vs",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3643,6 +3649,8 @@ export default function SoccerQuiz() {
   const [opponentProfile, setOpponentProfile] = useState(null);
   const [duelActive, setDuelActive] = useState(false);
   const [myPlayerSlot, setMyPlayerSlot] = useState(null); // "player1" | "player2"
+  const [duelCountdown, setDuelCountdown] = useState(3);
+  const [pendingDuelMatch, setPendingDuelMatch] = useState(null);
 
   useEffect(() => {
     if (!authUser) {
@@ -3780,13 +3788,28 @@ export default function SoccerQuiz() {
     };
   }, [currentMatch?.id]);
 
-  // Once the shared question set lands on the match row, jump into the duel.
+  // Once the shared question set lands on the match row, kick off the
+  // pre-duel countdown.
   useEffect(() => {
-    if (duelActive) return;
+    if (duelActive || screen === "duelCountdown") return;
     if (currentMatch?.questions?.length > 0) {
       startDuel(currentMatch);
     }
-  }, [currentMatch, duelActive]);
+  }, [currentMatch, duelActive, screen]);
+
+  // Ticks the "3, 2, 1" countdown, then blows the whistle and starts play.
+  useEffect(() => {
+    if (screen !== "duelCountdown") return;
+    if (duelCountdown <= 0) {
+      playWhistleSound();
+      const goTimer = setTimeout(() => {
+        if (pendingDuelMatch) beginDuelMatch(pendingDuelMatch);
+      }, 550);
+      return () => clearTimeout(goTimer);
+    }
+    const tickTimer = setTimeout(() => setDuelCountdown((c) => c - 1), 800);
+    return () => clearTimeout(tickTimer);
+  }, [screen, duelCountdown]);
 
   // Once both players have finished, move from "waiting" to the result screen.
   useEffect(() => {
@@ -4002,6 +4025,25 @@ export default function SoccerQuiz() {
   }
   function playWrongSound() {
     playTone([220, 164.81], 0.16, "sawtooth");
+  }
+  function playWhistleSound() {
+    if (!soundEnabled) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(2200, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(2600, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+      // audio unsupported or blocked — fail silently
+    }
   }
 
   function startClues(pool = QUESTION_POOL) {
@@ -4261,6 +4303,12 @@ export default function SoccerQuiz() {
   function startDuel(match) {
     const slot = match.player1_id === authUser.id ? "player1" : "player2";
     setMyPlayerSlot(slot);
+    setPendingDuelMatch(match);
+    setDuelCountdown(3);
+    setScreen("duelCountdown");
+  }
+
+  function beginDuelMatch(match) {
     setMode("random");
     setRandomQueue(match.questions);
     setRIndex(0);
@@ -4321,6 +4369,8 @@ export default function SoccerQuiz() {
     setMyPlayerSlot(null);
     setCurrentMatch(null);
     setOpponentProfile(null);
+    setPendingDuelMatch(null);
+    setDuelCountdown(3);
     setScreen("multiplayer");
   }
 
@@ -4372,6 +4422,7 @@ export default function SoccerQuiz() {
           "singlePlayer",
           "duelWaiting",
           "duelEnd",
+          "duelCountdown",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -5454,12 +5505,13 @@ export default function SoccerQuiz() {
             {t.menu}
           </button>
           {duelActive && (
-            <div style={styles.scoreboard}>
-              <div style={styles.scoreboardItem}>
+            <div style={styles.duelScoreRow}>
+              <div style={styles.duelScoreBlock}>
                 <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
                 <div style={styles.scoreboardValue}>{score}/100</div>
               </div>
-              <div style={styles.scoreboardItem}>
+              <div style={styles.duelScoreDivider}>VS</div>
+              <div style={styles.duelScoreBlock}>
                 <div style={styles.scoreboardLabel}>
                   {opponentProfile?.nickname ?? t.duelOpponentLabel}
                 </div>
@@ -5852,12 +5904,13 @@ export default function SoccerQuiz() {
             {t.duelWaitingTitle}
           </h1>
           <p style={styles.subtitle}>{t.duelWaitingDesc}</p>
-          <div style={styles.scoreboard}>
-            <div style={styles.scoreboardItem}>
+          <div style={styles.duelScoreRow}>
+            <div style={styles.duelScoreBlock}>
               <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
               <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
-            <div style={styles.scoreboardItem}>
+            <div style={styles.duelScoreDivider}>VS</div>
+            <div style={styles.duelScoreBlock}>
               <div style={styles.scoreboardLabel}>
                 {opponentProfile?.nickname ?? t.duelOpponentLabel}
               </div>
@@ -5888,15 +5941,16 @@ export default function SoccerQuiz() {
               ? t.duelEndLose
               : t.duelEndDraw}
           </h1>
-          <div style={styles.scoreboard}>
-            <div style={styles.scoreboardItem}>
+          <div style={styles.duelScoreRow}>
+            <div style={styles.duelScoreBlock}>
               <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
               <div style={styles.scoreboardValue}>
                 {myPlayerSlot === "player1" ? currentMatch.player1_score : currentMatch.player2_score}
                 /100
               </div>
             </div>
-            <div style={styles.scoreboardItem}>
+            <div style={styles.duelScoreDivider}>VS</div>
+            <div style={styles.duelScoreBlock}>
               <div style={styles.scoreboardLabel}>
                 {opponentProfile?.nickname ?? t.duelOpponentLabel}
               </div>
@@ -5909,6 +5963,24 @@ export default function SoccerQuiz() {
           <button style={styles.primaryBtn} onClick={leaveDuel}>
             {t.duelBackBtn}
           </button>
+        </div>
+      )}
+
+      {screen === "duelCountdown" && (
+        <div style={styles.centerCol}>
+          <div style={styles.eyebrow}>{t.duelGetReady}</div>
+          {opponentProfile && (
+            <p style={styles.subtitle}>
+              {profile?.nickname ?? t.duelYouLabel} {t.duelVsWord} {opponentProfile.nickname}
+            </p>
+          )}
+          <div
+            key={duelCountdown}
+            className="trophyGlow fadeInUp"
+            style={{ ...styles.trophyEmoji, fontSize: 88 }}
+          >
+            {duelCountdown > 0 ? duelCountdown : "⚽"}
+          </div>
         </div>
       )}
     </div>
@@ -6569,6 +6641,25 @@ const styles = {
     boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
   },
   scoreboardItem: { textAlign: "center", flex: 1 },
+  duelScoreRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 18,
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 18,
+    padding: "14px 16px",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
+  },
+  duelScoreBlock: { textAlign: "center", minWidth: 76 },
+  duelScoreDivider: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 13,
+    fontWeight: 700,
+    color: "#AAB4BE",
+    letterSpacing: "0.1em",
+  },
   scoreboardLabel: {
     fontFamily: "'Oswald', sans-serif",
     fontSize: 11,
