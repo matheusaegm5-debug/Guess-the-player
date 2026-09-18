@@ -3716,6 +3716,7 @@ export default function SoccerQuiz() {
   const t = TRANSLATIONS[lang];
 
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const audioCtxRef = useRef(null);
 
   // --- Multiplayer auth state ---
   const [authUser, setAuthUser] = useState(null);
@@ -4326,10 +4327,20 @@ export default function SoccerQuiz() {
   }, [randomAnswered]);
 
   // --- Sound effects (generated tones, no audio files needed) ---
+  function getAudioContext() {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
+    return audioCtxRef.current;
+  }
+
   function playTone(freqs, duration = 0.12, type = "sine") {
     if (!soundEnabled) return;
     try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = getAudioContext();
       freqs.forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -5513,10 +5524,27 @@ export default function SoccerQuiz() {
       )}
 
       {screen === "settings" && (
-        <div style={styles.centerCol}>
-          <div style={styles.eyebrow}>⚙️ {t.settingsTab}</div>
-          <h1 style={styles.title}>{t.settingsTitle}</h1>
-          <p style={styles.subtitle}>{t.settingsDesc}</p>
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => setScreen("start")}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.settingsTab}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.settingsTitle}</h1>
+          <p style={styles.lightSubtitle}>{t.settingsDesc}</p>
+          <div style={styles.lightSubtitleRule} />
 
           <div style={{ ...styles.modeCard, textAlign: "left" }}>
             <div style={styles.modeTitle}>{t.soundLabel}</div>
@@ -5544,10 +5572,6 @@ export default function SoccerQuiz() {
               </button>
             </div>
           </div>
-
-          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
-            {t.menu}
-          </button>
         </div>
       )}
 
