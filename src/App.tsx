@@ -3916,14 +3916,13 @@ export default function SoccerQuiz() {
     }
   }, [currentMatch, duelActive, screen]);
 
-  // Ticks the "3, 2, 1" countdown, then blows the whistle and starts play.
+  // Ticks the "3, 2, 1" countdown, then starts play.
   useEffect(() => {
     if (screen !== "duelCountdown") return;
     if (duelCountdown <= 0) {
-      playWhistleSound();
       const goTimer = setTimeout(() => {
         if (pendingDuelMatch) beginDuelMatch(pendingDuelMatch);
-      }, 550);
+      }, 400);
       return () => clearTimeout(goTimer);
     }
     const tickTimer = setTimeout(() => setDuelCountdown((c) => c - 1), 800);
@@ -4089,14 +4088,13 @@ export default function SoccerQuiz() {
     }
   }, [room, roomActive, screen]);
 
-  // Ticks the room's "3, 2, 1" countdown, then blows the whistle and starts play.
+  // Ticks the room's "3, 2, 1" countdown, then starts play.
   useEffect(() => {
     if (screen !== "roomCountdown") return;
     if (roomCountdown <= 0) {
-      playWhistleSound();
       const goTimer = setTimeout(() => {
         if (pendingRoomQuestions) beginRoomMatch(pendingRoomQuestions);
-      }, 550);
+      }, 400);
       return () => clearTimeout(goTimer);
     }
     const tickTimer = setTimeout(() => setRoomCountdown((c) => c - 1), 800);
@@ -4317,59 +4315,6 @@ export default function SoccerQuiz() {
   }
   function playWrongSound() {
     playTone([220, 164.81], 0.16, "sawtooth");
-  }
-  function playWhistleSound() {
-    if (!soundEnabled) return;
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const now = ctx.currentTime;
-      const duration = 0.8;
-
-      // A referee's pea whistle has a piercing ~3kHz tone with a fast
-      // amplitude "trill" from the pea rattling inside - simulate that
-      // trill with a fast LFO modulating the carrier tone's gain.
-      const carrier = ctx.createOscillator();
-      carrier.type = "triangle";
-      carrier.frequency.setValueAtTime(3100, now);
-
-      const carrierGain = ctx.createGain();
-      carrierGain.gain.setValueAtTime(0, now);
-      carrierGain.gain.linearRampToValueAtTime(0.3, now + 0.015);
-      carrierGain.gain.setValueAtTime(0.3, now + duration - 0.12);
-      carrierGain.gain.linearRampToValueAtTime(0, now + duration);
-
-      const lfo = ctx.createOscillator();
-      lfo.type = "sine";
-      lfo.frequency.setValueAtTime(28, now);
-      const lfoGain = ctx.createGain();
-      lfoGain.gain.setValueAtTime(0.4, now);
-      lfo.connect(lfoGain);
-      lfoGain.connect(carrierGain.gain);
-
-      // A thin higher harmonic adds the sharp/bright edge of a real whistle.
-      const harmonic = ctx.createOscillator();
-      harmonic.type = "sine";
-      harmonic.frequency.setValueAtTime(6200, now);
-      const harmonicGain = ctx.createGain();
-      harmonicGain.gain.setValueAtTime(0, now);
-      harmonicGain.gain.linearRampToValueAtTime(0.06, now + 0.015);
-      harmonicGain.gain.setValueAtTime(0.06, now + duration - 0.12);
-      harmonicGain.gain.linearRampToValueAtTime(0, now + duration);
-
-      carrier.connect(carrierGain);
-      carrierGain.connect(ctx.destination);
-      harmonic.connect(harmonicGain);
-      harmonicGain.connect(ctx.destination);
-
-      carrier.start(now);
-      lfo.start(now);
-      harmonic.start(now);
-      carrier.stop(now + duration);
-      lfo.stop(now + duration);
-      harmonic.stop(now + duration);
-    } catch (e) {
-      // audio unsupported or blocked — fail silently
-    }
   }
 
   function startClues(pool = QUESTION_POOL) {
@@ -6424,7 +6369,7 @@ export default function SoccerQuiz() {
       )}
 
       {screen === "duelEnd" && currentMatch && (
-        <div style={styles.centerCol}>
+        <div style={{ ...styles.centerCol, minHeight: "70vh", justifyContent: "center" }}>
           <div className="trophyGlow" style={styles.trophyEmoji}>
             {currentMatch.winner_id === authUser?.id
               ? "🏆"
@@ -6432,7 +6377,10 @@ export default function SoccerQuiz() {
               ? "😔"
               : "🤝"}
           </div>
-          <h1 className="fadeInUp" style={styles.title}>
+          <h1
+            className="fadeInUp"
+            style={{ ...styles.title, fontSize: "clamp(26px, 7vw, 38px)" }}
+          >
             {currentMatch.winner_id === authUser?.id
               ? t.duelEndWin
               : currentMatch.winner_id
@@ -6565,11 +6513,14 @@ export default function SoccerQuiz() {
       )}
 
       {screen === "roomEnd" && room && (
-        <div style={styles.centerCol}>
+        <div style={{ ...styles.centerCol, minHeight: "70vh", justifyContent: "center" }}>
           <div className="trophyGlow" style={styles.trophyEmoji}>
             🏆
           </div>
-          <h1 className="fadeInUp" style={styles.title}>
+          <h1
+            className="fadeInUp"
+            style={{ ...styles.title, fontSize: "clamp(26px, 7vw, 38px)" }}
+          >
             {t.roomEndTitle}
           </h1>
           <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
@@ -7019,7 +6970,7 @@ const styles = {
   },
   trophyEmoji: {
     fontSize: 52,
-    marginBottom: 4,
+    marginBottom: 18,
     marginTop: 4,
   },
   title: {
