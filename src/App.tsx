@@ -2910,6 +2910,14 @@ const TRANSLATIONS = {
     authLoggedInAs: "Signed in as",
     authLogoutBtn: "LOG OUT",
     authMatchmakingNote: "Matchmaking isn't ready yet - hang tight!",
+    nicknameLabel: "Pick a nickname",
+    nicknamePlaceholder: "Your nickname",
+    nicknameSaveBtn: "SAVE AND CONTINUE",
+    findMatchBtn: "FIND RANDOM MATCH",
+    searchingText: "Looking for an opponent...",
+    cancelSearchBtn: "CANCEL",
+    matchFoundText: "Match found! Opponent:",
+    inviteComingSoon: "Inviting a friend is coming soon.",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -2989,6 +2997,14 @@ const TRANSLATIONS = {
     authLoggedInAs: "Logado como",
     authLogoutBtn: "SAIR",
     authMatchmakingNote: "As partidas ainda não estão prontas - aguenta aí!",
+    nicknameLabel: "Escolha um apelido",
+    nicknamePlaceholder: "Seu apelido",
+    nicknameSaveBtn: "SALVAR E CONTINUAR",
+    findMatchBtn: "BUSCAR PARTIDA ALEATÓRIA",
+    searchingText: "Procurando um oponente...",
+    cancelSearchBtn: "CANCELAR",
+    matchFoundText: "Partida encontrada! Oponente:",
+    inviteComingSoon: "Convidar um amigo vem em breve.",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -3068,6 +3084,14 @@ const TRANSLATIONS = {
     authLoggedInAs: "Conectado como",
     authLogoutBtn: "CERRAR SESIÓN",
     authMatchmakingNote: "Las partidas todavía no están listas - ¡espera un poco!",
+    nicknameLabel: "Elige un apodo",
+    nicknamePlaceholder: "Tu apodo",
+    nicknameSaveBtn: "GUARDAR Y CONTINUAR",
+    findMatchBtn: "BUSCAR PARTIDA ALEATORIA",
+    searchingText: "Buscando un oponente...",
+    cancelSearchBtn: "CANCELAR",
+    matchFoundText: "¡Partida encontrada! Oponente:",
+    inviteComingSoon: "Invitar a un amigo llega pronto.",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3581,6 +3605,125 @@ export default function SoccerQuiz() {
   async function handleLogout() {
     await supabase.auth.signOut();
   }
+
+  // --- Multiplayer profile + matchmaking state ---
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [nicknameInput, setNicknameInput] = useState("");
+  const [profileBusy, setProfileBusy] = useState(false);
+  const [profileError, setProfileError] = useState("");
+
+  const [searching, setSearching] = useState(false);
+  const [matchmakingError, setMatchmakingError] = useState("");
+  const [currentMatch, setCurrentMatch] = useState(null);
+  const [opponentProfile, setOpponentProfile] = useState(null);
+
+  useEffect(() => {
+    if (!authUser) {
+      setProfile(null);
+      setProfileLoading(false);
+      return;
+    }
+    setProfileLoading(true);
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", authUser.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setProfile(data ?? null);
+        setProfileLoading(false);
+      });
+  }, [authUser]);
+
+  async function handleSaveNickname(e) {
+    e.preventDefault();
+    if (!nicknameInput.trim()) return;
+    setProfileBusy(true);
+    setProfileError("");
+    const { data, error } = await supabase
+      .from("profiles")
+      .insert({ id: authUser.id, nickname: nicknameInput.trim() })
+      .select()
+      .single();
+    setProfileBusy(false);
+    if (error) {
+      setProfileError(error.message || t.authGenericError);
+      return;
+    }
+    setProfile(data);
+  }
+
+  async function findRandomMatch() {
+    setMatchmakingError("");
+    setSearching(true);
+    const { data, error } = await supabase.rpc("try_match", { p_mode: "random" });
+    if (error) {
+      setMatchmakingError(error.message || t.authGenericError);
+      setSearching(false);
+      return;
+    }
+    if (data) {
+      openMatch(data);
+    }
+    // If data is null, we're now waiting in the queue - the realtime
+    // subscription below picks up the match once an opponent joins.
+  }
+
+  async function cancelSearch() {
+    setSearching(false);
+    if (authUser) {
+      await supabase.from("match_queue").delete().eq("user_id", authUser.id);
+    }
+  }
+
+  async function openMatch(matchId) {
+    setSearching(false);
+    const { data: match } = await supabase
+      .from("matches")
+      .select("*")
+      .eq("id", matchId)
+      .maybeSingle();
+    if (!match) return;
+    setCurrentMatch(match);
+    const opponentId = match.player1_id === authUser.id ? match.player2_id : match.player1_id;
+    const { data: opp } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", opponentId)
+      .maybeSingle();
+    setOpponentProfile(opp ?? null);
+  }
+
+  useEffect(() => {
+    if (!authUser || !profile) return;
+    const channel = supabase
+      .channel(`matches-${authUser.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "matches",
+          filter: `player1_id=eq.${authUser.id}`,
+        },
+        (payload) => openMatch(payload.new.id)
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "matches",
+          filter: `player2_id=eq.${authUser.id}`,
+        },
+        (payload) => openMatch(payload.new.id)
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [authUser, profile]);
 
   // --- Clues mode state ---
   const [questions, setQuestions] = useState(() =>
@@ -4480,15 +4623,73 @@ export default function SoccerQuiz() {
               {t.multiplayerComingDesc}
             </p>
 
-            {authLoading ? null : authUser ? (
+            {authLoading || (authUser && profileLoading) ? null : authUser && !profile ? (
+              <form style={styles.authForm} onSubmit={handleSaveNickname}>
+                <span style={styles.authMessage}>{t.nicknameLabel}</span>
+                <input
+                  type="text"
+                  required
+                  maxLength={20}
+                  placeholder={t.nicknamePlaceholder}
+                  value={nicknameInput}
+                  onChange={(e) => setNicknameInput(e.target.value)}
+                  style={styles.authInput}
+                />
+                {profileError && <div style={styles.authError}>{profileError}</div>}
+                <button
+                  type="submit"
+                  disabled={profileBusy}
+                  style={{
+                    ...styles.authSubmitBtn,
+                    opacity: profileBusy ? 0.6 : 1,
+                    cursor: profileBusy ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {t.nicknameSaveBtn}
+                </button>
+              </form>
+            ) : authUser && profile ? (
               <div style={styles.authLoggedInCard}>
                 <span style={styles.authMessage}>{t.authLoggedInAs}</span>
-                <strong>{authUser.email}</strong>
-                <p style={{ ...styles.authMessage, marginTop: 4 }}>
-                  {t.authMatchmakingNote}
-                </p>
+                <strong>{profile.nickname}</strong>
+
+                {currentMatch ? (
+                  <>
+                    <p style={{ ...styles.authMessage, marginTop: 4 }}>
+                      {t.matchFoundText} {opponentProfile?.nickname ?? "..."}
+                    </p>
+                  </>
+                ) : searching ? (
+                  <>
+                    <p style={{ ...styles.authMessage, marginTop: 4 }}>
+                      {t.searchingText}
+                    </p>
+                    <button
+                      style={{ ...styles.authSubmitBtn, marginTop: 8, background: "#AAB4BE" }}
+                      onClick={cancelSearch}
+                    >
+                      {t.cancelSearchBtn}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {matchmakingError && (
+                      <div style={styles.authError}>{matchmakingError}</div>
+                    )}
+                    <button
+                      style={{ ...styles.authSubmitBtn, marginTop: 4 }}
+                      onClick={findRandomMatch}
+                    >
+                      {t.findMatchBtn}
+                    </button>
+                    <p style={{ ...styles.authMessage, marginTop: 4 }}>
+                      {t.inviteComingSoon}
+                    </p>
+                  </>
+                )}
+
                 <button
-                  style={{ ...styles.authSubmitBtn, marginTop: 8 }}
+                  style={{ ...styles.authToggleLink, marginTop: 4 }}
                   onClick={handleLogout}
                 >
                   {t.authLogoutBtn}
