@@ -3334,6 +3334,7 @@ const TRANSLATIONS = {
     pickRegionLabel: "World or Brazil?",
     roomModesEyebrow: "NEW ROOM",
     roomModesHeading: "Choose a Mode",
+    roomModesSubtitle: "Choose a mode to play with your friends.",
     roomCodePlaceholder: "6-digit code",
     joinRoomSubmitBtn: "JOIN",
     roomNotFound: "Room not found or already started.",
@@ -3458,6 +3459,7 @@ const TRANSLATIONS = {
     pickRegionLabel: "Mundo ou Brasil?",
     roomModesEyebrow: "NOVA SALA",
     roomModesHeading: "Escolha um Modo",
+    roomModesSubtitle: "Escolha um modo para jogar com seus amigos.",
     roomCodePlaceholder: "código de 6 dígitos",
     joinRoomSubmitBtn: "ENTRAR",
     roomNotFound: "Sala não encontrada ou já começou.",
@@ -3582,6 +3584,7 @@ const TRANSLATIONS = {
     pickRegionLabel: "¿Mundo o Brasil?",
     roomModesEyebrow: "SALA NUEVA",
     roomModesHeading: "Elige un Modo",
+    roomModesSubtitle: "Elige un modo para jugar con tus amigos.",
     roomCodePlaceholder: "código de 6 dígitos",
     joinRoomSubmitBtn: "UNIRSE",
     roomNotFound: "Sala no encontrada o ya comenzó.",
@@ -7182,7 +7185,7 @@ export default function SoccerQuiz() {
             <span style={styles.lightEyebrowLine} />
           </div>
           <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
-          <p style={styles.lightSubtitle}>{t.chooseMode}</p>
+          <p style={styles.lightSubtitle}>{t.roomModesSubtitle}</p>
           <div style={styles.lightSubtitleRule} />
 
           {roomError && <div style={styles.authError}>{roomError}</div>}
@@ -7217,7 +7220,7 @@ export default function SoccerQuiz() {
             <span style={styles.lightEyebrowLine} />
           </div>
           <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
-          <p style={styles.lightSubtitle}>{t.chooseMode}</p>
+          <p style={styles.lightSubtitle}>{t.roomModesSubtitle}</p>
           <div style={styles.lightSubtitleRule} />
 
           {roomError && <div style={styles.authError}>{roomError}</div>}
