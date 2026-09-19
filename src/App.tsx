@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { supabase } from "./lib/supabaseClient";
 
 // ============ CLUES MODE DATA ============
 // clues are provided per language; options/answer are proper names (language-agnostic)
@@ -1128,7 +1129,7 @@ const LINEUP_POOL = [
     year: 1999,
     matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
     players: [
-      { name: "Peter Schmeichel", position: "GK", number: 1, nationality: "Denmark", clubs: "Brondby, Manchester United, Sporting CP", funFact: { en: "Won the treble with United in 1999.", pt: "Venceu a tríplice coroa com o United em 1999.", es: "Ganó el triplete con el United en 1999." } },
+      { name: "Peter Schmeichel", position: "GK", number: 1, nationality: "Denmark", clubs: "Brondby, Manchester United, Sporting CP", funFact: { en: "Won the European Championship with Denmark in 1992.", pt: "Venceu a Eurocopa com a Dinamarca em 1992.", es: "Ganó la Eurocopa con Dinamarca en 1992." } },
       { name: "Denis Irwin", position: "DF", number: 3, nationality: "Ireland", clubs: "Manchester United, Oldham Athletic", funFact: { en: "Rarely missed a match, known for his reliability.", pt: "Raramente desfalcava o time, conhecido por sua regularidade.", es: "Rara vez se perdía un partido, conocido por su regularidad." } },
       { name: "Jaap Stam", position: "DF", number: 6, nationality: "Netherlands", clubs: "PSV, Manchester United, Lazio", funFact: { en: "Was one of the most expensive defenders of his era.", pt: "Foi um dos zagueiros mais caros de sua época.", es: "Fue uno de los defensores más caros de su época." } },
       { name: "Ronny Johnsen", position: "DF", number: 5, nationality: "Norway", clubs: "Besiktas, Manchester United", funFact: { en: "Overcame repeated injuries to feature in the 1999 treble run.", pt: "Superou lesões repetidas para atuar na campanha da tríplice coroa de 1999.", es: "Superó lesiones recurrentes para participar en la campaña del triplete de 1999." } },
@@ -1167,7 +1168,7 @@ const LINEUP_POOL = [
       { name: "Manuel Neuer", position: "GK", number: 1, nationality: "Germany", clubs: "Schalke 04, Bayern Munich", funFact: { en: "Pioneered the modern 'sweeper-keeper' playing style.", pt: "Foi pioneiro no estilo moderno de goleiro-líbero.", es: "Fue pionero en el estilo moderno de portero-líbero." } },
       { name: "David Alaba", position: "DF", number: 27, nationality: "Austria", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Known for his versatility across defense and midfield.", pt: "Conhecido pela versatilidade entre a defesa e o meio-campo.", es: "Conocido por su versatilidad entre la defensa y el mediocampo." } },
       { name: "Jerome Boateng", position: "DF", number: 17, nationality: "Germany", clubs: "Hamburg, Manchester City, Bayern Munich", funFact: { en: "Won the World Cup with Germany in 2014.", pt: "Venceu a Copa do Mundo com a Alemanha em 2014.", es: "Ganó el Mundial con Alemania en 2014." } },
-      { name: "Dante", position: "DF", number: 4, nationality: "Brazil", clubs: "Standard Liege, Borussia Monchengladbach, Bayern Munich", funFact: { en: "Won the treble with Bayern in 2013.", pt: "Venceu a tríplice coroa com o Bayern em 2013.", es: "Ganó el triplete con el Bayern en 2013." } },
+      { name: "Dante", position: "DF", number: 4, nationality: "Brazil", clubs: "Standard Liege, Borussia Monchengladbach, Bayern Munich", funFact: { en: "Represented Brazil at the 2014 World Cup.", pt: "Defendeu o Brasil na Copa do Mundo de 2014.", es: "Representó a Brasil en el Mundial de 2014." } },
       { name: "Philipp Lahm", position: "DF", number: 21, nationality: "Germany", clubs: "Bayern Munich, Stuttgart", funFact: { en: "Could play at the highest level on either side of defense.", pt: "Podia atuar em alto nível nas duas laterais da defesa.", es: "Podía jugar a alto nivel en ambos laterales de la defensa." } },
       { name: "Bastian Schweinsteiger", position: "DM", number: 31, nationality: "Germany", clubs: "Bayern Munich, Manchester United", funFact: { en: "Named man of the match in the 2014 World Cup final.", pt: "Eleito o melhor em campo na final da Copa do Mundo de 2014.", es: "Elegido mejor jugador del partido en la final del Mundial de 2014." } },
       { name: "Javi Martinez", position: "DM", number: 8, nationality: "Spain", clubs: "Athletic Bilbao, Bayern Munich", funFact: { en: "Won the treble in his very first season at Bayern.", pt: "Venceu a tríplice coroa em sua primeira temporada no Bayern.", es: "Ganó el triplete en su primera temporada en el Bayern." } },
@@ -1183,9 +1184,9 @@ const LINEUP_POOL = [
     matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
     players: [
       { name: "Jerzy Dudek", position: "GK", number: 1, nationality: "Poland", clubs: "Feyenoord, Liverpool", funFact: { en: "His 'wobbly legs' penalty save became iconic after the 2005 final.", pt: "Sua defesa de pênalti com as 'pernas bambas' virou icônica após a final de 2005.", es: "Su parada de penalti con las 'piernas de gelatina' se hizo icónica tras la final de 2005." } },
-      { name: "Steve Finnan", position: "DF", number: 2, nationality: "Ireland", clubs: "Fulham, Liverpool", funFact: { en: "Played every minute of Liverpool's 2005 Champions League run.", pt: "Jogou todos os minutos da campanha do Liverpool na Champions League de 2005.", es: "Jugó todos los minutos de la campaña del Liverpool en la Champions League de 2005." } },
+      { name: "Steve Finnan", position: "DF", number: 2, nationality: "Ireland", clubs: "Fulham, Liverpool", funFact: { en: "Earned over 50 caps for the Republic of Ireland.", pt: "Somou mais de 50 partidas pela seleção da Irlanda.", es: "Sumó más de 50 partidos con la selección de Irlanda." } },
       { name: "Jamie Carragher", position: "DF", number: 23, nationality: "England", clubs: "Liverpool", funFact: { en: "Made over 700 appearances, all for Liverpool.", pt: "Disputou mais de 700 partidas, todas pelo Liverpool.", es: "Disputó más de 700 partidos, todos con el Liverpool." } },
-      { name: "Sami Hyypia", position: "DF", number: 4, nationality: "Finland", clubs: "Willem II, Liverpool", funFact: { en: "Captained Liverpool to Champions League glory in 2005.", pt: "Foi capitão do Liverpool na conquista da Champions League de 2005.", es: "Fue capitán del Liverpool en la conquista de la Champions League de 2005." } },
+      { name: "Sami Hyypia", position: "DF", number: 4, nationality: "Finland", clubs: "Willem II, Liverpool", funFact: { en: "Later managed Bayer Leverkusen in the Bundesliga.", pt: "Mais tarde treinou o Bayer Leverkusen na Bundesliga.", es: "Más tarde dirigió al Bayer Leverkusen en la Bundesliga." } },
       { name: "Djimi Traore", position: "DF", number: 3, nationality: "France", clubs: "Lens, Liverpool", funFact: { en: "Overcame a rocky start to become a key defender in Istanbul.", pt: "Superou um início conturbado para se tornar peça-chave na final de Istambul.", es: "Superó un comienzo complicado para convertirse en pieza clave en la final de Estambul." } },
       { name: "Steven Gerrard", position: "MF", number: 8, nationality: "England", clubs: "Liverpool", funFact: { en: "Scored a famous header to spark the 2005 final comeback.", pt: "Marcou um gol de cabeça famoso que iniciou a virada na final de 2005.", es: "Marcó un cabezazo famoso que inició la remontada en la final de 2005." } },
       { name: "Xabi Alonso", position: "MF", number: 14, nationality: "Spain", clubs: "Real Sociedad, Liverpool, Real Madrid, Bayern Munich", funFact: { en: "Later became a head coach at Bayer Leverkusen.", pt: "Mais tarde, se tornou técnico principal do Bayer Leverkusen.", es: "Más tarde se convirtió en entrenador principal del Bayer Leverkusen." } },
@@ -1202,7 +1203,7 @@ const LINEUP_POOL = [
     players: [
       { name: "Julio Cesar", position: "GK", number: 1, nationality: "Brazil", clubs: "Inter Milan, Queens Park Rangers", funFact: { en: "Was Brazil's starting goalkeeper heading into the 2010 World Cup.", pt: "Era o goleiro titular do Brasil às vésperas da Copa do Mundo de 2010.", es: "Era el portero titular de Brasil de cara al Mundial de 2010." } },
       { name: "Javier Zanetti", position: "DF", number: 4, nationality: "Argentina", clubs: "Inter Milan (only)", funFact: { en: "Holds the record for most appearances in Inter Milan's history.", pt: "Detém o recorde de mais jogos na história da Inter de Milão.", es: "Posee el récord de más partidos en la historia del Inter de Milán." } },
-      { name: "Lucio", position: "DF", number: 4, nationality: "Brazil", clubs: "Bayer Leverkusen, Bayern Munich, Inter Milan", funFact: { en: "Captained Inter to the treble in 2010.", pt: "Foi capitão da Inter na conquista da tríplice coroa em 2010.", es: "Fue capitán del Inter en la conquista del triplete en 2010." } },
+      { name: "Lucio", position: "DF", number: 4, nationality: "Brazil", clubs: "Bayer Leverkusen, Bayern Munich, Inter Milan", funFact: { en: "Won the World Cup with Brazil in 2002.", pt: "Venceu a Copa do Mundo com o Brasil em 2002.", es: "Ganó el Mundial con Brasil en 2002." } },
       { name: "Walter Samuel", position: "DF", number: 15, nationality: "Argentina", clubs: "Roma, Real Madrid, Inter Milan", funFact: { en: "Nicknamed 'The Wall' for his uncompromising defending.", pt: "Apelidado de 'A Muralha' pela marcação implacável.", es: "Apodado 'La Muralla' por su marca implacable." } },
       { name: "Maicon", position: "DF", number: 2, nationality: "Brazil", clubs: "Inter Milan, Manchester City", funFact: { en: "Scored a memorable curling goal against Chelsea in the same campaign.", pt: "Marcou um gol de placa contra o Chelsea na mesma campanha.", es: "Marcó un golazo de rosca ante el Chelsea en la misma campaña." } },
       { name: "Esteban Cambiasso", position: "MF", number: 19, nationality: "Argentina", clubs: "Real Madrid, Inter Milan", funFact: { en: "Won the treble with Inter after a decorated career at Real Madrid.", pt: "Venceu a tríplice coroa pela Inter após passagem de sucesso pelo Real Madrid.", es: "Ganó el triplete con el Inter tras una etapa exitosa en el Real Madrid." } },
@@ -1257,7 +1258,7 @@ const LINEUP_POOL = [
       { name: "Vitor Baia", position: "GK", number: 1, nationality: "Portugal", clubs: "Porto, Barcelona", funFact: { en: "A veteran goalkeeper who returned to Porto after a spell at Barcelona.", pt: "Goleiro veterano que retornou ao Porto após passagem pelo Barcelona.", es: "Portero veterano que regresó al Porto tras un paso por el Barcelona." } },
       { name: "Nuno Valente", position: "DF", number: 16, nationality: "Portugal", clubs: "Boavista, Porto", funFact: { en: "Started at left-back in the 2004 Champions League final.", pt: "Foi titular na lateral-esquerda na final da Champions League de 2004.", es: "Fue titular en el lateral izquierdo en la final de la Champions League de 2004." } },
       { name: "Ricardo Carvalho", position: "DF", number: 15, nationality: "Portugal", clubs: "Porto, Chelsea", funFact: { en: "Also followed Mourinho to Chelsea the following season.", pt: "Também seguiu Mourinho para o Chelsea na temporada seguinte.", es: "También siguió a Mourinho al Chelsea la temporada siguiente." } },
-      { name: "Jorge Costa", position: "DF", number: 4, nationality: "Portugal", clubs: "Porto (mostly)", funFact: { en: "Captained Porto's Champions League winning side of 2004.", pt: "Foi capitão do Porto campeão europeu em 2004.", es: "Fue capitán del Porto campeón europeo en 2004." } },
+      { name: "Jorge Costa", position: "DF", number: 4, nationality: "Portugal", clubs: "Porto (mostly)", funFact: { en: "Represented Portugal at the 2000 European Championship.", pt: "Defendeu Portugal na Eurocopa de 2000.", es: "Representó a Portugal en la Eurocopa de 2000." } },
       { name: "Paulo Ferreira", position: "DF", number: 25, nationality: "Portugal", clubs: "Vitoria Setubal, Porto", funFact: { en: "Followed his coach Jose Mourinho to Chelsea after this title.", pt: "Seguiu seu técnico José Mourinho para o Chelsea após esse título.", es: "Siguió a su entrenador José Mourinho al Chelsea tras este título." } },
       { name: "Costinha", position: "MF", number: 6, nationality: "Portugal", clubs: "Porto, Dynamo Moscow", funFact: { en: "Scored a late goal in the 2004 semifinal comeback against Deportivo.", pt: "Marcou um gol decisivo na virada da semifinal de 2004 contra o Deportivo.", es: "Marcó un gol decisivo en la remontada de la semifinal de 2004 ante el Deportivo." } },
       { name: "Maniche", position: "MF", number: 8, nationality: "Portugal", clubs: "Benfica, Porto", funFact: { en: "Scored a spectacular long-range goal in the 2004 final.", pt: "Marcou um golaço de longa distância na final de 2004.", es: "Marcó un golazo de larga distancia en la final de 2004." } },
@@ -1275,7 +1276,7 @@ const LINEUP_POOL = [
       { name: "Edwin van der Sar", position: "GK", number: 1, nationality: "Netherlands", clubs: "Ajax, Manchester United", funFact: { en: "Later became one of the most decorated goalkeepers in football history.", pt: "Mais tarde se tornou um dos goleiros mais vitoriosos da história do futebol.", es: "Más tarde se convirtió en uno de los porteros más laureados de la historia del fútbol." } },
       { name: "Michael Reiziger", position: "DF", number: 2, nationality: "Netherlands", clubs: "Ajax, Barcelona, Milan", funFact: { en: "Part of a golden generation developed in Ajax's youth academy.", pt: "Parte de uma geração de ouro revelada nas categorias de base do Ajax.", es: "Parte de una generación dorada formada en la cantera del Ajax." } },
       { name: "Frank de Boer", position: "DF", number: 4, nationality: "Netherlands", clubs: "Ajax, Barcelona", funFact: { en: "Twin brother of teammate Ronald de Boer.", pt: "Irmão gêmeo do companheiro de time Ronald de Boer.", es: "Hermano gemelo de su compañero de equipo Ronald de Boer." } },
-      { name: "Danny Blind", position: "DF", number: 10, nationality: "Netherlands", clubs: "Ajax (mostly)", funFact: { en: "Captained the Ajax side that won the Champions League in 1995.", pt: "Foi capitão do Ajax campeão da Champions League em 1995.", es: "Fue capitán del Ajax campeón de la Champions League en 1995." } },
+      { name: "Danny Blind", position: "DF", number: 10, nationality: "Netherlands", clubs: "Ajax (mostly)", funFact: { en: "Later managed the Netherlands national team.", pt: "Mais tarde treinou a seleção da Holanda.", es: "Más tarde dirigió a la selección de Holanda." } },
       { name: "Winston Bogarde", position: "MF", number: 3, nationality: "Netherlands", clubs: "Ajax, Milan, Chelsea", funFact: { en: "Versatile defender who later played in the Premier League.", pt: "Defensor versátil que depois jogou na Premier League.", es: "Defensor versátil que después jugó en la Premier League." } },
       { name: "Edgar Davids", position: "MF", number: 8, nationality: "Netherlands", clubs: "Ajax, Milan, Juventus", funFact: { en: "Nicknamed 'The Pitbull' for his relentless tackling.", pt: "Apelidado de 'Pitbull' pela marcação implacável.", es: "Apodado 'El Pitbull' por su marca implacable." } },
       { name: "Ronald de Boer", position: "MF", number: 11, nationality: "Netherlands", clubs: "Ajax, Barcelona", funFact: { en: "Twin brother of Frank de Boer, also part of that Ajax generation.", pt: "Irmão gêmeo de Frank de Boer, também parte daquela geração do Ajax.", es: "Hermano gemelo de Frank de Boer, también parte de aquella generación del Ajax." } },
@@ -1293,10 +1294,10 @@ const LINEUP_POOL = [
       { name: "Angelo Peruzzi", position: "GK", number: 1, nationality: "Italy", clubs: "Juventus, Inter Milan", funFact: { en: "Reliable goalkeeper throughout Juventus's Champions League run.", pt: "Goleiro confiável durante toda a campanha da Champions League da Juventus.", es: "Portero confiable durante toda la campaña de la Champions League de la Juventus." } },
       { name: "Gianluca Pessotto", position: "DF", number: 3, nationality: "Italy", clubs: "Juventus (mostly)", funFact: { en: "Versatile defender who spent his whole career at Juventus.", pt: "Defensor versátil que passou toda a carreira na Juventus.", es: "Defensor versátil que pasó toda su carrera en la Juventus." } },
       { name: "Ciro Ferrara", position: "DF", number: 5, nationality: "Italy", clubs: "Napoli, Juventus", funFact: { en: "Longtime Juventus defender and later a coach.", pt: "Zagueiro de longa data da Juventus, mais tarde também treinador.", es: "Defensor de larga trayectoria en la Juventus, más tarde también entrenador." } },
-      { name: "Sergio Vierchowod", position: "DF", number: 5, nationality: "Italy", clubs: "Sampdoria, Inter Milan, Juventus", funFact: { en: "Veteran centre-back who started at the heart of Juventus's defense in the 1996 final.", pt: "Zagueiro veterano, titular no eixo da defesa da Juventus na final de 1996.", es: "Defensor central veterano, titular en el eje de la defensa de la Juventus en la final de 1996." } },
+      { name: "Sergio Vierchowod", position: "DF", number: 5, nationality: "Italy", clubs: "Sampdoria, Inter Milan, Juventus", funFact: { en: "Won Serie A with Sampdoria in the club's only league title.", pt: "Venceu o Serie A com a Sampdoria, único título de liga do clube.", es: "Ganó la Serie A con la Sampdoria, único título de liga del club." } },
       { name: "Moreno Torricelli", position: "DF", number: 2, nationality: "Italy", clubs: "Juventus", funFact: { en: "Right-back who started the 1996 Champions League final.", pt: "Lateral-direito titular na final da Champions League de 1996.", es: "Lateral derecho titular en la final de la Champions League de 1996." } },
       { name: "Didier Deschamps", position: "MF", number: 6, nationality: "France", clubs: "Marseille, Juventus, Chelsea", funFact: { en: "Later coached France to World Cup glory in 2018.", pt: "Mais tarde treinou a França até o título da Copa do Mundo de 2018.", es: "Más tarde dirigió a Francia hasta el título del Mundial de 2018." } },
-      { name: "Paulo Sousa", position: "MF", number: 6, nationality: "Portugal", clubs: "Benfica, Juventus, Inter Milan", funFact: { en: "Portuguese midfielder who anchored Juventus's midfield in the 1996 final.", pt: "Meio-campista português, base do meio-campo da Juventus na final de 1996.", es: "Centrocampista portugués, base del mediocampo de la Juventus en la final de 1996." } },
+      { name: "Paulo Sousa", position: "MF", number: 6, nationality: "Portugal", clubs: "Benfica, Juventus, Inter Milan", funFact: { en: "Later managed the Poland national team.", pt: "Mais tarde treinou a seleção da Polônia.", es: "Más tarde dirigió a la selección de Polonia." } },
       { name: "Antonio Conte", position: "MF", number: 8, nationality: "Italy", clubs: "Juventus (mostly)", funFact: { en: "Later became a successful manager at several top European clubs.", pt: "Mais tarde se tornou um técnico de sucesso em vários grandes clubes europeus.", es: "Más tarde se convirtió en un entrenador exitoso en varios grandes clubes europeos." } },
       { name: "Gianluca Vialli", position: "FW", number: 9, nationality: "Italy", clubs: "Sampdoria, Juventus, Chelsea", funFact: { en: "Veteran striker who started alongside Del Piero and Ravanelli in the 1996 final.", pt: "Atacante veterano, titular ao lado de Del Piero e Ravanelli na final de 1996.", es: "Delantero veterano, titular junto a Del Piero y Ravanelli en la final de 1996." } },
       { name: "Alessandro Del Piero", position: "FW", number: 10, nationality: "Italy", clubs: "Juventus (mostly)", funFact: { en: "Is Juventus's all-time record goalscorer.", pt: "É o maior artilheiro da história da Juventus.", es: "Es el máximo goleador histórico de la Juventus." } },
@@ -1312,7 +1313,7 @@ const LINEUP_POOL = [
             { name: "Sylvinho", position: "DF", number: 12, nationality: "Brazil", clubs: "Corinthians, Arsenal, Barcelona", funFact: { en: "Brazilian left-back who later became a head coach.", pt: "Lateral-esquerdo brasileiro que mais tarde se tornou treinador.", es: "Lateral izquierdo brasileño que más tarde se convirtió en entrenador." } },
       { name: "Gerard Pique", position: "DF", number: 3, nationality: "Spain", clubs: "Manchester United, Zaragoza, Barcelona", funFact: { en: "Returned to Barcelona from Manchester United to win the treble.", pt: "Voltou ao Barcelona vindo do Manchester United para vencer a tríplice coroa.", es: "Regresó al Barcelona desde el Manchester United para ganar el triplete." } },
       { name: "Yaya Toure", position: "DF", number: 24, nationality: "Ivory Coast", clubs: "Barcelona, Manchester City", funFact: { en: "Played as an auxiliary centre-back in the 2009 final, with Puyol shifting to right-back.", pt: "Atuou improvisado na zaga na final de 2009, com Puyol deslocado para a lateral-direita.", es: "Jugó improvisado en la zaga en la final de 2009, con Puyol desplazado al lateral derecho." } },
-      { name: "Carles Puyol", position: "DF", number: 5, nationality: "Spain", clubs: "Barcelona", funFact: { en: "Captained Barcelona to an unprecedented treble in 2009.", pt: "Foi capitão do Barcelona na conquista inédita da tríplice coroa em 2009.", es: "Fue capitán del Barcelona en la conquista inédita del triplete en 2009." } },
+      { name: "Carles Puyol", position: "DF", number: 5, nationality: "Spain", clubs: "Barcelona", funFact: { en: "Won the World Cup with Spain in 2010.", pt: "Venceu a Copa do Mundo com a Espanha em 2010.", es: "Ganó el Mundial con España en 2010." } },
 { name: "Sergio Busquets", position: "MF", number: 16, nationality: "Spain", clubs: "Barcelona, Inter Miami", funFact: { en: "Broke into the first team the same season as the treble.", pt: "Chegou ao time principal na mesma temporada da tríplice coroa.", es: "Llegó al primer equipo en la misma temporada del triplete." } },
       { name: "Xavi Hernandez", position: "MF", number: 6, nationality: "Spain", clubs: "Barcelona, Al Sadd", shortName: "Xavi", funFact: { en: "Was the orchestrator of Barcelona's possession-based style under Guardiola.", pt: "Foi o maestro do estilo de posse de bola do Barcelona sob o comando de Guardiola.", es: "Fue el orquestador del estilo de posesión del Barcelona bajo Guardiola." } },
       { name: "Andres Iniesta", position: "MF", number: 8, nationality: "Spain", clubs: "Barcelona, Vissel Kobe", funFact: { en: "Key playmaker throughout the historic 2009 treble season.", pt: "Armador fundamental durante toda a histórica temporada da tríplice coroa de 2009.", es: "Armador clave durante toda la histórica temporada del triplete de 2009." } },
@@ -1334,7 +1335,7 @@ const LINEUP_POOL = [
       { name: "Rodri", position: "MF", number: 16, nationality: "Spain", clubs: "Atletico Madrid, Manchester City", funFact: { en: "Scored the winning goal in the 2023 Champions League final.", pt: "Marcou o gol da vitória na final da Champions League de 2023.", es: "Marcó el gol de la victoria en la final de la Champions League de 2023." } },
       { name: "Bernardo Silva", position: "MF", number: 20, nationality: "Portugal", clubs: "Benfica, Monaco, Manchester City", funFact: { en: "Versatile Portuguese midfielder who can play across the front line.", pt: "Meio-campista português versátil, capaz de jogar em toda a linha ofensiva.", es: "Centrocampista portugués versátil, capaz de jugar en toda la línea ofensiva." } },
       { name: "Kevin De Bruyne", position: "MF", number: 17, nationality: "Belgium", clubs: "Chelsea, Wolfsburg, Manchester City", funFact: { en: "Was forced off injured early in the 2023 Champions League final.", pt: "Precisou sair machucado ainda no início da final da Champions League de 2023.", es: "Tuvo que salir lesionado al inicio de la final de la Champions League de 2023." } },
-      { name: "Ilkay Gundogan", position: "MF", number: 8, nationality: "Germany", clubs: "Borussia Dortmund, Manchester City", funFact: { en: "Captained Manchester City to the treble in 2023.", pt: "Foi capitão do Manchester City na conquista da tríplice coroa em 2023.", es: "Fue capitán del Manchester City en la conquista del triplete en 2023." } },
+      { name: "Ilkay Gundogan", position: "MF", number: 8, nationality: "Germany", clubs: "Borussia Dortmund, Manchester City", funFact: { en: "Won the Bundesliga twice with Borussia Dortmund.", pt: "Venceu a Bundesliga duas vezes com o Borussia Dortmund.", es: "Ganó la Bundesliga dos veces con el Borussia Dortmund." } },
       { name: "Erling Haaland", position: "FW", number: 9, nationality: "Norway", clubs: "Molde, Salzburg, Borussia Dortmund, Manchester City", funFact: { en: "Broke the Premier League single-season goals record in 2022-23.", pt: "Bateu o recorde de gols em uma única temporada da Premier League em 2022-23.", es: "Batió el récord de goles en una sola temporada de la Premier League en 2022-23." } },
       { name: "Julian Alvarez", position: "FW", number: 19, nationality: "Argentina", clubs: "River Plate, Manchester City", funFact: { en: "Argentine forward who won the World Cup months before the treble.", pt: "Atacante argentino que venceu a Copa do Mundo meses antes da tríplice coroa.", es: "Delantero argentino que ganó el Mundial meses antes del triplete." } },
     ],
@@ -1355,6 +1356,402 @@ const LINEUP_POOL = [
       { name: "Ousmane Dembele", position: "FW", number: 10, nationality: "France", clubs: "Rennes, Borussia Dortmund, Barcelona, PSG", funFact: { en: "French forward who came through Rennes and Borussia Dortmund before PSG.", pt: "Atacante francês que passou por Rennes e Borussia Dortmund antes do PSG.", es: "Delantero francés que pasó por el Rennes y el Borussia Dortmund antes del PSG." } },
       { name: "Bradley Barcola", position: "FW", number: 29, nationality: "France", clubs: "Lyon, PSG", funFact: { en: "Fast French winger developed in Lyon's academy.", pt: "Ponta francês veloz, revelado nas categorias de base do Lyon.", es: "Extremo francés veloz, formado en la cantera del Lyon." } },
       { name: "Khvicha Kvaratskhelia", position: "FW", number: 7, nationality: "Georgia", clubs: "Dinamo Batumi, Napoli, PSG", funFact: { en: "Georgian winger known for his dribbling, nicknamed 'Kvaradona'.", pt: "Ponta georgiano conhecido pelo drible, apelidado de 'Kvaradona'.", es: "Extremo georgiano conocido por su regate, apodado 'Kvaradona'." } },
+    ],
+  },
+  {
+    team: "Real Madrid",
+    year: 2014,
+    matchLabel: { en: "UEFA Champions League Final (La Décima)", pt: "Final da Champions League (La Décima)", es: "Final de la Champions League (La Décima)" },
+    players: [
+      { name: "Iker Casillas", position: "GK", number: 1, nationality: "Spain", clubs: "Real Madrid, Porto", funFact: { en: "Captained Spain to World Cup glory in 2010.", pt: "Foi capitão da Espanha na conquista da Copa do Mundo de 2010.", es: "Fue capitán de España en la conquista del Mundial de 2010." } },
+      { name: "Dani Carvajal", position: "DF", number: 2, nationality: "Spain", clubs: "Bayer Leverkusen, Real Madrid", funFact: { en: "Came through Real Madrid's academy after a loan spell in Germany.", pt: "Passou pela base do Real Madrid antes de um empréstimo na Alemanha.", es: "Pasó por la cantera del Real Madrid antes de una cesión en Alemania." } },
+      { name: "Sergio Ramos", position: "DF", number: 4, nationality: "Spain", clubs: "Sevilla, Real Madrid, PSG", funFact: { en: "Later became president of Sevilla after retiring.", pt: "Mais tarde se tornou presidente do Sevilla após se aposentar.", es: "Más tarde se convirtió en presidente del Sevilla tras retirarse." } },
+      { name: "Pepe", position: "DF", number: 3, nationality: "Portugal", clubs: "Porto, Real Madrid", funFact: { en: "Represented Portugal at four different European Championships.", pt: "Defendeu Portugal em quatro Eurocopas diferentes.", es: "Representó a Portugal en cuatro Eurocopas distintas." } },
+      { name: "Fabio Coentrao", position: "DF", number: 17, nationality: "Portugal", clubs: "Benfica, Real Madrid", funFact: { en: "Was one of the most expensive full-backs in the world when he signed.", pt: "Foi um dos laterais mais caros do mundo quando foi contratado.", es: "Fue uno de los laterales más caros del mundo cuando fue fichado." } },
+      { name: "Xabi Alonso", position: "MF", number: 14, nationality: "Spain", clubs: "Real Sociedad, Liverpool, Real Madrid, Bayern Munich", funFact: { en: "Later became a head coach at Bayer Leverkusen.", pt: "Mais tarde, se tornou técnico principal do Bayer Leverkusen.", es: "Más tarde se convirtió en entrenador principal del Bayer Leverkusen." } },
+      { name: "Angel Di Maria", position: "MF", number: 22, nationality: "Argentina", clubs: "Benfica, Real Madrid, Manchester United, PSG", funFact: { en: "Scored the winning goal in Argentina's 2022 World Cup final.", pt: "Marcou o gol da vitória na final da Copa do Mundo de 2022 pela Argentina.", es: "Marcó el gol de la victoria en la final del Mundial de 2022 con Argentina." } },
+      { name: "Luka Modric", position: "MF", number: 19, nationality: "Croatia", clubs: "Dinamo Zagreb, Tottenham, Real Madrid", funFact: { en: "Won the Ballon d'Or in 2018.", pt: "Venceu a Bola de Ouro em 2018.", es: "Ganó el Balón de Oro en 2018." } },
+      { name: "Cristiano Ronaldo", position: "FW", number: 7, nationality: "Portugal", clubs: "Sporting CP, Manchester United, Real Madrid, Juventus, Al-Nassr", funFact: { en: "Is the all-time top scorer in Champions League history.", pt: "É o maior artilheiro da história da Champions League.", es: "Es el máximo goleador histórico de la Champions League." } },
+      { name: "Karim Benzema", position: "FW", number: 9, nationality: "France", clubs: "Lyon, Real Madrid, Al-Ittihad", funFact: { en: "Won the Ballon d'Or in 2022.", pt: "Venceu a Bola de Ouro em 2022.", es: "Ganó el Balón de Oro en 2022." } },
+      { name: "Gareth Bale", position: "FW", number: 11, nationality: "Wales", clubs: "Southampton, Tottenham, Real Madrid", funFact: { en: "Scored an iconic overhead kick in the 2018 Champions League final.", pt: "Marcou um gol de bicicleta icônico na final da Champions League de 2018.", es: "Marcó un icónico gol de chilena en la final de la Champions League de 2018." } },
+    ],
+  },
+  {
+    team: "Atletico Madrid",
+    year: 2014,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Thibaut Courtois", position: "GK", number: 13, nationality: "Belgium", clubs: "Genk, Chelsea, Atletico Madrid, Real Madrid", funFact: { en: "Won the World Cup's Golden Glove award in 2018.", pt: "Venceu a Luva de Ouro da Copa do Mundo de 2018.", es: "Ganó el Guante de Oro del Mundial de 2018." } },
+      { name: "Juanfran", position: "DF", number: 20, nationality: "Spain", clubs: "Atletico Madrid (mostly)", funFact: { en: "Spent almost his entire career at Atletico Madrid.", pt: "Passou quase toda a carreira no Atlético de Madrid.", es: "Pasó casi toda su carrera en el Atlético de Madrid." } },
+      { name: "Diego Godin", position: "DF", number: 2, nationality: "Uruguay", clubs: "Nacional, Villarreal, Atletico Madrid, Inter Milan", funFact: { en: "Captained Uruguay at three World Cups.", pt: "Foi capitão do Uruguai em três Copas do Mundo.", es: "Fue capitán de Uruguay en tres Mundiales." } },
+      { name: "Miranda", position: "DF", number: 3, nationality: "Brazil", clubs: "Sao Paulo, Atletico Madrid, Inter Milan", funFact: { en: "Later won Serie A with Inter Milan.", pt: "Mais tarde venceu o Serie A com a Inter de Milão.", es: "Más tarde ganó la Serie A con el Inter de Milán." } },
+      { name: "Filipe Luis", position: "DF", number: 23, nationality: "Brazil", clubs: "Atletico Madrid, Chelsea", funFact: { en: "Later returned to Atletico Madrid as head coach.", pt: "Mais tarde retornou ao Atlético de Madrid como técnico.", es: "Más tarde volvió al Atlético de Madrid como entrenador." } },
+      { name: "Gabi", position: "MF", number: 14, nationality: "Spain", clubs: "Real Madrid, Atletico Madrid", funFact: { en: "Captained Atletico Madrid for nearly a decade.", pt: "Foi capitão do Atlético de Madrid por quase uma década.", es: "Fue capitán del Atlético de Madrid durante casi una década." } },
+      { name: "Tiago", position: "MF", number: 5, nationality: "Portugal", clubs: "Benfica, Porto, Juventus, Atletico Madrid", funFact: { en: "Won the UEFA Cup with Porto in 2003.", pt: "Venceu a Copa da UEFA pelo Porto em 2003.", es: "Ganó la Copa de la UEFA con el Porto en 2003." } },
+      { name: "Koke", position: "MF", number: 6, nationality: "Spain", clubs: "Atletico Madrid (only)", funFact: { en: "Became Atletico Madrid's club captain.", pt: "Se tornou capitão do Atlético de Madrid.", es: "Se convirtió en capitán del Atlético de Madrid." } },
+      { name: "Arda Turan", position: "MF", number: 7, nationality: "Turkey", clubs: "Galatasaray, Atletico Madrid, Barcelona", funFact: { en: "Was the first Turkish player to play for Barcelona.", pt: "Foi o primeiro jogador turco a atuar pelo Barcelona.", es: "Fue el primer jugador turco en jugar en el Barcelona." } },
+      { name: "Raul Garcia", position: "FW", number: 17, nationality: "Spain", clubs: "Athletic Bilbao, Atletico Madrid", funFact: { en: "Became Athletic Bilbao's captain after returning to the club.", pt: "Se tornou capitão do Athletic Bilbao após retornar ao clube.", es: "Se convirtió en capitán del Athletic Bilbao tras volver al club." } },
+      { name: "Diego Costa", position: "FW", number: 19, nationality: "Spain", clubs: "Atletico Madrid, Chelsea", funFact: { en: "Played for Brazil's youth teams before choosing to represent Spain.", pt: "Defendeu as categorias de base do Brasil antes de optar pela Espanha.", es: "Jugó en las categorías juveniles de Brasil antes de optar por España." } },
+    ],
+  },
+  {
+    team: "Liverpool",
+    year: 2019,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Alisson Becker", position: "GK", number: 1, nationality: "Brazil", clubs: "Internacional, Roma, Liverpool", funFact: { en: "Won the Best FIFA Goalkeeper award in 2019.", pt: "Venceu o prêmio de Melhor Goleiro da FIFA em 2019.", es: "Ganó el premio al Mejor Portero de la FIFA en 2019." } },
+      { name: "Trent Alexander-Arnold", position: "DF", number: 66, nationality: "England", clubs: "Liverpool, Real Madrid", funFact: { en: "Came through Liverpool's own academy.", pt: "Foi revelado nas categorias de base do Liverpool.", es: "Se formó en la cantera del Liverpool." } },
+      { name: "Virgil van Dijk", position: "DF", number: 4, nationality: "Netherlands", clubs: "Groningen, Celtic, Southampton, Liverpool", funFact: { en: "Was runner-up for the 2019 Ballon d'Or.", pt: "Foi vice-campeão da Bola de Ouro de 2019.", es: "Fue subcampeón del Balón de Oro de 2019." } },
+      { name: "Joel Matip", position: "DF", number: 32, nationality: "Cameroon", clubs: "Schalke, Liverpool", funFact: { en: "Chose to represent Cameroon over Germany internationally.", pt: "Optou por defender os Camarões em vez da Alemanha.", es: "Optó por representar a Camerún en lugar de Alemania." } },
+      { name: "Andrew Robertson", position: "DF", number: 26, nationality: "Scotland", clubs: "Dundee United, Hull City, Liverpool", funFact: { en: "Captained Scotland's national team.", pt: "Foi capitão da seleção da Escócia.", es: "Fue capitán de la selección de Escocia." } },
+      { name: "Fabinho", position: "MF", number: 3, nationality: "Brazil", clubs: "Real Madrid, Monaco, Liverpool, Al-Ittihad", funFact: { en: "Started his career at Real Madrid before being loaned out repeatedly.", pt: "Começou a carreira no Real Madrid antes de ser emprestado várias vezes.", es: "Empezó su carrera en el Real Madrid antes de salir cedido varias veces." } },
+      { name: "Georginio Wijnaldum", position: "MF", number: 5, nationality: "Netherlands", clubs: "Feyenoord, PSV, Newcastle, Liverpool", funFact: { en: "Scored a hat-trick to complete a historic comeback against Barcelona.", pt: "Marcou um hat-trick na virada histórica contra o Barcelona.", es: "Marcó un hat-trick en la histórica remontada ante el Barcelona." } },
+      { name: "Jordan Henderson", position: "MF", number: 14, nationality: "England", clubs: "Sunderland, Liverpool, Al-Ettifaq", funFact: { en: "Later captained Liverpool to a first league title in 30 years.", pt: "Mais tarde foi capitão do Liverpool na conquista do primeiro título nacional em 30 anos.", es: "Más tarde fue capitán del Liverpool en la conquista del primer título de liga en 30 años." } },
+      { name: "Mohamed Salah", position: "FW", number: 11, nationality: "Egypt", clubs: "Basel, Chelsea, Roma, Liverpool", funFact: { en: "Won the Premier League Golden Boot multiple times.", pt: "Venceu a artilharia da Premier League diversas vezes.", es: "Ganó el trofeo de máximo goleador de la Premier League varias veces." } },
+      { name: "Roberto Firmino", position: "FW", number: 9, nationality: "Brazil", clubs: "Figueirense, Hoffenheim, Liverpool, Al-Ahli", funFact: { en: "Known for his relentless pressing work rate as a false nine.", pt: "Conhecido pela marcação incansável atuando de falso 9.", es: "Conocido por su presión incansable jugando de falso 9." } },
+      { name: "Sadio Mane", position: "FW", number: 10, nationality: "Senegal", clubs: "Metz, Salzburg, Southampton, Liverpool, Bayern Munich, Al-Nassr", funFact: { en: "Was runner-up at the Africa Cup of Nations with Senegal in 2019.", pt: "Foi vice-campeão da Copa Africana de Nações pelo Senegal em 2019.", es: "Fue subcampeón de la Copa Africana de Naciones con Senegal en 2019." } },
+    ],
+  },
+  {
+    team: "Tottenham",
+    year: 2019,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Hugo Lloris", position: "GK", number: 1, nationality: "France", clubs: "Nice, Lyon, Tottenham", funFact: { en: "Captained France to World Cup glory in 2018.", pt: "Foi capitão da França na conquista da Copa do Mundo de 2018.", es: "Fue capitán de Francia en la conquista del Mundial de 2018." } },
+      { name: "Kieran Trippier", position: "DF", number: 2, nationality: "England", clubs: "Manchester City, Burnley, Tottenham, Atletico Madrid", funFact: { en: "Scored a famous free kick against Croatia at the 2018 World Cup.", pt: "Marcou uma falta famosa contra a Croácia na Copa do Mundo de 2018.", es: "Marcó un famoso tiro libre ante Croacia en el Mundial de 2018." } },
+      { name: "Toby Alderweireld", position: "DF", number: 4, nationality: "Belgium", clubs: "Ajax, Atletico Madrid, Southampton, Tottenham", funFact: { en: "Was part of Belgium's 'golden generation' at the 2018 World Cup.", pt: "Fez parte da 'geração de ouro' belga na Copa do Mundo de 2018.", es: "Formó parte de la 'generación dorada' belga en el Mundial de 2018." } },
+      { name: "Jan Vertonghen", position: "DF", number: 5, nationality: "Belgium", clubs: "Ajax, Tottenham, Benfica", funFact: { en: "Played over 300 matches for Tottenham.", pt: "Disputou mais de 300 partidas pelo Tottenham.", es: "Disputó más de 300 partidos con el Tottenham." } },
+      { name: "Danny Rose", position: "DF", number: 3, nationality: "England", clubs: "Leeds United, Tottenham", funFact: { en: "Came through Leeds United's academy before moving to Tottenham.", pt: "Foi revelado na base do Leeds United antes de ir ao Tottenham.", es: "Se formó en la cantera del Leeds United antes de fichar por el Tottenham." } },
+      { name: "Moussa Sissoko", position: "MF", number: 17, nationality: "France", clubs: "Toulouse, Newcastle, Tottenham", funFact: { en: "Reached the 2016 European Championship final with France.", pt: "Chegou à final da Eurocopa de 2016 pela França.", es: "Llegó a la final de la Eurocopa de 2016 con Francia." } },
+      { name: "Harry Winks", position: "MF", number: 8, nationality: "England", clubs: "Tottenham (only)", funFact: { en: "Came through Tottenham's own youth academy.", pt: "Foi revelado nas categorias de base do próprio Tottenham.", es: "Se formó en la propia cantera del Tottenham." } },
+      { name: "Christian Eriksen", position: "MF", number: 23, nationality: "Denmark", clubs: "Ajax, Tottenham, Inter Milan, Manchester United", funFact: { en: "Suffered a cardiac arrest on the pitch in 2021 before making a remarkable return.", pt: "Sofreu uma parada cardíaca em campo em 2021 antes de fazer um retorno notável.", es: "Sufrió un paro cardíaco en el campo en 2021 antes de hacer un regreso notable." } },
+      { name: "Son Heung-min", position: "FW", number: 7, nationality: "South Korea", clubs: "Hamburg, Bayer Leverkusen, Tottenham", funFact: { en: "Became the first Asian player to win the Premier League Golden Boot.", pt: "Se tornou o primeiro jogador asiático a vencer a artilharia da Premier League.", es: "Se convirtió en el primer jugador asiático en ganar el trofeo de máximo goleador de la Premier League." } },
+      { name: "Dele Alli", position: "FW", number: 20, nationality: "England", clubs: "MK Dons, Tottenham, Everton", funFact: { en: "Won the PFA Young Player of the Year award twice.", pt: "Venceu o prêmio de Jovem Jogador do Ano da PFA duas vezes.", es: "Ganó el premio al Joven Jugador del Año de la PFA dos veces." } },
+      { name: "Harry Kane", position: "FW", number: 10, nationality: "England", clubs: "Tottenham, Bayern Munich", funFact: { en: "Is Tottenham's all-time record goalscorer.", pt: "É o maior artilheiro da história do Tottenham.", es: "Es el máximo goleador histórico del Tottenham." } },
+    ],
+  },
+  {
+    team: "Bayern Munich",
+    year: 2010,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Hans-Jorg Butt", position: "GK", number: 22, nationality: "Germany", clubs: "Hamburg, Bayer Leverkusen, Bayern Munich", funFact: { en: "Was known for scoring goals as a penalty-taking goalkeeper.", pt: "Era conhecido por marcar gols cobrando pênaltis mesmo sendo goleiro.", es: "Era conocido por marcar goles cobrando penales pese a ser portero." } },
+      { name: "Philipp Lahm", position: "DF", number: 21, nationality: "Germany", clubs: "Bayern Munich (only)", funFact: { en: "Captained Germany to World Cup glory in 2014.", pt: "Foi capitão da Alemanha na conquista da Copa do Mundo de 2014.", es: "Fue capitán de Alemania en la conquista del Mundial de 2014." } },
+      { name: "Martin Demichelis", position: "DF", number: 4, nationality: "Argentina", clubs: "River Plate, Bayern Munich, Malaga, Manchester City", funFact: { en: "Later won the Premier League with Manchester City.", pt: "Mais tarde venceu a Premier League com o Manchester City.", es: "Más tarde ganó la Premier League con el Manchester City." } },
+      { name: "Daniel van Buyten", position: "DF", number: 28, nationality: "Belgium", clubs: "Standard Liege, Marseille, Hamburg, Bayern Munich", funFact: { en: "Started his career at Standard Liege in Belgium.", pt: "Começou a carreira no Standard Liege, na Bélgica.", es: "Empezó su carrera en el Standard Lieja, en Bélgica." } },
+      { name: "Holger Badstuber", position: "DF", number: 26, nationality: "Germany", clubs: "Bayern Munich, Stuttgart", funFact: { en: "Came through Bayern Munich's own academy.", pt: "Foi revelado nas categorias de base do próprio Bayern de Munique.", es: "Se formó en la propia cantera del Bayern de Múnich." } },
+      { name: "Mark van Bommel", position: "MF", number: 17, nationality: "Netherlands", clubs: "Fortuna Sittard, PSV, Barcelona, Bayern Munich, AC Milan", funFact: { en: "Later became a head coach at PSV Eindhoven.", pt: "Mais tarde se tornou técnico principal do PSV Eindhoven.", es: "Más tarde se convirtió en entrenador principal del PSV Eindhoven." } },
+      { name: "Bastian Schweinsteiger", position: "MF", number: 31, nationality: "Germany", clubs: "Bayern Munich, Manchester United", funFact: { en: "Won the World Cup with Germany in 2014.", pt: "Venceu a Copa do Mundo com a Alemanha em 2014.", es: "Ganó el Mundial con Alemania en 2014." } },
+      { name: "Arjen Robben", position: "FW", number: 10, nationality: "Netherlands", clubs: "Groningen, PSV, Chelsea, Real Madrid, Bayern Munich", funFact: { en: "Scored the winning goal in the 2013 Champions League final.", pt: "Marcou o gol da vitória na final da Champions League de 2013.", es: "Marcó el gol de la victoria en la final de la Champions League de 2013." } },
+      { name: "Thomas Muller", position: "FW", number: 25, nationality: "Germany", clubs: "Bayern Munich (only)", funFact: { en: "Won the Golden Boot at the 2010 World Cup.", pt: "Venceu a Chuteira de Ouro na Copa do Mundo de 2010.", es: "Ganó la Bota de Oro en el Mundial de 2010." } },
+      { name: "Franck Ribery", position: "FW", number: 7, nationality: "France", clubs: "Boulogne, Galatasaray, Marseille, Bayern Munich", funFact: { en: "Was runner-up for the Ballon d'Or in 2013.", pt: "Foi vice-campeão da Bola de Ouro em 2013.", es: "Fue subcampeón del Balón de Oro en 2013." } },
+      { name: "Ivica Olic", position: "FW", number: 11, nationality: "Croatia", clubs: "Hajduk Split, CSKA Moscow, Hamburg, Bayern Munich", funFact: { en: "Represented Croatia at three major tournaments.", pt: "Defendeu a Croácia em três grandes torneios.", es: "Representó a Croacia en tres grandes torneos." } },
+    ],
+  },
+  {
+    team: "Manchester United",
+    year: 2011,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Edwin van der Sar", position: "GK", number: 1, nationality: "Netherlands", clubs: "Ajax, Juventus, Fulham, Manchester United", funFact: { en: "Retired as the Premier League's all-time clean sheet leader at the time.", pt: "Se aposentou como o líder histórico de jogos sem sofrer gols na Premier League.", es: "Se retiró como el líder histórico de partidos sin recibir goles en la Premier League." } },
+      { name: "Fabio", position: "DF", number: 20, nationality: "Brazil", clubs: "Manchester United, Cardiff City", funFact: { en: "Twin brother of fellow Manchester United player Rafael.", pt: "Irmão gêmeo de Rafael, também jogador do Manchester United.", es: "Hermano gemelo de Rafael, también jugador del Manchester United." } },
+      { name: "Rio Ferdinand", position: "DF", number: 5, nationality: "England", clubs: "West Ham, Leeds United, Manchester United", funFact: { en: "Won six Premier League titles with Manchester United.", pt: "Venceu seis títulos da Premier League pelo Manchester United.", es: "Ganó seis títulos de la Premier League con el Manchester United." } },
+      { name: "Nemanja Vidic", position: "DF", number: 15, nationality: "Serbia", clubs: "Red Star Belgrade, Spartak Moscow, Manchester United", funFact: { en: "Captained Serbia's national team.", pt: "Foi capitão da seleção da Sérvia.", es: "Fue capitán de la selección de Serbia." } },
+      { name: "Patrice Evra", position: "DF", number: 3, nationality: "France", clubs: "Monaco, Manchester United, Juventus", funFact: { en: "Won the Champions League with Manchester United in 2008.", pt: "Venceu a Champions League pelo Manchester United em 2008.", es: "Ganó la Champions League con el Manchester United en 2008." } },
+      { name: "Michael Carrick", position: "MF", number: 16, nationality: "England", clubs: "West Ham, Tottenham, Manchester United", funFact: { en: "Later became Manchester United's assistant coach and interim manager.", pt: "Mais tarde se tornou auxiliar técnico e treinador interino do Manchester United.", es: "Más tarde se convirtió en asistente técnico y entrenador interino del Manchester United." } },
+      { name: "Ryan Giggs", position: "MF", number: 11, nationality: "Wales", clubs: "Manchester United (only)", funFact: { en: "Holds the record for most Premier League appearances at one club.", pt: "Detém o recorde de mais jogos na Premier League por um único clube.", es: "Posee el récord de más partidos en la Premier League con un solo club." } },
+      { name: "Park Ji-sung", position: "MF", number: 13, nationality: "South Korea", clubs: "PSV, Manchester United, Queens Park Rangers", funFact: { en: "Was one of the first Asian players to start a Champions League final.", pt: "Foi um dos primeiros jogadores asiáticos titulares em uma final de Champions League.", es: "Fue uno de los primeros jugadores asiáticos titulares en una final de Champions League." } },
+      { name: "Antonio Valencia", position: "MF", number: 25, nationality: "Ecuador", clubs: "Villarreal, Wigan Athletic, Manchester United", funFact: { en: "Later became Manchester United's club captain.", pt: "Mais tarde se tornou capitão do Manchester United.", es: "Más tarde se convirtió en capitán del Manchester United." } },
+      { name: "Wayne Rooney", position: "FW", number: 10, nationality: "England", clubs: "Everton, Manchester United", funFact: { en: "Won the PFA Young Player of the Year award twice.", pt: "Venceu o prêmio de Jovem Jogador do Ano da PFA duas vezes.", es: "Ganó el premio al Joven Jugador del Año de la PFA dos veces." } },
+      { name: "Javier Hernandez", position: "FW", number: 14, nationality: "Mexico", clubs: "Guadalajara, Manchester United, Real Madrid", funFact: { en: "Nicknamed 'Chicharito', became Mexico's all-time leading World Cup scorer.", pt: "Apelidado de 'Chicharito', se tornou o maior artilheiro do México em Copas do Mundo.", es: "Apodado 'Chicharito', se convirtió en el máximo goleador histórico de México en Mundiales." } },
+    ],
+  },
+  {
+    team: "Bayern Munich",
+    year: 2012,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Manuel Neuer", position: "GK", number: 1, nationality: "Germany", clubs: "Schalke, Bayern Munich", funFact: { en: "Pioneered the modern 'sweeper-keeper' playing style.", pt: "Foi pioneiro no estilo moderno de goleiro-líbero.", es: "Fue pionero en el estilo moderno de portero-líbero." } },
+      { name: "Philipp Lahm", position: "DF", number: 21, nationality: "Germany", clubs: "Bayern Munich (only)", funFact: { en: "Was nicknamed 'The Magic Dwarf' by Pep Guardiola for his versatility.", pt: "Foi apelidado de 'O Anão Mágico' por Pep Guardiola pela versatilidade.", es: "Fue apodado 'El Enano Mágico' por Pep Guardiola por su versatilidad." } },
+      { name: "Jerome Boateng", position: "DF", number: 17, nationality: "Germany", clubs: "Hamburg, Manchester City, Bayern Munich", funFact: { en: "His younger half-brother Kevin-Prince played for the Ghana national team.", pt: "Seu meio-irmão mais novo, Kevin-Prince, defendeu a seleção de Gana.", es: "Su medio hermano menor, Kevin-Prince, jugó para la selección de Ghana." } },
+      { name: "Daniel van Buyten", position: "DF", number: 28, nationality: "Belgium", clubs: "Standard Liege, Marseille, Hamburg, Bayern Munich", funFact: { en: "Played over 100 matches for the Belgium national team.", pt: "Disputou mais de 100 partidas pela seleção da Bélgica.", es: "Disputó más de 100 partidos con la selección de Bélgica." } },
+      { name: "David Alaba", position: "DF", number: 27, nationality: "Austria", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Became one of the youngest players to win the Bundesliga.", pt: "Se tornou um dos jogadores mais jovens a vencer a Bundesliga.", es: "Se convirtió en uno de los jugadores más jóvenes en ganar la Bundesliga." } },
+      { name: "Bastian Schweinsteiger", position: "MF", number: 31, nationality: "Germany", clubs: "Bayern Munich, Manchester United", funFact: { en: "Later married tennis star Ana Ivanovic.", pt: "Mais tarde se casou com a tenista Ana Ivanovic.", es: "Más tarde se casó con la tenista Ana Ivanovic." } },
+      { name: "Toni Kroos", position: "MF", number: 39, nationality: "Germany", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Won the World Cup with Germany in 2014.", pt: "Venceu a Copa do Mundo com a Alemanha em 2014.", es: "Ganó el Mundial con Alemania en 2014." } },
+      { name: "Arjen Robben", position: "FW", number: 10, nationality: "Netherlands", clubs: "Groningen, PSV, Chelsea, Real Madrid, Bayern Munich", funFact: { en: "Was known for consistently cutting inside onto his favored left foot.", pt: "Era conhecido por sempre cortar para dentro em direção ao seu pé esquerdo favorito.", es: "Era conocido por siempre cortar hacia adentro hacia su pierna izquierda favorita." } },
+      { name: "Thomas Muller", position: "FW", number: 25, nationality: "Germany", clubs: "Bayern Munich (only)", funFact: { en: "Invented his own position name: the 'Raumdeuter' (space investigator).", pt: "Inventou o próprio nome de posição: 'Raumdeuter' (intérprete de espaços).", es: "Inventó su propio nombre de posición: 'Raumdeuter' (intérprete de espacios)." } },
+      { name: "Franck Ribery", position: "FW", number: 7, nationality: "France", clubs: "Boulogne, Galatasaray, Marseille, Bayern Munich", funFact: { en: "Has a distinctive facial scar from a childhood car accident.", pt: "Tem uma cicatriz marcante no rosto, resultado de um acidente de carro na infância.", es: "Tiene una cicatriz distintiva en el rostro por un accidente de auto en su infancia." } },
+      { name: "Mario Gomez", position: "FW", number: 33, nationality: "Germany", clubs: "Stuttgart, Bayern Munich, Fiorentina, Wolfsburg", funFact: { en: "Was Bayern Munich's top scorer in the 2011-12 season.", pt: "Foi o artilheiro do Bayern de Munique na temporada 2011-12.", es: "Fue el máximo goleador del Bayern de Múnich en la temporada 2011-12." } },
+    ],
+  },
+  {
+    team: "Borussia Dortmund",
+    year: 2013,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Roman Weidenfeller", position: "GK", number: 1, nationality: "Germany", clubs: "Kaiserslautern, Borussia Dortmund", funFact: { en: "Spent his entire senior career at Borussia Dortmund.", pt: "Passou toda a carreira profissional no Borussia Dortmund.", es: "Pasó toda su carrera profesional en el Borussia Dortmund." } },
+      { name: "Lukasz Piszczek", position: "DF", number: 26, nationality: "Poland", clubs: "Zaglebie Lubin, Hertha BSC, Borussia Dortmund", funFact: { en: "Represented Poland at Euro 2012 on home soil.", pt: "Defendeu a Polônia na Eurocopa de 2012, disputada em casa.", es: "Representó a Polonia en la Eurocopa de 2012, disputada en casa." } },
+      { name: "Mats Hummels", position: "DF", number: 15, nationality: "Germany", clubs: "Bayern Munich, Borussia Dortmund", funFact: { en: "Later spent three seasons playing for Bayern Munich.", pt: "Mais tarde passou três temporadas jogando pelo Bayern de Munique.", es: "Más tarde pasó tres temporadas jugando para el Bayern de Múnich." } },
+      { name: "Neven Subotic", position: "DF", number: 4, nationality: "Serbia", clubs: "Mainz, Borussia Dortmund", funFact: { en: "Was born in Bosnia but chose to represent Serbia internationally.", pt: "Nasceu na Bósnia, mas escolheu representar a Sérvia na seleção.", es: "Nació en Bosnia, pero eligió representar a Serbia en la selección." } },
+      { name: "Marcel Schmelzer", position: "DF", number: 29, nationality: "Germany", clubs: "Borussia Dortmund (only)", funFact: { en: "Spent his entire career at Borussia Dortmund.", pt: "Passou toda a carreira no Borussia Dortmund.", es: "Pasó toda su carrera en el Borussia Dortmund." } },
+      { name: "Sven Bender", position: "MF", number: 6, nationality: "Germany", clubs: "Borussia Dortmund, Bayer Leverkusen", funFact: { en: "Has a twin brother, Lars, who also played professional football.", pt: "Tem um irmão gêmeo, Lars, que também foi jogador profissional.", es: "Tiene un hermano gemelo, Lars, que también fue futbolista profesional." } },
+      { name: "Ilkay Gundogan", position: "MF", number: 8, nationality: "Germany", clubs: "Borussia Dortmund, Manchester City", funFact: { en: "Was born and raised in Gelsenkirchen, Germany.", pt: "Nasceu e cresceu em Gelsenkirchen, na Alemanha.", es: "Nació y creció en Gelsenkirchen, Alemania." } },
+      { name: "Jakub Blaszczykowski", position: "MF", number: 16, nationality: "Poland", clubs: "Wisla Krakow, Borussia Dortmund, Fiorentina", funFact: { en: "Nicknamed 'Kuba', became Poland's national team captain.", pt: "Apelidado de 'Kuba', se tornou capitão da seleção da Polônia.", es: "Apodado 'Kuba', se convirtió en capitán de la selección de Polonia." } },
+      { name: "Marco Reus", position: "MF", number: 11, nationality: "Germany", clubs: "Borussia Monchengladbach, Borussia Dortmund", funFact: { en: "Missed the 2014 World Cup due to injury just before the tournament.", pt: "Ficou fora da Copa do Mundo de 2014 por lesão pouco antes do torneio.", es: "Se perdió el Mundial de 2014 por lesión justo antes del torneo." } },
+      { name: "Kevin Grosskreutz", position: "MF", number: 19, nationality: "Germany", clubs: "Rot Weiss Ahlen, Borussia Dortmund", funFact: { en: "Was a boyhood Borussia Dortmund fan before playing for the club.", pt: "Era torcedor do Borussia Dortmund desde criança antes de jogar pelo clube.", es: "Era hincha del Borussia Dortmund desde niño antes de jugar en el club." } },
+      { name: "Robert Lewandowski", position: "FW", number: 9, nationality: "Poland", clubs: "Znicz Pruszkow, Lech Poznan, Borussia Dortmund, Bayern Munich, Barcelona", funFact: { en: "Later broke the Bundesliga single-season scoring record.", pt: "Mais tarde quebrou o recorde de gols em uma única temporada da Bundesliga.", es: "Más tarde batió el récord de goles en una sola temporada de la Bundesliga." } },
+    ],
+  },
+  {
+    team: "FC Barcelona",
+    year: 2015,
+    matchLabel: { en: "UEFA Champions League Final (treble)", pt: "Final da Champions League (tríplice coroa)", es: "Final de la Champions League (triplete)" },
+    players: [
+      { name: "Marc-Andre ter Stegen", position: "GK", number: 1, nationality: "Germany", clubs: "Borussia Monchengladbach, Barcelona", funFact: { en: "Became Barcelona's undisputed starting goalkeeper for over a decade.", pt: "Se tornou o goleiro titular absoluto do Barcelona por mais de uma década.", es: "Se convirtió en el portero titular indiscutido del Barcelona durante más de una década." } },
+      { name: "Dani Alves", position: "DF", number: 2, nationality: "Brazil", clubs: "Sevilla, Barcelona, Juventus, PSG", funFact: { en: "Won the Copa America with Brazil in 2019.", pt: "Venceu a Copa América com o Brasil em 2019.", es: "Ganó la Copa América con Brasil en 2019." } },
+      { name: "Gerard Pique", position: "DF", number: 3, nationality: "Spain", clubs: "Manchester United, Zaragoza, Barcelona", funFact: { en: "Started his career at Manchester United's academy.", pt: "Começou a carreira nas categorias de base do Manchester United.", es: "Empezó su carrera en la cantera del Manchester United." } },
+      { name: "Javier Mascherano", position: "DF", number: 14, nationality: "Argentina", clubs: "River Plate, Liverpool, Barcelona", funFact: { en: "Represented Argentina at four World Cups.", pt: "Defendeu a Argentina em quatro Copas do Mundo.", es: "Representó a Argentina en cuatro Mundiales." } },
+      { name: "Jordi Alba", position: "DF", number: 18, nationality: "Spain", clubs: "Valencia, Barcelona", funFact: { en: "Won a gold medal at the 2012 Olympics with Spain.", pt: "Venceu a medalha de ouro nos Jogos Olímpicos de 2012 pela Espanha.", es: "Ganó la medalla de oro en los Juegos Olímpicos de 2012 con España." } },
+      { name: "Sergio Busquets", position: "MF", number: 5, nationality: "Spain", clubs: "Barcelona, Inter Miami", funFact: { en: "Later moved to Inter Miami to play alongside Messi.", pt: "Mais tarde se transferiu ao Inter Miami para jogar ao lado de Messi.", es: "Más tarde se fue al Inter Miami para jugar junto a Messi." } },
+      { name: "Ivan Rakitic", position: "MF", number: 4, nationality: "Croatia", clubs: "Sevilla, Barcelona", funFact: { en: "Started his career at Basel before moving to Schalke.", pt: "Começou a carreira no Basel antes de se transferir ao Schalke.", es: "Empezó su carrera en el Basilea antes de fichar por el Schalke." } },
+      { name: "Andres Iniesta", position: "MF", number: 8, nationality: "Spain", clubs: "Barcelona, Vissel Kobe", funFact: { en: "Spent the final years of his career playing in Japan.", pt: "Passou os últimos anos da carreira jogando no Japão.", es: "Pasó los últimos años de su carrera jugando en Japón." } },
+      { name: "Lionel Messi", position: "FW", number: 10, nationality: "Argentina", clubs: "Barcelona, PSG, Inter Miami", funFact: { en: "Holds a record eight Ballon d'Or awards.", pt: "Detém o recorde de oito prêmios Bola de Ouro.", es: "Posee el récord de ocho Balones de Oro." } },
+      { name: "Neymar", position: "FW", number: 11, nationality: "Brazil", clubs: "Santos, Barcelona, PSG, Al-Hilal", funFact: { en: "Became the most expensive transfer in football history when he joined PSG.", pt: "Se tornou a transferência mais cara da história do futebol ao ir para o PSG.", es: "Se convirtió en el fichaje más caro de la historia del fútbol al fichar por el PSG." } },
+      { name: "Luis Suarez", position: "FW", number: 9, nationality: "Uruguay", clubs: "Ajax, Liverpool, Barcelona, Atletico Madrid", funFact: { en: "Is Uruguay's all-time record goalscorer.", pt: "É o maior artilheiro da história do Uruguai.", es: "Es el máximo goleador histórico de Uruguay." } },
+    ],
+  },
+  {
+    team: "Juventus",
+    year: 2015,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Gianluigi Buffon", position: "GK", number: 1, nationality: "Italy", clubs: "Parma, Juventus, PSG", funFact: { en: "Represented Italy at five different World Cups.", pt: "Defendeu a Itália em cinco Copas do Mundo diferentes.", es: "Representó a Italia en cinco Mundiales distintos." } },
+      { name: "Stephan Lichtsteiner", position: "DF", number: 26, nationality: "Switzerland", clubs: "Lugano, Lille, Juventus", funFact: { en: "Won seven straight Serie A titles with Juventus.", pt: "Venceu sete Serie A seguidas pela Juventus.", es: "Ganó siete Serie A consecutivas con la Juventus." } },
+      { name: "Leonardo Bonucci", position: "DF", number: 19, nationality: "Italy", clubs: "Inter Milan, Bari, Juventus, AC Milan", funFact: { en: "Later returned to Juventus after a season at AC Milan.", pt: "Mais tarde retornou à Juventus após uma temporada no AC Milan.", es: "Más tarde regresó a la Juventus tras una temporada en el AC Milan." } },
+      { name: "Giorgio Chiellini", position: "DF", number: 3, nationality: "Italy", clubs: "Fiorentina, Juventus", funFact: { en: "Spent nearly his entire career at Juventus.", pt: "Passou quase toda a carreira na Juventus.", es: "Pasó casi toda su carrera en la Juventus." } },
+      { name: "Patrice Evra", position: "DF", number: 33, nationality: "France", clubs: "Monaco, Manchester United, Juventus", funFact: { en: "Won the Champions League with Manchester United in 2008.", pt: "Venceu a Champions League pelo Manchester United em 2008.", es: "Ganó la Champions League con el Manchester United en 2008." } },
+      { name: "Arturo Vidal", position: "MF", number: 23, nationality: "Chile", clubs: "Colo-Colo, Bayer Leverkusen, Juventus, Bayern Munich", funFact: { en: "Later won the treble with Bayern Munich in 2013.", pt: "Mais tarde venceu a tríplice coroa com o Bayern de Munique em 2013.", es: "Más tarde ganó el triplete con el Bayern de Múnich en 2013." } },
+      { name: "Andrea Pirlo", position: "MF", number: 21, nationality: "Italy", clubs: "AC Milan, Juventus, New York City FC", funFact: { en: "Famous for his deep-lying playmaker role and free kicks.", pt: "Famoso pela função de armador recuado e pelas cobranças de falta.", es: "Famoso por su rol de armador recostado y por sus tiros libres." } },
+      { name: "Claudio Marchisio", position: "MF", number: 8, nationality: "Italy", clubs: "Juventus (only)", funFact: { en: "Nicknamed 'The Little Prince' by Juventus fans.", pt: "Apelidado de 'O Pequeno Príncipe' pelos torcedores da Juventus.", es: "Apodado 'El Principito' por los hinchas de la Juventus." } },
+      { name: "Kwadwo Asamoah", position: "MF", number: 22, nationality: "Ghana", clubs: "Udinese, Juventus, Inter Milan", funFact: { en: "Known for his versatility across midfield and wing-back.", pt: "Conhecido pela versatilidade no meio-campo e como ala.", es: "Conocido por su versatilidad en el mediocampo y como carrilero." } },
+      { name: "Carlos Tevez", position: "FW", number: 10, nationality: "Argentina", clubs: "Boca Juniors, West Ham, Manchester United, Manchester City, Juventus", funFact: { en: "Won the Premier League with two different Manchester clubs.", pt: "Venceu a Premier League pelos dois clubes de Manchester.", es: "Ganó la Premier League con los dos clubes de Manchester." } },
+      { name: "Alvaro Morata", position: "FW", number: 9, nationality: "Spain", clubs: "Real Madrid, Juventus, Chelsea, Atletico Madrid", funFact: { en: "Scored twice against his boyhood club Real Madrid in a Champions League semifinal.", pt: "Marcou duas vezes contra o Real Madrid, time de seu coração, numa semifinal da Champions.", es: "Marcó dos veces ante el Real Madrid, el equipo de su infancia, en una semifinal de la Champions." } },
+    ],
+  },
+  {
+    team: "Real Madrid",
+    year: 2016,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Keylor Navas", position: "GK", number: 1, nationality: "Costa Rica", clubs: "Levante, Real Madrid, PSG", funFact: { en: "Started for his country at three different World Cups.", pt: "Foi titular por seu país em três Copas do Mundo diferentes.", es: "Fue titular con su selección en tres Mundiales distintos." } },
+      { name: "Dani Carvajal", position: "DF", number: 2, nationality: "Spain", clubs: "Bayer Leverkusen, Real Madrid", funFact: { en: "Won five Champions League titles with Real Madrid.", pt: "Venceu cinco Champions League pelo Real Madrid.", es: "Ganó cinco Champions League con el Real Madrid." } },
+      { name: "Sergio Ramos", position: "DF", number: 4, nationality: "Spain", clubs: "Sevilla, Real Madrid, PSG", funFact: { en: "Scored a dramatic late equalizer to force penalties in this final.", pt: "Marcou um gol de empate dramático no fim para levar essa final aos pênaltis.", es: "Marcó un dramático gol de empate al final para llevar esta final a los penales." } },
+      { name: "Pepe", position: "DF", number: 3, nationality: "Portugal", clubs: "Porto, Real Madrid", funFact: { en: "Later returned to Porto after leaving Real Madrid.", pt: "Mais tarde retornou ao Porto após deixar o Real Madrid.", es: "Más tarde volvió al Porto tras dejar el Real Madrid." } },
+      { name: "Marcelo", position: "DF", number: 12, nationality: "Brazil", clubs: "Fluminense, Real Madrid", funFact: { en: "Is the most decorated player in Real Madrid's history.", pt: "É o jogador mais premiado da história do Real Madrid.", es: "Es el jugador más laureado de la historia del Real Madrid." } },
+      { name: "Casemiro", position: "MF", number: 14, nationality: "Brazil", clubs: "Sao Paulo, Real Madrid, Manchester United", funFact: { en: "Later moved to Manchester United after eight years at Real Madrid.", pt: "Mais tarde se transferiu ao Manchester United após oito anos no Real Madrid.", es: "Más tarde fichó por el Manchester United tras ocho años en el Real Madrid." } },
+      { name: "Toni Kroos", position: "MF", number: 8, nationality: "Germany", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Won the World Cup with Germany in 2014.", pt: "Venceu a Copa do Mundo com a Alemanha em 2014.", es: "Ganó el Mundial con Alemania en 2014." } },
+      { name: "Luka Modric", position: "MF", number: 19, nationality: "Croatia", clubs: "Dinamo Zagreb, Tottenham, Real Madrid", funFact: { en: "Won the Ballon d'Or in 2018.", pt: "Venceu a Bola de Ouro em 2018.", es: "Ganó el Balón de Oro en 2018." } },
+      { name: "Gareth Bale", position: "FW", number: 11, nationality: "Wales", clubs: "Southampton, Tottenham, Real Madrid", funFact: { en: "Scored a memorable solo goal in the 2014 Copa del Rey final.", pt: "Marcou um gol de placa em jogada individual na final da Copa do Rei de 2014.", es: "Marcó un golazo en jugada individual en la final de la Copa del Rey de 2014." } },
+      { name: "Cristiano Ronaldo", position: "FW", number: 7, nationality: "Portugal", clubs: "Sporting CP, Manchester United, Real Madrid, Juventus, Al-Nassr", funFact: { en: "Won the Champions League five times in his career.", pt: "Venceu a Champions League cinco vezes na carreira.", es: "Ganó la Champions League cinco veces en su carrera." } },
+      { name: "Karim Benzema", position: "FW", number: 9, nationality: "France", clubs: "Lyon, Real Madrid, Al-Ittihad", funFact: { en: "Won the Champions League four times with Real Madrid.", pt: "Venceu a Champions League quatro vezes pelo Real Madrid.", es: "Ganó la Champions League cuatro veces con el Real Madrid." } },
+    ],
+  },
+  {
+    team: "Atletico Madrid",
+    year: 2016,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Jan Oblak", position: "GK", number: 13, nationality: "Slovenia", clubs: "Olimpija Ljubljana, Benfica, Atletico Madrid", funFact: { en: "Became one of the best-paid goalkeepers in the world at Atletico.", pt: "Se tornou um dos goleiros mais bem pagos do mundo no Atlético.", es: "Se convirtió en uno de los porteros mejor pagados del mundo en el Atlético." } },
+      { name: "Juanfran", position: "DF", number: 20, nationality: "Spain", clubs: "Atletico Madrid (mostly)", funFact: { en: "Made over 350 appearances for Atletico Madrid.", pt: "Disputou mais de 350 partidas pelo Atlético de Madrid.", es: "Disputó más de 350 partidos con el Atlético de Madrid." } },
+      { name: "Diego Godin", position: "DF", number: 2, nationality: "Uruguay", clubs: "Nacional, Villarreal, Atletico Madrid, Inter Milan", funFact: { en: "Later played for Inter Milan and Cagliari in Serie A.", pt: "Mais tarde jogou pela Inter de Milão e pelo Cagliari, na Serie A.", es: "Más tarde jugó en el Inter de Milán y en el Cagliari, en la Serie A." } },
+      { name: "Jose Gimenez", position: "DF", number: 5, nationality: "Uruguay", clubs: "Danubio, Atletico Madrid", funFact: { en: "Became one of the youngest centre-backs to establish himself in La Liga.", pt: "Se tornou um dos zagueiros mais jovens a se firmar na La Liga.", es: "Se convirtió en uno de los centrales más jóvenes en asentarse en La Liga." } },
+      { name: "Filipe Luis", position: "DF", number: 23, nationality: "Brazil", clubs: "Atletico Madrid, Chelsea", funFact: { en: "Represented Brazil at the 2014 World Cup on home soil.", pt: "Defendeu o Brasil na Copa do Mundo de 2014, disputada em casa.", es: "Representó a Brasil en el Mundial de 2014, disputado en casa." } },
+      { name: "Gabi", position: "MF", number: 14, nationality: "Spain", clubs: "Real Madrid, Atletico Madrid", funFact: { en: "Started his career at Real Madrid's academy.", pt: "Começou a carreira nas categorias de base do Real Madrid.", es: "Empezó su carrera en la cantera del Real Madrid." } },
+      { name: "Saul Niguez", position: "MF", number: 8, nationality: "Spain", clubs: "Atletico Madrid (mostly)", funFact: { en: "Came through Atletico Madrid's own academy.", pt: "Foi revelado nas categorias de base do próprio Atlético de Madrid.", es: "Se formó en la propia cantera del Atlético de Madrid." } },
+      { name: "Koke", position: "MF", number: 6, nationality: "Spain", clubs: "Atletico Madrid (only)", funFact: { en: "Was part of Spain's youth teams before becoming a senior international.", pt: "Passou pelas categorias de base da Espanha antes de virar titular na seleção principal.", es: "Pasó por las categorías juveniles de España antes de ser titular en la selección absoluta." } },
+      { name: "Yannick Carrasco", position: "MF", number: 21, nationality: "Belgium", clubs: "Monaco, Atletico Madrid, Dalian Yifang", funFact: { en: "Later moved to the Chinese Super League mid-career.", pt: "Mais tarde se transferiu para a liga chinesa em meio à carreira.", es: "Más tarde se fue a la liga china en plena carrera." } },
+      { name: "Antoine Griezmann", position: "FW", number: 7, nationality: "France", clubs: "Real Sociedad, Atletico Madrid, Barcelona", funFact: { en: "Won the World Cup with France in 2018.", pt: "Venceu a Copa do Mundo com a França em 2018.", es: "Ganó el Mundial con Francia en 2018." } },
+      { name: "Fernando Torres", position: "FW", number: 9, nationality: "Spain", clubs: "Atletico Madrid, Liverpool, Chelsea, AC Milan", funFact: { en: "Won the European Championship twice with Spain.", pt: "Venceu a Eurocopa duas vezes pela Espanha.", es: "Ganó la Eurocopa dos veces con España." } },
+    ],
+  },
+  {
+    team: "Juventus",
+    year: 2017,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Gianluigi Buffon", position: "GK", number: 1, nationality: "Italy", clubs: "Parma, Juventus, PSG", funFact: { en: "Was runner-up for the Ballon d'Or in 2006.", pt: "Foi vice-campeão da Bola de Ouro em 2006.", es: "Fue subcampeón del Balón de Oro en 2006." } },
+      { name: "Dani Alves", position: "DF", number: 20, nationality: "Brazil", clubs: "Sevilla, Barcelona, Juventus, PSG", funFact: { en: "Won a domestic treble in his only season at Juventus.", pt: "Venceu a tríplice coroa nacional em sua única temporada na Juventus.", es: "Ganó el triplete nacional en su única temporada en la Juventus." } },
+      { name: "Giorgio Chiellini", position: "DF", number: 3, nationality: "Italy", clubs: "Fiorentina, Juventus", funFact: { en: "Represented Italy at four European Championships.", pt: "Defendeu a Itália em quatro Eurocopas.", es: "Representó a Italia en cuatro Eurocopas." } },
+      { name: "Leonardo Bonucci", position: "DF", number: 19, nationality: "Italy", clubs: "Inter Milan, Bari, Juventus, AC Milan", funFact: { en: "Won the European Championship with Italy in 2021.", pt: "Venceu a Eurocopa com a Itália em 2021.", es: "Ganó la Eurocopa con Italia en 2021." } },
+      { name: "Alex Sandro", position: "DF", number: 12, nationality: "Brazil", clubs: "Porto, Juventus", funFact: { en: "Started his career at Porto before moving to Juventus.", pt: "Começou a carreira no Porto antes de se transferir à Juventus.", es: "Empezó su carrera en el Porto antes de fichar por la Juventus." } },
+      { name: "Miralem Pjanic", position: "MF", number: 5, nationality: "Bosnia", clubs: "Metz, Lyon, Roma, Juventus, Barcelona", funFact: { en: "Later moved to Barcelona in a swap deal with Arthur.", pt: "Mais tarde se transferiu ao Barcelona numa troca envolvendo o Arthur.", es: "Más tarde fichó por el Barcelona en un intercambio con Arthur." } },
+      { name: "Sami Khedira", position: "MF", number: 6, nationality: "Germany", clubs: "Stuttgart, Real Madrid, Juventus", funFact: { en: "Won the World Cup with Germany in 2014.", pt: "Venceu a Copa do Mundo com a Alemanha em 2014.", es: "Ganó el Mundial con Alemania en 2014." } },
+      { name: "Claudio Marchisio", position: "MF", number: 8, nationality: "Italy", clubs: "Juventus (only)", funFact: { en: "Made over 300 appearances for Juventus.", pt: "Disputou mais de 300 partidas pela Juventus.", es: "Disputó más de 300 partidos con la Juventus." } },
+      { name: "Juan Cuadrado", position: "MF", number: 16, nationality: "Colombia", clubs: "Independiente Medellin, Fiorentina, Chelsea, Juventus", funFact: { en: "Converted from a winger into an attacking wing-back at Juventus.", pt: "Foi convertido de ponta para ala ofensivo na Juventus.", es: "Fue reconvertido de extremo a carrilero ofensivo en la Juventus." } },
+      { name: "Gonzalo Higuain", position: "FW", number: 9, nationality: "Argentina", clubs: "River Plate, Real Madrid, Napoli, Juventus", funFact: { en: "Scored over 300 career club goals.", pt: "Marcou mais de 300 gols na carreira por clubes.", es: "Marcó más de 300 goles en su carrera con clubes." } },
+      { name: "Paulo Dybala", position: "FW", number: 10, nationality: "Argentina", clubs: "Instituto, Palermo, Juventus, Roma", funFact: { en: "Became known as 'La Joya' (The Jewel) at Juventus.", pt: "Ficou conhecido como 'La Joya' (A Joia) na Juventus.", es: "Se hizo conocido como 'La Joya' en la Juventus." } },
+    ],
+  },
+  {
+    team: "Real Madrid",
+    year: 2018,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Keylor Navas", position: "GK", number: 1, nationality: "Costa Rica", clubs: "Levante, Real Madrid, PSG", funFact: { en: "Won three consecutive Champions League titles as Real Madrid's goalkeeper.", pt: "Venceu três Champions League seguidas como goleiro do Real Madrid.", es: "Ganó tres Champions League seguidas como portero del Real Madrid." } },
+      { name: "Dani Carvajal", position: "DF", number: 2, nationality: "Spain", clubs: "Bayer Leverkusen, Real Madrid", funFact: { en: "Was named in the UEFA Champions League Team of the Season multiple times.", pt: "Foi eleito para o Time da Temporada da Champions League da UEFA várias vezes.", es: "Fue elegido para el Equipo de la Temporada de la Champions League de la UEFA varias veces." } },
+      { name: "Raphael Varane", position: "DF", number: 5, nationality: "France", clubs: "Lens, Real Madrid, Manchester United", funFact: { en: "Won the World Cup with France in 2018, weeks after this final.", pt: "Venceu a Copa do Mundo com a França em 2018, semanas depois dessa final.", es: "Ganó el Mundial con Francia en 2018, semanas después de esta final." } },
+      { name: "Sergio Ramos", position: "DF", number: 4, nationality: "Spain", clubs: "Sevilla, Real Madrid, PSG", funFact: { en: "Became Real Madrid's all-time appearance leader.", pt: "Se tornou o jogador com mais partidas na história do Real Madrid.", es: "Se convirtió en el jugador con más partidos en la historia del Real Madrid." } },
+      { name: "Marcelo", position: "DF", number: 12, nationality: "Brazil", clubs: "Fluminense, Real Madrid", funFact: { en: "Won more trophies than almost any other player in Real Madrid's history.", pt: "Venceu mais títulos do que quase qualquer outro jogador na história do Real Madrid.", es: "Ganó más títulos que casi cualquier otro jugador en la historia del Real Madrid." } },
+      { name: "Casemiro", position: "MF", number: 14, nationality: "Brazil", clubs: "Sao Paulo, Real Madrid, Manchester United", funFact: { en: "Won the Champions League five times with Real Madrid.", pt: "Venceu a Champions League cinco vezes pelo Real Madrid.", es: "Ganó la Champions League cinco veces con el Real Madrid." } },
+      { name: "Toni Kroos", position: "MF", number: 8, nationality: "Germany", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Played for Bayern Munich before joining Real Madrid in 2014.", pt: "Jogou pelo Bayern de Munique antes de se transferir ao Real Madrid em 2014.", es: "Jugó en el Bayern de Múnich antes de fichar por el Real Madrid en 2014." } },
+      { name: "Luka Modric", position: "MF", number: 19, nationality: "Croatia", clubs: "Dinamo Zagreb, Tottenham, Real Madrid", funFact: { en: "Started his career at Dinamo Zagreb before moving to Tottenham.", pt: "Começou a carreira no Dinamo Zagreb antes de se transferir ao Tottenham.", es: "Empezó su carrera en el Dinamo Zagreb antes de fichar por el Tottenham." } },
+      { name: "Isco", position: "MF", number: 22, nationality: "Spain", clubs: "Valencia, Malaga, Real Madrid, Sevilla", funFact: { en: "Won the Under-21 European Championship with Spain.", pt: "Venceu a Eurocopa Sub-21 pela Espanha.", es: "Ganó la Eurocopa Sub-21 con España." } },
+      { name: "Cristiano Ronaldo", position: "FW", number: 7, nationality: "Portugal", clubs: "Sporting CP, Manchester United, Real Madrid, Juventus, Al-Nassr", funFact: { en: "Left Real Madrid for Juventus shortly after this final.", pt: "Deixou o Real Madrid rumo à Juventus pouco depois dessa final.", es: "Dejó el Real Madrid rumbo a la Juventus poco después de esta final." } },
+      { name: "Karim Benzema", position: "FW", number: 9, nationality: "France", clubs: "Lyon, Real Madrid, Al-Ittihad", funFact: { en: "Became Real Madrid's second-highest goalscorer of all time.", pt: "Se tornou o segundo maior artilheiro da história do Real Madrid.", es: "Se convirtió en el segundo máximo goleador de la historia del Real Madrid." } },
+    ],
+  },
+  {
+    team: "Liverpool",
+    year: 2018,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Loris Karius", position: "GK", number: 1, nationality: "Germany", clubs: "Manchester City, Mainz, Liverpool", funFact: { en: "Started his career in Germany before moving to the Premier League.", pt: "Começou a carreira na Alemanha antes de se transferir à Premier League.", es: "Empezó su carrera en Alemania antes de fichar por la Premier League." } },
+      { name: "Trent Alexander-Arnold", position: "DF", number: 66, nationality: "England", clubs: "Liverpool, Real Madrid", funFact: { en: "Was handed his first England call-up the same year.", pt: "Recebeu sua primeira convocação para a seleção da Inglaterra no mesmo ano.", es: "Recibió su primera convocatoria a la selección de Inglaterra ese mismo año." } },
+      { name: "Dejan Lovren", position: "DF", number: 6, nationality: "Croatia", clubs: "Dinamo Zagreb, Lyon, Southampton, Liverpool", funFact: { en: "Reached the World Cup final with Croatia in 2018.", pt: "Chegou à final da Copa do Mundo pela Croácia em 2018.", es: "Llegó a la final del Mundial con Croacia en 2018." } },
+      { name: "Virgil van Dijk", position: "DF", number: 4, nationality: "Netherlands", clubs: "Groningen, Celtic, Southampton, Liverpool", funFact: { en: "Joined Liverpool in a then-record fee for a defender.", pt: "Chegou ao Liverpool por uma taxa que era recorde para um zagueiro na época.", es: "Llegó al Liverpool por un traspaso que era récord para un defensor en ese momento." } },
+      { name: "Andrew Robertson", position: "DF", number: 26, nationality: "Scotland", clubs: "Dundee United, Hull City, Liverpool", funFact: { en: "Started his career on loan at Scottish club Dundee United.", pt: "Começou a carreira emprestado ao clube escocês Dundee United.", es: "Empezó su carrera cedido en el club escocés Dundee United." } },
+      { name: "Jordan Henderson", position: "MF", number: 14, nationality: "England", clubs: "Sunderland, Liverpool, Al-Ettifaq", funFact: { en: "Was booed by some fans early in his Liverpool career before becoming captain.", pt: "Foi vaiado por alguns torcedores no início da carreira no Liverpool antes de virar capitão.", es: "Fue abucheado por algunos hinchas al inicio de su etapa en el Liverpool antes de ser capitán." } },
+      { name: "Georginio Wijnaldum", position: "MF", number: 5, nationality: "Netherlands", clubs: "Feyenoord, PSV, Newcastle, Liverpool", funFact: { en: "Started his career at Feyenoord's academy in Rotterdam.", pt: "Começou a carreira nas categorias de base do Feyenoord, em Roterdã.", es: "Empezó su carrera en la cantera del Feyenoord, en Róterdam." } },
+      { name: "James Milner", position: "MF", number: 7, nationality: "England", clubs: "Leeds United, Newcastle, Aston Villa, Manchester City, Liverpool", funFact: { en: "Made more Premier League appearances than almost any player of his generation.", pt: "Disputou mais partidas na Premier League do que quase qualquer jogador de sua geração.", es: "Disputó más partidos en la Premier League que casi cualquier jugador de su generación." } },
+      { name: "Mohamed Salah", position: "FW", number: 11, nationality: "Egypt", clubs: "Basel, Chelsea, Roma, Liverpool", funFact: { en: "Won the African Footballer of the Year award multiple times.", pt: "Venceu o prêmio de Jogador Africano do Ano diversas vezes.", es: "Ganó el premio al Futbolista Africano del Año varias veces." } },
+      { name: "Roberto Firmino", position: "FW", number: 9, nationality: "Brazil", clubs: "Figueirense, Hoffenheim, Liverpool, Al-Ahli", funFact: { en: "Started his career at Brazilian club Figueirense.", pt: "Começou a carreira no Figueirense, no Brasil.", es: "Empezó su carrera en el Figueirense, de Brasil." } },
+      { name: "Sadio Mane", position: "FW", number: 10, nationality: "Senegal", clubs: "Metz, Salzburg, Southampton, Liverpool, Bayern Munich, Al-Nassr", funFact: { en: "Was the first Senegalese player to start a Champions League final.", pt: "Foi o primeiro jogador senegalês a ser titular numa final de Champions League.", es: "Fue el primer jugador senegalés en ser titular en una final de Champions League." } },
+    ],
+  },
+  {
+    team: "Bayern Munich",
+    year: 2020,
+    matchLabel: { en: "UEFA Champions League Final (treble)", pt: "Final da Champions League (tríplice coroa)", es: "Final de la Champions League (triplete)" },
+    players: [
+      { name: "Manuel Neuer", position: "GK", number: 1, nationality: "Germany", clubs: "Schalke, Bayern Munich", funFact: { en: "Has played his entire senior career for Bayern Munich.", pt: "Jogou toda a carreira profissional pelo Bayern de Munique.", es: "Jugó toda su carrera profesional en el Bayern de Múnich." } },
+      { name: "Joshua Kimmich", position: "DF", number: 32, nationality: "Germany", clubs: "RB Leipzig, Bayern Munich", funFact: { en: "Started his career at RB Leipzig before their promotion to the Bundesliga.", pt: "Começou a carreira no RB Leipzig antes da promoção do clube à Bundesliga.", es: "Empezó su carrera en el RB Leipzig antes del ascenso del club a la Bundesliga." } },
+      { name: "Jerome Boateng", position: "DF", number: 17, nationality: "Germany", clubs: "Hamburg, Manchester City, Bayern Munich", funFact: { en: "Won the World Cup with Germany in 2014.", pt: "Venceu a Copa do Mundo com a Alemanha em 2014.", es: "Ganó el Mundial con Alemania en 2014." } },
+      { name: "David Alaba", position: "DF", number: 27, nationality: "Austria", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Later joined Real Madrid on a free transfer.", pt: "Mais tarde se transferiu ao Real Madrid sem custo.", es: "Más tarde fichó por el Real Madrid como agente libre." } },
+      { name: "Alphonso Davies", position: "DF", number: 19, nationality: "Canada", clubs: "Vancouver Whitecaps, Bayern Munich", funFact: { en: "Became the first Canadian to play in a Champions League final.", pt: "Se tornou o primeiro canadense a jogar uma final de Champions League.", es: "Se convirtió en el primer canadiense en jugar una final de Champions League." } },
+      { name: "Thiago Alcantara", position: "MF", number: 6, nationality: "Spain", clubs: "Barcelona, Bayern Munich, Liverpool", funFact: { en: "Later moved to Liverpool from Bayern Munich.", pt: "Mais tarde se transferiu ao Liverpool vindo do Bayern de Munique.", es: "Más tarde fichó por el Liverpool procedente del Bayern de Múnich." } },
+      { name: "Leon Goretzka", position: "MF", number: 18, nationality: "Germany", clubs: "Bochum, Schalke, Bayern Munich", funFact: { en: "Recovered from a serious injury to become a Bayern regular.", pt: "Se recuperou de uma lesão grave para se firmar como titular no Bayern.", es: "Se recuperó de una lesión grave para consolidarse como titular en el Bayern." } },
+      { name: "Serge Gnabry", position: "FW", number: 22, nationality: "Germany", clubs: "Arsenal, West Bromwich Albion, Werder Bremen, Bayern Munich", funFact: { en: "Scored four goals in a single Champions League match against Tottenham.", pt: "Marcou quatro gols numa única partida de Champions League contra o Tottenham.", es: "Marcó cuatro goles en un solo partido de Champions League ante el Tottenham." } },
+      { name: "Thomas Muller", position: "FW", number: 25, nationality: "Germany", clubs: "Bayern Munich (only)", funFact: { en: "Has won the Champions League six times.", pt: "Já venceu a Champions League seis vezes.", es: "Ya ha ganado la Champions League seis veces." } },
+      { name: "Kingsley Coman", position: "FW", number: 29, nationality: "France", clubs: "Paris Saint-Germain, Juventus, Bayern Munich", funFact: { en: "Scored the winning goal in this Champions League final against his boyhood club.", pt: "Marcou o gol da vitória nessa final da Champions League contra o clube que torcia quando criança.", es: "Marcó el gol de la victoria en esta final de la Champions League ante el club del que era hincha de niño." } },
+      { name: "Robert Lewandowski", position: "FW", number: 9, nationality: "Poland", clubs: "Znicz Pruszkow, Lech Poznan, Borussia Dortmund, Bayern Munich, Barcelona", funFact: { en: "Once scored five goals in nine minutes off the bench in the Bundesliga.", pt: "Certa vez marcou cinco gols em nove minutos saindo do banco, na Bundesliga.", es: "Una vez marcó cinco goles en nueve minutos entrando desde el banco, en la Bundesliga." } },
+    ],
+  },
+  {
+    team: "Paris Saint-Germain",
+    year: 2020,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Keylor Navas", position: "GK", number: 1, nationality: "Costa Rica", clubs: "Levante, Real Madrid, PSG", funFact: { en: "Left Real Madrid for PSG in 2019 despite winning three Champions Leagues.", pt: "Deixou o Real Madrid rumo ao PSG em 2019, mesmo tendo vencido três Champions League.", es: "Dejó el Real Madrid rumbo al PSG en 2019, pese a haber ganado tres Champions League." } },
+      { name: "Thilo Kehrer", position: "DF", number: 15, nationality: "Germany", clubs: "Schalke, PSG", funFact: { en: "Started his career at Schalke's academy in Germany.", pt: "Começou a carreira nas categorias de base do Schalke, na Alemanha.", es: "Empezó su carrera en la cantera del Schalke, en Alemania." } },
+      { name: "Presnel Kimpembe", position: "DF", number: 3, nationality: "France", clubs: "PSG (only)", funFact: { en: "Came through PSG's own youth academy.", pt: "Foi revelado nas categorias de base do próprio PSG.", es: "Se formó en la propia cantera del PSG." } },
+      { name: "Marquinhos", position: "DF", number: 5, nationality: "Brazil", clubs: "Corinthians, AS Roma, PSG", funFact: { en: "Started his career at Corinthians in Brazil.", pt: "Começou a carreira no Corinthians, no Brasil.", es: "Empezó su carrera en el Corinthians, de Brasil." } },
+      { name: "Juan Bernat", position: "DF", number: 14, nationality: "Spain", clubs: "Valencia, Bayern Munich, PSG", funFact: { en: "Won the Champions League with Bayern Munich before joining PSG.", pt: "Venceu a Champions League pelo Bayern de Munique antes de ir ao PSG.", es: "Ganó la Champions League con el Bayern de Múnich antes de fichar por el PSG." } },
+      { name: "Idrissa Gueye", position: "MF", number: 27, nationality: "Senegal", clubs: "Lille, Aston Villa, Everton, PSG", funFact: { en: "Was known as one of the best ball-winning midfielders of his generation.", pt: "Era conhecido como um dos melhores volantes de recomposição de sua geração.", es: "Era conocido como uno de los mejores mediocentros de recuperación de su generación." } },
+      { name: "Marco Verratti", position: "MF", number: 6, nationality: "Italy", clubs: "Pescara, PSG", funFact: { en: "Joined PSG as a teenager from Italian club Pescara.", pt: "Chegou ao PSG ainda adolescente, vindo do Pescara, da Itália.", es: "Llegó al PSG siendo adolescente, procedente del Pescara, de Italia." } },
+      { name: "Ander Herrera", position: "MF", number: 21, nationality: "Spain", clubs: "Real Zaragoza, Athletic Bilbao, Manchester United, PSG", funFact: { en: "Won the Europa League with Manchester United in 2017.", pt: "Venceu a Liga Europa pelo Manchester United em 2017.", es: "Ganó la Europa League con el Manchester United en 2017." } },
+      { name: "Angel Di Maria", position: "FW", number: 11, nationality: "Argentina", clubs: "Benfica, Real Madrid, Manchester United, PSG", funFact: { en: "Was named Man of the Match in the 2014 Champions League final.", pt: "Foi eleito o melhor em campo na final da Champions League de 2014.", es: "Fue elegido el mejor jugador del partido en la final de la Champions League de 2014." } },
+      { name: "Kylian Mbappe", position: "FW", number: 7, nationality: "France", clubs: "Monaco, PSG, Real Madrid", funFact: { en: "Won the World Cup with France as a teenager in 2018.", pt: "Venceu a Copa do Mundo com a França ainda adolescente, em 2018.", es: "Ganó el Mundial con Francia siendo adolescente, en 2018." } },
+      { name: "Neymar", position: "FW", number: 10, nationality: "Brazil", clubs: "Santos, Barcelona, PSG, Al-Hilal", funFact: { en: "Is Brazil's all-time record goalscorer.", pt: "É o maior artilheiro da história da seleção brasileira.", es: "Es el máximo goleador histórico de la selección brasileña." } },
+    ],
+  },
+  {
+    team: "Chelsea",
+    year: 2021,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Edouard Mendy", position: "GK", number: 16, nationality: "Senegal", clubs: "Cherbourg, Reims, Rennes, Chelsea", funFact: { en: "Was named the Best FIFA Goalkeeper in 2021.", pt: "Foi eleito o Melhor Goleiro da FIFA em 2021.", es: "Fue elegido el Mejor Portero de la FIFA en 2021." } },
+      { name: "Reece James", position: "DF", number: 24, nationality: "England", clubs: "Chelsea (only)", funFact: { en: "Came through Chelsea's own academy.", pt: "Foi revelado nas categorias de base do próprio Chelsea.", es: "Se formó en la propia cantera del Chelsea." } },
+      { name: "Thiago Silva", position: "DF", number: 6, nationality: "Brazil", clubs: "Fluminense, AC Milan, PSG, Chelsea", funFact: { en: "Captained Brazil's national team for many years.", pt: "Foi capitão da seleção brasileira por muitos anos.", es: "Fue capitán de la selección brasileña durante muchos años." } },
+      { name: "Antonio Rudiger", position: "DF", number: 2, nationality: "Germany", clubs: "VfB Stuttgart, AS Roma, Chelsea, Real Madrid", funFact: { en: "Later joined Real Madrid on a free transfer.", pt: "Mais tarde se transferiu ao Real Madrid sem custo.", es: "Más tarde fichó por el Real Madrid como agente libre." } },
+      { name: "Ben Chilwell", position: "DF", number: 21, nationality: "England", clubs: "Leicester City, Chelsea", funFact: { en: "Started his career at Leicester City's academy.", pt: "Começou a carreira nas categorias de base do Leicester City.", es: "Empezó su carrera en la cantera del Leicester City." } },
+      { name: "N'Golo Kante", position: "MF", number: 7, nationality: "France", clubs: "Boulogne, Caen, Leicester City, Chelsea", funFact: { en: "Won the Premier League with two different clubs in consecutive seasons.", pt: "Venceu a Premier League por dois clubes diferentes em temporadas seguidas.", es: "Ganó la Premier League con dos clubes distintos en temporadas consecutivas." } },
+      { name: "Jorginho", position: "MF", number: 5, nationality: "Italy", clubs: "Hellas Verona, Napoli, Chelsea, Arsenal", funFact: { en: "Won the European Championship with Italy in 2021.", pt: "Venceu a Eurocopa com a Itália em 2021.", es: "Ganó la Eurocopa con Italia en 2021." } },
+      { name: "Mateo Kovacic", position: "MF", number: 17, nationality: "Croatia", clubs: "Dinamo Zagreb, Inter Milan, Real Madrid, Chelsea, Manchester City", funFact: { en: "Won the Champions League with Real Madrid before joining Chelsea.", pt: "Venceu a Champions League pelo Real Madrid antes de ir ao Chelsea.", es: "Ganó la Champions League con el Real Madrid antes de fichar por el Chelsea." } },
+      { name: "Mason Mount", position: "FW", number: 19, nationality: "England", clubs: "Chelsea, Manchester United", funFact: { en: "Was named Chelsea's Player of the Year in his breakout season.", pt: "Foi eleito o Jogador do Ano do Chelsea em sua temporada de estreia como titular.", es: "Fue elegido Jugador del Año del Chelsea en su temporada de consagración." } },
+      { name: "Timo Werner", position: "FW", number: 11, nationality: "Germany", clubs: "VfB Stuttgart, RB Leipzig, Chelsea", funFact: { en: "Was known for his blistering pace up front.", pt: "Era conhecido pela velocidade impressionante no ataque.", es: "Era conocido por su velocidad impresionante en el ataque." } },
+      { name: "Kai Havertz", position: "FW", number: 29, nationality: "Germany", clubs: "Bayer Leverkusen, Chelsea", funFact: { en: "Scored the only goal of this Champions League final.", pt: "Marcou o único gol dessa final da Champions League.", es: "Marcó el único gol de esta final de la Champions League." } },
+    ],
+  },
+  {
+    team: "Manchester City",
+    year: 2021,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Ederson", position: "GK", number: 31, nationality: "Brazil", clubs: "Rio Ave, Benfica, Manchester City", funFact: { en: "Was one of the most expensive goalkeepers in history when he signed.", pt: "Foi um dos goleiros mais caros da história quando foi contratado.", es: "Fue uno de los porteros más caros de la historia cuando fue fichado." } },
+      { name: "Kyle Walker", position: "DF", number: 2, nationality: "England", clubs: "Sheffield United, Tottenham, Manchester City", funFact: { en: "Was part of England's run to the 2018 World Cup semifinal.", pt: "Fez parte da campanha da Inglaterra até a semifinal da Copa de 2018.", es: "Formó parte de la campaña de Inglaterra hasta la semifinal del Mundial de 2018." } },
+      { name: "Ruben Dias", position: "DF", number: 3, nationality: "Portugal", clubs: "Benfica, Manchester City", funFact: { en: "Won Portuguese Primeira Liga Player of the Year before moving to England.", pt: "Foi eleito o Jogador do Ano da Primeira Liga portuguesa antes de ir à Inglaterra.", es: "Fue elegido Jugador del Año de la Primeira Liga portuguesa antes de irse a Inglaterra." } },
+      { name: "John Stones", position: "DF", number: 5, nationality: "England", clubs: "Barnsley, Everton, Manchester City", funFact: { en: "Came through Barnsley's academy before his big-money move to Everton.", pt: "Foi revelado nas categorias de base do Barnsley antes da transferência milionária ao Everton.", es: "Se formó en la cantera del Barnsley antes de su millonario traspaso al Everton." } },
+      { name: "Oleksandr Zinchenko", position: "DF", number: 11, nationality: "Ukraine", clubs: "Shakhtar Donetsk, Manchester City, Arsenal", funFact: { en: "Converted from a midfielder into a left-back at Manchester City.", pt: "Foi convertido de meio-campista para lateral-esquerdo no Manchester City.", es: "Fue reconvertido de centrocampista a lateral izquierdo en el Manchester City." } },
+      { name: "Ilkay Gundogan", position: "MF", number: 8, nationality: "Germany", clubs: "Borussia Dortmund, Manchester City", funFact: { en: "Later became Manchester City's club captain.", pt: "Mais tarde se tornou capitão do Manchester City.", es: "Más tarde se convirtió en capitán del Manchester City." } },
+      { name: "Rodri", position: "MF", number: 16, nationality: "Spain", clubs: "Villarreal, Atletico Madrid, Manchester City", funFact: { en: "Won the Ballon d'Or in 2024.", pt: "Venceu a Bola de Ouro em 2024.", es: "Ganó el Balón de Oro en 2024." } },
+      { name: "Phil Foden", position: "MF", number: 47, nationality: "England", clubs: "Manchester City (only)", funFact: { en: "Came through Manchester City's own academy as a highly rated prospect.", pt: "Foi revelado nas categorias de base do próprio Manchester City como grande promessa.", es: "Se formó en la propia cantera del Manchester City como gran promesa." } },
+      { name: "Riyad Mahrez", position: "FW", number: 26, nationality: "Algeria", clubs: "Le Havre, Leicester City, Manchester City, Al-Ahli", funFact: { en: "Won the Premier League title with a small-budget Leicester City in 2016.", pt: "Venceu a Premier League por um Leicester City de orçamento modesto, em 2016.", es: "Ganó la Premier League con un Leicester City de presupuesto modesto, en 2016." } },
+      { name: "Raheem Sterling", position: "FW", number: 7, nationality: "England", clubs: "Queens Park Rangers, Liverpool, Manchester City, Chelsea", funFact: { en: "Represented England at three major tournaments.", pt: "Defendeu a Inglaterra em três grandes torneios.", es: "Representó a Inglaterra en tres grandes torneos." } },
+      { name: "Kevin De Bruyne", position: "MF", number: 17, nationality: "Belgium", clubs: "Genk, Chelsea, Wolfsburg, Manchester City", funFact: { en: "Was previously let go by Chelsea before starring at Manchester City.", pt: "Foi dispensado pelo Chelsea antes de brilhar no Manchester City.", es: "Fue descartado por el Chelsea antes de brillar en el Manchester City." } },
+    ],
+  },
+  {
+    team: "Real Madrid",
+    year: 2022,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Thibaut Courtois", position: "GK", number: 1, nationality: "Belgium", clubs: "Genk, Chelsea, Atletico Madrid, Real Madrid", funFact: { en: "Was named UEFA's Goalkeeper of the Season.", pt: "Foi eleito o Goleiro da Temporada pela UEFA.", es: "Fue elegido el Portero de la Temporada por la UEFA." } },
+      { name: "Dani Carvajal", position: "DF", number: 2, nationality: "Spain", clubs: "Bayer Leverkusen, Real Madrid", funFact: { en: "Has spent his entire senior career at Real Madrid.", pt: "Passou toda a carreira profissional no Real Madrid.", es: "Pasó toda su carrera profesional en el Real Madrid." } },
+      { name: "Eder Militao", position: "DF", number: 3, nationality: "Brazil", clubs: "Sao Paulo, Porto, Real Madrid", funFact: { en: "Started his career at Sao Paulo before a brief spell at Porto.", pt: "Começou a carreira no São Paulo antes de uma passagem breve pelo Porto.", es: "Empezó su carrera en el São Paulo antes de un breve paso por el Porto." } },
+      { name: "David Alaba", position: "DF", number: 4, nationality: "Austria", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Won league titles in three different countries.", pt: "Venceu campeonatos nacionais em três países diferentes.", es: "Ganó ligas nacionales en tres países distintos." } },
+      { name: "Ferland Mendy", position: "DF", number: 23, nationality: "France", clubs: "Le Havre, Lyon, Real Madrid", funFact: { en: "Started his career at French club Le Havre.", pt: "Começou a carreira no clube francês Le Havre.", es: "Empezó su carrera en el club francés Le Havre." } },
+      { name: "Casemiro", position: "MF", number: 14, nationality: "Brazil", clubs: "Sao Paulo, Real Madrid, Manchester United", funFact: { en: "Later moved to Manchester United in 2022.", pt: "Mais tarde se transferiu ao Manchester United em 2022.", es: "Más tarde fichó por el Manchester United en 2022." } },
+      { name: "Toni Kroos", position: "MF", number: 8, nationality: "Germany", clubs: "Bayern Munich, Real Madrid", funFact: { en: "Was part of Germany's World Cup winning squad in 2014.", pt: "Fez parte do elenco campeão do mundo pela Alemanha em 2014.", es: "Formó parte del plantel campeón del mundo con Alemania en 2014." } },
+      { name: "Luka Modric", position: "MF", number: 10, nationality: "Croatia", clubs: "Dinamo Zagreb, Tottenham, Real Madrid", funFact: { en: "Was named the best player at the 2018 World Cup.", pt: "Foi eleito o melhor jogador da Copa do Mundo de 2018.", es: "Fue elegido el mejor jugador del Mundial de 2018." } },
+      { name: "Federico Valverde", position: "MF", number: 15, nationality: "Uruguay", clubs: "Penarol, Real Madrid", funFact: { en: "Started his career at Uruguayan club Penarol.", pt: "Começou a carreira no Peñarol, do Uruguai.", es: "Empezó su carrera en Peñarol, de Uruguay." } },
+      { name: "Vinicius Junior", position: "FW", number: 20, nationality: "Brazil", clubs: "Flamengo, Real Madrid", funFact: { en: "Scored the winning goal in this Champions League final.", pt: "Marcou o gol da vitória nessa final da Champions League.", es: "Marcó el gol de la victoria en esta final de la Champions League." } },
+      { name: "Karim Benzema", position: "FW", number: 9, nationality: "France", clubs: "Lyon, Real Madrid, Al-Ittihad", funFact: { en: "Won the Ballon d'Or in 2022.", pt: "Venceu a Bola de Ouro em 2022.", es: "Ganó el Balón de Oro en 2022." } },
+    ],
+  },
+  {
+    team: "Liverpool",
+    year: 2022,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Alisson Becker", position: "GK", number: 1, nationality: "Brazil", clubs: "Internacional, Roma, Liverpool", funFact: { en: "Scored a dramatic injury-time header for Liverpool against West Brom.", pt: "Marcou um gol de cabeça dramático nos acréscimos contra o West Brom.", es: "Marcó un dramático gol de cabeza en el descuento ante el West Brom." } },
+      { name: "Trent Alexander-Arnold", position: "DF", number: 66, nationality: "England", clubs: "Liverpool, Real Madrid", funFact: { en: "Is known for his exceptional passing range from right-back.", pt: "É conhecido pela qualidade de passe fora do comum jogando como lateral-direito.", es: "Es conocido por su calidad de pase fuera de lo común jugando de lateral derecho." } },
+      { name: "Virgil van Dijk", position: "DF", number: 4, nationality: "Netherlands", clubs: "Groningen, Celtic, Southampton, Liverpool", funFact: { en: "Was runner-up for the 2019 Ballon d'Or.", pt: "Foi vice-campeão da Bola de Ouro de 2019.", es: "Fue subcampeón del Balón de Oro de 2019." } },
+      { name: "Ibrahima Konate", position: "DF", number: 5, nationality: "France", clubs: "Sochaux, RB Leipzig, Liverpool", funFact: { en: "Started his career at French club Sochaux.", pt: "Começou a carreira no clube francês Sochaux.", es: "Empezó su carrera en el club francés Sochaux." } },
+      { name: "Andrew Robertson", position: "DF", number: 26, nationality: "Scotland", clubs: "Dundee United, Hull City, Liverpool", funFact: { en: "Became Liverpool's vice-captain.", pt: "Se tornou vice-capitão do Liverpool.", es: "Se convirtió en vicecapitán del Liverpool." } },
+      { name: "Fabinho", position: "MF", number: 3, nationality: "Brazil", clubs: "Real Madrid, Monaco, Liverpool, Al-Ittihad", funFact: { en: "Was nicknamed 'The Lighthouse' for his calm presence in midfield.", pt: "Foi apelidado de 'O Farol' pela presença calma no meio-campo.", es: "Fue apodado 'El Faro' por su presencia calmada en el mediocampo." } },
+      { name: "Jordan Henderson", position: "MF", number: 14, nationality: "England", clubs: "Sunderland, Liverpool, Al-Ettifaq", funFact: { en: "Later moved to Saudi Arabia's league.", pt: "Mais tarde se transferiu para a liga saudita.", es: "Más tarde se fue a la liga saudí." } },
+      { name: "Thiago Alcantara", position: "MF", number: 6, nationality: "Spain", clubs: "Barcelona, Bayern Munich, Liverpool", funFact: { en: "Won the treble with Bayern Munich in 2020.", pt: "Venceu a tríplice coroa com o Bayern de Munique em 2020.", es: "Ganó el triplete con el Bayern de Múnich en 2020." } },
+      { name: "Mohamed Salah", position: "FW", number: 11, nationality: "Egypt", clubs: "Basel, Chelsea, Roma, Liverpool", funFact: { en: "Scored over 200 goals for Liverpool.", pt: "Marcou mais de 200 gols pelo Liverpool.", es: "Marcó más de 200 goles con el Liverpool." } },
+      { name: "Sadio Mane", position: "FW", number: 10, nationality: "Senegal", clubs: "Metz, Salzburg, Southampton, Liverpool, Bayern Munich, Al-Nassr", funFact: { en: "Later joined Bayern Munich from Liverpool.", pt: "Mais tarde se transferiu ao Bayern de Munique vindo do Liverpool.", es: "Más tarde fichó por el Bayern de Múnich procedente del Liverpool." } },
+      { name: "Luis Diaz", position: "FW", number: 23, nationality: "Colombia", clubs: "Barranquilla, Junior, Porto, Liverpool", funFact: { en: "Joined Liverpool midway through this Champions League campaign.", pt: "Chegou ao Liverpool no meio dessa campanha de Champions League.", es: "Llegó al Liverpool a mitad de esta campaña de Champions League." } },
+    ],
+  },
+  {
+    team: "Inter Milan",
+    year: 2023,
+    matchLabel: { en: "UEFA Champions League Final", pt: "Final da Champions League", es: "Final de la Champions League" },
+    players: [
+      { name: "Andre Onana", position: "GK", number: 24, nationality: "Cameroon", clubs: "Barcelona, Ajax, Inter Milan, Manchester United", funFact: { en: "Later moved to Manchester United from Inter Milan.", pt: "Mais tarde se transferiu ao Manchester United vindo da Inter de Milão.", es: "Más tarde fichó por el Manchester United procedente del Inter de Milán." } },
+      { name: "Denzel Dumfries", position: "DF", number: 2, nationality: "Netherlands", clubs: "Heerenveen, PSV, Inter Milan", funFact: { en: "Known for his explosive pace as an attacking wing-back.", pt: "Conhecido pela velocidade explosiva como ala ofensivo.", es: "Conocido por su velocidad explosiva como carrilero ofensivo." } },
+      { name: "Francesco Acerbi", position: "DF", number: 15, nationality: "Italy", clubs: "AC Milan, Chievo, Sassuolo, Lazio, Inter Milan", funFact: { en: "Overcame testicular cancer early in his career.", pt: "Superou um câncer testicular no início da carreira.", es: "Superó un cáncer testicular al inicio de su carrera." } },
+      { name: "Alessandro Bastoni", position: "DF", number: 95, nationality: "Italy", clubs: "Atalanta, Inter Milan", funFact: { en: "Wears one of the highest squad numbers in professional football.", pt: "Usa um dos números de camisa mais altos do futebol profissional.", es: "Usa uno de los números de camiseta más altos del fútbol profesional." } },
+      { name: "Federico Dimarco", position: "DF", number: 32, nationality: "Italy", clubs: "Inter Milan (mostly)", funFact: { en: "Came through Inter Milan's own youth academy.", pt: "Foi revelado nas categorias de base da própria Inter de Milão.", es: "Se formó en la propia cantera del Inter de Milán." } },
+      { name: "Nicolo Barella", position: "MF", number: 23, nationality: "Italy", clubs: "Cagliari, Inter Milan", funFact: { en: "Became a key player for Italy's national team.", pt: "Se tornou peça-chave na seleção da Itália.", es: "Se convirtió en pieza clave en la selección de Italia." } },
+      { name: "Hakan Calhanoglu", position: "MF", number: 20, nationality: "Turkey", clubs: "Karlsruhe, Hamburg, Bayer Leverkusen, AC Milan, Inter Milan", funFact: { en: "Previously played for rivals AC Milan before joining Inter.", pt: "Já jogou pelo rival AC Milan antes de se transferir à Inter.", es: "Ya jugó para el rival AC Milan antes de fichar por el Inter." } },
+      { name: "Marcelo Brozovic", position: "MF", number: 77, nationality: "Croatia", clubs: "Dinamo Zagreb, Inter Milan, Al-Nassr", funFact: { en: "Later moved to Saudi Arabia's league.", pt: "Mais tarde se transferiu para a liga saudita.", es: "Más tarde se fue a la liga saudí." } },
+      { name: "Robin Gosens", position: "DF", number: 28, nationality: "Germany", clubs: "Vitesse, Heracles, Atalanta, Inter Milan", funFact: { en: "Was part of Atalanta's surprise Champions League run in 2020.", pt: "Fez parte da surpreendente campanha da Atalanta na Champions League de 2020.", es: "Formó parte de la sorprendente campaña del Atalanta en la Champions League de 2020." } },
+      { name: "Lautaro Martinez", position: "FW", number: 10, nationality: "Argentina", clubs: "Racing Club, Inter Milan", funFact: { en: "Became Inter Milan's captain and top scorer.", pt: "Se tornou capitão e artilheiro da Inter de Milão.", es: "Se convirtió en capitán y máximo goleador del Inter de Milán." } },
+      { name: "Edin Dzeko", position: "FW", number: 9, nationality: "Bosnia", clubs: "Wolfsburg, Manchester City, Roma, Inter Milan", funFact: { en: "Is Bosnia and Herzegovina's all-time record goalscorer.", pt: "É o maior artilheiro da história da seleção da Bósnia e Herzegovina.", es: "Es el máximo goleador histórico de la selección de Bosnia y Herzegovina." } },
     ],
   },
 ];
@@ -1565,7 +1962,7 @@ const BRAZIL_LINEUP_POOL = [
     year: 2000,
     matchLabel: "Final do Mundial de Clubes",
     players: [
-      { name: "Dida", position: "GK", number: 1, nationality: "Brasil", clubs: "Corinthians, AC Milan", funFact: "Goleiro daquele Corinthians campeão mundial em 2000." },
+      { name: "Dida", position: "GK", number: 1, nationality: "Brasil", clubs: "Corinthians, AC Milan", funFact: "Foi campeão do mundo com a seleção brasileira em 2002." },
       { name: "Zé Maria", position: "DF", number: 6, nationality: "Brasil", clubs: "Corinthians", funFact: "Lateral-esquerdo daquele elenco de 2000." },
       { name: "Fábio Luciano", position: "DF", number: 3, nationality: "Brasil", clubs: "Corinthians", funFact: "Zagueiro titular na conquista do primeiro Mundial de Clubes." },
       { name: "Índio", position: "DF", number: 4, nationality: "Brasil", clubs: "Corinthians", funFact: "Zagueiro que compunha a defesa do time campeão." },
@@ -1583,7 +1980,7 @@ const BRAZIL_LINEUP_POOL = [
     year: 1999,
     matchLabel: "Final da Libertadores",
     players: [
-      { name: "Marcos", position: "GK", number: 1, nationality: "Brasil", clubs: "Palmeiras", funFact: "Goleiro daquele Palmeiras campeão da Libertadores de 1999." },
+      { name: "Marcos", position: "GK", number: 1, nationality: "Brasil", clubs: "Palmeiras", funFact: "Foi o goleiro titular do Brasil na conquista do pentacampeonato em 2002." },
       { name: "Arce", position: "DF", number: 2, nationality: "Brasil", clubs: "Palmeiras", funFact: "Lateral daquele elenco palmeirense." },
       { name: "Roque Júnior", position: "DF", number: 4, nationality: "Brasil", clubs: "Palmeiras", funFact: "Zagueiro titular na conquista continental de 1999." },
       { name: "Júnior", position: "DF", number: 3, nationality: "Brasil", clubs: "Palmeiras", funFact: "Zagueiro que completava a defesa do time campeão." },
@@ -1593,7 +1990,7 @@ const BRAZIL_LINEUP_POOL = [
       { name: "Franco", position: "MF", number: 10, nationality: "Argentina", clubs: "Palmeiras", funFact: "Meio-campista argentino que reforçou o Palmeiras naquela época." },
       { name: "Galeano", position: "MF", number: 11, nationality: "Paraguai", clubs: "Palmeiras", funFact: "Meia paraguaio, peça importante do time de 1999." },
       { name: "Euller", position: "FW", number: 9, nationality: "Brasil", clubs: "Palmeiras", funFact: "Atacante daquele elenco campeão da Libertadores." },
-      { name: "Oséas", position: "FW", number: 7, nationality: "Brasil", clubs: "Palmeiras", funFact: "Artilheiro do Palmeiras na campanha de 1999." },
+      { name: "Oséas", position: "FW", number: 7, nationality: "Brasil", clubs: "Palmeiras", funFact: "Atacante conhecido pela finalização precisa dentro da área." },
     ],
   },
   {
@@ -2868,16 +3265,19 @@ const TRANSLATIONS = {
     eyebrow: "KICKOFF QUIZ",
     title: "GUESS THE PLAYER",
     chooseMode: "Choose a mode to start playing.",
+    singlePlayerTitle: "Single Player",
+    singlePlayerDesc: "Test your football knowledge across 5 solo game modes.",
+    singlePlayerCta: "PLAY SOLO",
+    singlePlayerEyebrow: "SINGLE PLAYER",
+    singlePlayerHeading: "Choose Your Mode",
     cluesModeTitle: "Clues Mode",
     cluesModeDesc: "Read three clues, pick the player from four options.",
     playClues: "PLAY CLUES MODE",
     lineupModeTitle: "Lineup Mode",
-    lineupModeDesc:
-      "A famous European club's XI from a given year — one player is missing. Type the name to fill the gap. Up to 3 optional hints are available, but each one lowers the points you can earn.",
+    lineupModeDesc: "Guess the missing player in a famous lineup. Up to 3 hints available.",
     playLineup: "PLAY LINEUP MODE",
     clubsModeTitle: "Clubs Mode",
-    clubsModeDesc:
-      "See a player's career clubs and guess who it is by typing the name. Up to 5 optional hints are available, but each one lowers the points you can earn.",
+    clubsModeDesc: "Guess the player from the clubs on their career. Up to 5 hints available.",
     playClubsMode: "PLAY CLUBS MODE",
     clubsLabel: "CLUBS",
     clubsGuessPlaceholder: "Type the player's name",
@@ -2887,6 +3287,72 @@ const TRANSLATIONS = {
     randomModeDesc: "A mix of all four modes — clues, lineups, clubs, and years — in one 10-question game.",
     playRandomMode: "PLAY RANDOM MODE",
     playYearMode: "PLAY YEAR MODE",
+    multiplayerTitle: "Multiplayer",
+    multiplayerDesc: "Challenge a random opponent to a live 1v1 duel.",
+    multiplayerCta: "LIVE",
+    multiplayerComingTitle: "1V1 DUELS",
+    multiplayerComingDesc:
+      "Sign in, pick a nickname, and get matched instantly with another player for a live 10-question duel.",
+    authEmailLabel: "Email",
+    authPasswordLabel: "Password",
+    showPasswordLabel: "Show password",
+    hidePasswordLabel: "Hide password",
+    authLoginBtn: "LOG IN",
+    authSignupBtn: "CREATE ACCOUNT",
+    authToggleToSignup: "No account yet? Create one",
+    authToggleToLogin: "Already have an account? Log in",
+    authGoogleBtn: "Continue with Google",
+    authOr: "or",
+    authCheckEmail: "Check your inbox to confirm your account.",
+    authGenericError: "Something went wrong. Try again.",
+    authLoggedInAs: "Signed in as",
+    authLogoutBtn: "LOG OUT",
+    authMatchmakingNote: "Matchmaking isn't ready yet - hang tight!",
+    nicknameLabel: "Pick a nickname",
+    nicknamePlaceholder: "Your nickname",
+    nicknameSaveBtn: "SAVE AND CONTINUE",
+    changeNicknameBtn: "Change nickname",
+    findMatchBtn: "FIND RANDOM MATCH",
+    searchingText: "Looking for an opponent...",
+    cancelSearchBtn: "CANCEL",
+    matchFoundText: "Match found! Opponent:",
+    inviteComingSoon: "Inviting a friend is coming soon.",
+    duelYouLabel: "YOU",
+    duelOpponentLabel: "OPPONENT",
+    duelWaitingTitle: "Waiting for opponent...",
+    duelWaitingDesc: "You finished! Hang tight while your opponent wraps up.",
+    duelEndWin: "You won! 🏆",
+    duelEndLose: "You lost",
+    duelEndDraw: "It's a draw",
+    duelBackBtn: "BACK TO MULTIPLAYER",
+    duelGetReady: "GET READY",
+    duelVsWord: "vs",
+    roomOrLabel: "or invite friends",
+    createRoomBtn: "CREATE ROOM",
+    joinRoomBtn: "JOIN WITH CODE",
+    pickModeLabel: "Choose a mode for the room",
+    pickRegionLabel: "World or Brazil?",
+    roomModesEyebrow: "NEW ROOM",
+    roomModesHeading: "Choose a Mode",
+    roomModesSubtitle: "Choose a mode to play with your friends.",
+    roomCodePlaceholder: "6-digit code",
+    joinRoomSubmitBtn: "JOIN",
+    roomNotFound: "Room not found or already started.",
+    roomCodeLabel: "ROOM CODE",
+    roomShareHint: "Share this code with your friends",
+    roomCopyBtn: "COPY CODE",
+    roomCodeCopiedMsg: "Copied!",
+    roomPlayersLabel: "PLAYERS",
+    roomWaitingHostLabel: "Waiting for the host to start the game...",
+    roomStartBtn: "START GAME",
+    roomLeaveBtn: "LEAVE ROOM",
+    currentModeLabel: "Mode:",
+    changeModeBtn: "CHANGE MODE",
+    roomWaitingTitle: "Waiting for everyone to finish...",
+    roomEndTitle: "FINAL RESULTS",
+    roomPlayAgainBtn: "PLAY AGAIN (SAME CODE)",
+    roomRestartTitle: "The host wants to play another round!",
+    roomStayBtn: "STAY IN THE ROOM",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -2894,6 +3360,7 @@ const TRANSLATIONS = {
     lineupLabel: "LINEUP",
     cluesLabel: "CLUES",
     submitAnswer: "SUBMIT ANSWER",
+    skipBtn: "SKIP - I DON'T KNOW",
     correct: "Correct! ⚽",
     answerLabel: "Answer:",
     missingPlayer: "Missing player:",
@@ -2905,7 +3372,6 @@ const TRANSLATIONS = {
     getHint: "GET A HINT ({used}/{max} used — lowers points)",
     noMoreHints: "NO MORE HINTS",
     fullTime: "FULL TIME",
-    pts: "PTS",
     niceReading: "Nice reading of the game.",
     playAgain: "PLAY AGAIN",
     changeMode: "CHANGE MODE",
@@ -2926,16 +3392,19 @@ const TRANSLATIONS = {
     eyebrow: "PONTAPÉ INICIAL",
     title: "ADIVINHE O JOGADOR",
     chooseMode: "Escolha um modo para começar a jogar.",
+    singlePlayerTitle: "Um Jogador",
+    singlePlayerDesc: "Teste seu conhecimento de futebol em 5 modos solo.",
+    singlePlayerCta: "JOGAR SOZINHO",
+    singlePlayerEyebrow: "UM JOGADOR",
+    singlePlayerHeading: "Escolha seu Modo",
     cluesModeTitle: "Modo Pistas",
     cluesModeDesc: "Leia três pistas e escolha o jogador entre quatro opções.",
     playClues: "JOGAR MODO PISTAS",
     lineupModeTitle: "Modo Escalação",
-    lineupModeDesc:
-      "A escalação de um clube europeu famoso em um determinado ano — falta um jogador. Digite o nome para completar. Há até 3 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar.",
+    lineupModeDesc: "Adivinhe o jogador que falta numa escalação famosa. Até 3 dicas.",
     playLineup: "JOGAR MODO ESCALAÇÃO",
     clubsModeTitle: "Modo Clubes",
-    clubsModeDesc:
-      "Veja os clubes por onde o jogador passou na carreira e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar.",
+    clubsModeDesc: "Adivinhe o jogador pelos clubes da carreira dele. Até 5 dicas.",
     playClubsMode: "JOGAR MODO CLUBES",
     clubsLabel: "CLUBES",
     clubsGuessPlaceholder: "Digite o nome do jogador",
@@ -2945,6 +3414,72 @@ const TRANSLATIONS = {
     randomModeDesc: "Uma mistura dos quatro modos — pistas, escalações, clubes e anos — em uma partida de 10 perguntas.",
     playRandomMode: "JOGAR MODO ALEATÓRIO",
     playYearMode: "JOGAR MODO ANO",
+    multiplayerTitle: "Multiplayer",
+    multiplayerDesc: "Desafie um oponente aleatório num duelo 1x1 ao vivo.",
+    multiplayerCta: "AO VIVO",
+    multiplayerComingTitle: "DUELOS 1X1",
+    multiplayerComingDesc:
+      "Entre, escolha um apelido e seja pareado na hora com outro jogador pra um duelo ao vivo de 10 perguntas.",
+    authEmailLabel: "Email",
+    authPasswordLabel: "Senha",
+    showPasswordLabel: "Mostrar senha",
+    hidePasswordLabel: "Esconder senha",
+    authLoginBtn: "ENTRAR",
+    authSignupBtn: "CRIAR CONTA",
+    authToggleToSignup: "Não tem conta? Criar uma",
+    authToggleToLogin: "Já tem conta? Entrar",
+    authGoogleBtn: "Continuar com Google",
+    authOr: "ou",
+    authCheckEmail: "Confira seu email pra confirmar a conta.",
+    authGenericError: "Algo deu errado. Tenta de novo.",
+    authLoggedInAs: "Logado como",
+    authLogoutBtn: "SAIR",
+    authMatchmakingNote: "As partidas ainda não estão prontas - aguenta aí!",
+    nicknameLabel: "Escolha um apelido",
+    nicknamePlaceholder: "Seu apelido",
+    nicknameSaveBtn: "SALVAR E CONTINUAR",
+    changeNicknameBtn: "Trocar apelido",
+    findMatchBtn: "BUSCAR PARTIDA ALEATÓRIA",
+    searchingText: "Procurando um oponente...",
+    cancelSearchBtn: "CANCELAR",
+    matchFoundText: "Partida encontrada! Oponente:",
+    inviteComingSoon: "Convidar um amigo vem em breve.",
+    duelYouLabel: "VOCÊ",
+    duelOpponentLabel: "OPONENTE",
+    duelWaitingTitle: "Aguardando oponente...",
+    duelWaitingDesc: "Você terminou! Aguenta aí enquanto seu oponente termina.",
+    duelEndWin: "Você venceu! 🏆",
+    duelEndLose: "Você perdeu",
+    duelEndDraw: "Empate",
+    duelBackBtn: "VOLTAR AO MULTIPLAYER",
+    duelGetReady: "PREPARA AÍ",
+    duelVsWord: "vs",
+    roomOrLabel: "ou convide amigos",
+    createRoomBtn: "CRIAR SALA",
+    joinRoomBtn: "ENTRAR COM CÓDIGO",
+    pickModeLabel: "Escolha um modo pra sala",
+    pickRegionLabel: "Mundo ou Brasil?",
+    roomModesEyebrow: "NOVA SALA",
+    roomModesHeading: "Escolha um Modo",
+    roomModesSubtitle: "Escolha um modo para jogar com seus amigos.",
+    roomCodePlaceholder: "código de 6 dígitos",
+    joinRoomSubmitBtn: "ENTRAR",
+    roomNotFound: "Sala não encontrada ou já começou.",
+    roomCodeLabel: "CÓDIGO DA SALA",
+    roomShareHint: "Compartilhe esse código com seus amigos",
+    roomCopyBtn: "COPIAR CÓDIGO",
+    roomCodeCopiedMsg: "Copiado!",
+    roomPlayersLabel: "JOGADORES",
+    roomWaitingHostLabel: "Aguardando o anfitrião iniciar a partida...",
+    roomStartBtn: "INICIAR PARTIDA",
+    roomLeaveBtn: "SAIR DA SALA",
+    currentModeLabel: "Modo:",
+    changeModeBtn: "TROCAR MODO",
+    roomWaitingTitle: "Aguardando todo mundo terminar...",
+    roomEndTitle: "RESULTADO FINAL",
+    roomPlayAgainBtn: "JOGAR DE NOVO (MESMO CÓDIGO)",
+    roomRestartTitle: "O anfitrião quer jogar outra rodada!",
+    roomStayBtn: "FICAR NA SALA",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -2952,6 +3487,7 @@ const TRANSLATIONS = {
     lineupLabel: "ESCALAÇÃO",
     cluesLabel: "PISTAS",
     submitAnswer: "ENVIAR RESPOSTA",
+    skipBtn: "PULAR - NÃO SEI",
     correct: "Correto! ⚽",
     answerLabel: "Resposta:",
     missingPlayer: "Jogador que faltava:",
@@ -2963,7 +3499,6 @@ const TRANSLATIONS = {
     getHint: "PEDIR DICA ({used}/{max} usadas — reduz pontos)",
     noMoreHints: "SEM MAIS DICAS",
     fullTime: "FIM DE JOGO",
-    pts: "PTS",
     niceReading: "Boa leitura de jogo.",
     playAgain: "JOGAR NOVAMENTE",
     changeMode: "TROCAR MODO",
@@ -2984,16 +3519,19 @@ const TRANSLATIONS = {
     eyebrow: "SAQUE INICIAL",
     title: "ADIVINA AL JUGADOR",
     chooseMode: "Elige un modo para empezar a jugar.",
+    singlePlayerTitle: "Un Jugador",
+    singlePlayerDesc: "Pon a prueba tu conocimiento de fútbol en 5 modos individuales.",
+    singlePlayerCta: "JUGAR SOLO",
+    singlePlayerEyebrow: "UN JUGADOR",
+    singlePlayerHeading: "Elige tu Modo",
     cluesModeTitle: "Modo Pistas",
     cluesModeDesc: "Lee tres pistas y elige al jugador entre cuatro opciones.",
     playClues: "JUGAR MODO PISTAS",
     lineupModeTitle: "Modo Alineación",
-    lineupModeDesc:
-      "La alineación de un club europeo famoso en un año determinado — falta un jugador. Escribe el nombre para completar. Hay hasta 3 pistas opcionales disponibles, pero cada una reduce los puntos que puedes ganar.",
+    lineupModeDesc: "Adivina al jugador que falta en una alineación famosa. Hasta 3 pistas.",
     playLineup: "JUGAR MODO ALINEACIÓN",
     clubsModeTitle: "Modo Clubes",
-    clubsModeDesc:
-      "Mira los clubes por los que pasó el jugador en su carrera y adivina quién es escribiendo el nombre. Hay hasta 5 pistas opcionales disponibles, pero cada una reduce los puntos que puedes ganar.",
+    clubsModeDesc: "Adivina al jugador por los clubes de su carrera. Hasta 5 pistas.",
     playClubsMode: "JUGAR MODO CLUBES",
     clubsLabel: "CLUBES",
     clubsGuessPlaceholder: "Escribe el nombre del jugador",
@@ -3003,6 +3541,72 @@ const TRANSLATIONS = {
     randomModeDesc: "Una mezcla de los cuatro modos — pistas, alineaciones, clubes y años — en una partida de 10 preguntas.",
     playRandomMode: "JUGAR MODO ALEATORIO",
     playYearMode: "JUGAR MODO AÑO",
+    multiplayerTitle: "Multijugador",
+    multiplayerDesc: "Desafía a un oponente aleatorio a un duelo 1v1 en vivo.",
+    multiplayerCta: "EN VIVO",
+    multiplayerComingTitle: "DUELOS 1V1",
+    multiplayerComingDesc:
+      "Inicia sesión, elige un apodo y emparéjate al instante con otro jugador para un duelo en vivo de 10 preguntas.",
+    authEmailLabel: "Correo",
+    authPasswordLabel: "Contraseña",
+    showPasswordLabel: "Mostrar contraseña",
+    hidePasswordLabel: "Ocultar contraseña",
+    authLoginBtn: "INICIAR SESIÓN",
+    authSignupBtn: "CREAR CUENTA",
+    authToggleToSignup: "¿No tienes cuenta? Crea una",
+    authToggleToLogin: "¿Ya tienes cuenta? Inicia sesión",
+    authGoogleBtn: "Continuar con Google",
+    authOr: "o",
+    authCheckEmail: "Revisa tu correo para confirmar la cuenta.",
+    authGenericError: "Algo salió mal. Intenta de nuevo.",
+    authLoggedInAs: "Conectado como",
+    authLogoutBtn: "CERRAR SESIÓN",
+    authMatchmakingNote: "Las partidas todavía no están listas - ¡espera un poco!",
+    nicknameLabel: "Elige un apodo",
+    nicknamePlaceholder: "Tu apodo",
+    nicknameSaveBtn: "GUARDAR Y CONTINUAR",
+    changeNicknameBtn: "Cambiar apodo",
+    findMatchBtn: "BUSCAR PARTIDA ALEATORIA",
+    searchingText: "Buscando un oponente...",
+    cancelSearchBtn: "CANCELAR",
+    matchFoundText: "¡Partida encontrada! Oponente:",
+    inviteComingSoon: "Invitar a un amigo llega pronto.",
+    duelYouLabel: "TÚ",
+    duelOpponentLabel: "OPONENTE",
+    duelWaitingTitle: "Esperando al oponente...",
+    duelWaitingDesc: "¡Terminaste! Espera un poco mientras tu oponente termina.",
+    duelEndWin: "¡Ganaste! 🏆",
+    duelEndLose: "Perdiste",
+    duelEndDraw: "Empate",
+    duelBackBtn: "VOLVER A MULTIJUGADOR",
+    duelGetReady: "PREPÁRATE",
+    duelVsWord: "vs",
+    roomOrLabel: "o invita amigos",
+    createRoomBtn: "CREAR SALA",
+    joinRoomBtn: "UNIRSE CON CÓDIGO",
+    pickModeLabel: "Elige un modo para la sala",
+    pickRegionLabel: "¿Mundo o Brasil?",
+    roomModesEyebrow: "SALA NUEVA",
+    roomModesHeading: "Elige un Modo",
+    roomModesSubtitle: "Elige un modo para jugar con tus amigos.",
+    roomCodePlaceholder: "código de 6 dígitos",
+    joinRoomSubmitBtn: "UNIRSE",
+    roomNotFound: "Sala no encontrada o ya comenzó.",
+    roomCodeLabel: "CÓDIGO DE SALA",
+    roomShareHint: "Comparte este código con tus amigos",
+    roomCopyBtn: "COPIAR CÓDIGO",
+    roomCodeCopiedMsg: "¡Copiado!",
+    roomPlayersLabel: "JUGADORES",
+    roomWaitingHostLabel: "Esperando a que el anfitrión inicie la partida...",
+    roomStartBtn: "INICIAR PARTIDA",
+    roomLeaveBtn: "SALIR DE LA SALA",
+    currentModeLabel: "Modo:",
+    changeModeBtn: "CAMBIAR MODO",
+    roomWaitingTitle: "Esperando a que todos terminen...",
+    roomEndTitle: "RESULTADO FINAL",
+    roomPlayAgainBtn: "JUGAR DE NUEVO (MISMO CÓDIGO)",
+    roomRestartTitle: "¡El anfitrión quiere jugar otra ronda!",
+    roomStayBtn: "QUEDARME EN LA SALA",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -3010,6 +3614,7 @@ const TRANSLATIONS = {
     lineupLabel: "ALINEACIÓN",
     cluesLabel: "PISTAS",
     submitAnswer: "ENVIAR RESPUESTA",
+    skipBtn: "SALTAR - NO SÉ",
     correct: "¡Correcto! ⚽",
     answerLabel: "Respuesta:",
     missingPlayer: "Jugador que faltaba:",
@@ -3021,7 +3626,6 @@ const TRANSLATIONS = {
     getHint: "PEDIR PISTA ({used}/{max} usadas — reduce puntos)",
     noMoreHints: "SIN MÁS PISTAS",
     fullTime: "FIN DEL PARTIDO",
-    pts: "PTS",
     niceReading: "Buena lectura del partido.",
     playAgain: "JUGAR DE NUEVO",
     changeMode: "CAMBIAR MODO",
@@ -3041,6 +3645,13 @@ const TRANSLATIONS = {
 };
 
 // ============ HELPERS ============
+// Every correct answer is worth up to 10 points (never 0), scaled down by
+// how much time was left and, where relevant, how many hints were used -
+// so a full round of 10 questions always tops out at a simple 100.
+function questionScore(timeLeft, roundSeconds, hintFactor = 1) {
+  const timeFactor = 0.4 + 0.6 * Math.max(0, Math.min(1, timeLeft / roundSeconds));
+  return Math.max(1, Math.round(10 * timeFactor * hintFactor));
+}
 function shuffle(array) {
   const copy = [...array];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -3105,6 +3716,77 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
+// Strips common club prefixes/suffixes (FC Porto vs Porto, AC Milan vs
+// Milan) so the same club matches regardless of which form the data uses.
+function normalizeClubName(name) {
+  return (name || "")
+    .toLowerCase()
+    .replace(/\b(fc|cf|ac|afc|sc|cd)\b\.?/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// The "Clubs" hint in Lineup mode lists a player's career clubs, but
+// the current team is already shown on the pitch above - repeating it
+// in the hint gives the answer away for free. Drop it from the list.
+function otherClubsHint(clubsStr, currentTeam) {
+  if (!clubsStr) return clubsStr;
+  const normTeam = normalizeClubName(currentTeam);
+  const filtered = clubsStr
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => normalizeClubName(c) !== normTeam);
+  return filtered.length > 0 ? filtered.join(", ") : clubsStr;
+}
+
+const MODE_ACCENTS = {
+  clues: { solid: "#1CB0F6", dark: "#0A91D1" },
+  lineup: { solid: "#FF9600", dark: "#E07C00" },
+  clubs: { solid: "#58CC02", dark: "#46A302" },
+  year: { solid: "#FF4B4B", dark: "#E23636" },
+  random: { solid: "#00C2B8", dark: "#009C94" },
+  mundo: { solid: "#1CB0F6", dark: "#0A91D1" },
+  brasil: { solid: "#FFC94D", dark: "#E0A82E" },
+  multiplayer: { solid: "#1CB0F6", dark: "#0A91D1" },
+  singlePlayer: { solid: "#22C744", dark: "#0B6F27" },
+};
+
+const TEAM_KIT = {
+  "AC Milan": { bg: "#D81920", text: "#FFFFFF" },
+  Ajax: { bg: "#D2122E", text: "#FFFFFF" },
+  Arsenal: { bg: "#EF0107", text: "#FFFFFF" },
+  "Atlético Mineiro": { bg: "#1A1A1A", text: "#FFFFFF" },
+  "Atletico Madrid": { bg: "#CB3524", text: "#FFFFFF" },
+  "Bayern Munich": { bg: "#DC052D", text: "#FFFFFF" },
+  Botafogo: { bg: "#1A1A1A", text: "#FFFFFF" },
+  "Borussia Dortmund": { bg: "#FDE100", text: "#101820" },
+  Chelsea: { bg: "#034694", text: "#FFFFFF" },
+  Corinthians: { bg: "#FFFFFF", text: "#101820" },
+  Cruzeiro: { bg: "#003DA5", text: "#FFFFFF" },
+  "FC Barcelona": { bg: "#A50044", text: "#FFFFFF" },
+  "FC Porto": { bg: "#003399", text: "#FFFFFF" },
+  Flamengo: { bg: "#E30613", text: "#FFFFFF" },
+  Fluminense: { bg: "#8A1538", text: "#FFFFFF" },
+  "Grêmio": { bg: "#0033A0", text: "#FFFFFF" },
+  "Inter Milan": { bg: "#0068A8", text: "#FFFFFF" },
+  Internacional: { bg: "#C8102E", text: "#FFFFFF" },
+  Juventus: { bg: "#1A1A1A", text: "#FFFFFF" },
+  Liverpool: { bg: "#C8102E", text: "#FFFFFF" },
+  "Manchester City": { bg: "#6CABDD", text: "#101820" },
+  "Manchester United": { bg: "#DA291C", text: "#FFFFFF" },
+  Palmeiras: { bg: "#006437", text: "#FFFFFF" },
+  "Paris Saint-Germain": { bg: "#004170", text: "#FFFFFF" },
+  "Real Madrid": { bg: "#FFFFFF", text: "#101820" },
+  Santos: { bg: "#FFFFFF", text: "#101820" },
+  "São Paulo FC": { bg: "#FFFFFF", text: "#B0121A" },
+  Tottenham: { bg: "#FFFFFF", text: "#132257" },
+  "Vasco da Gama": { bg: "#1A1A1A", text: "#FFFFFF" },
+};
+
+function getTeamKit(team) {
+  return TEAM_KIT[team] || { bg: "#FFFFFF", text: "#0B6F27" };
+}
+
 function GearIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -3118,72 +3800,215 @@ function GearIcon() {
     </svg>
   );
 }
-function GlobeIcon() {
+function GlobeIcon({ accent = "#0B6F27" }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="#F4F1EA" strokeWidth="1.7" />
-      <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#F4F1EA" strokeWidth="1.5" />
-      <line x1="3" y1="12" x2="21" y2="12" stroke="#F4F1EA" strokeWidth="1.5" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="24" fill="#FFFFFF" />
+      <path
+        d="M22 16c-3 5-3 14 0 19s6 9 4 16c-6-2-11-8-13-16-2-9 2-16 9-19z"
+        fill={accent}
+      />
+      <path
+        d="M42 20c3 4 4 10 1 15-2 4-1 9 2 12 4-3 7-9 6-15-1-6-5-10-9-12z"
+        fill={accent}
+      />
+      <path
+        d="M32 8v48M8 32h48M12 18c8 6 32 6 40 0M12 46c8-6 32-6 40 0"
+        stroke={accent}
+        strokeWidth="1.4"
+        fill="none"
+        opacity="0.35"
+      />
     </svg>
   );
 }
 function FlagIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <line x1="5" y1="3" x2="5" y2="21" stroke="#F4F1EA" strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M5 4h14l-3.5 4L19 12H5V4z" stroke="#F4F1EA" strokeWidth="1.5" strokeLinejoin="round" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect x="9" y="15" width="46" height="34" rx="6" fill="#0B6F27" />
+      <polygon points="32,20 50,32 32,44 14,32" fill="#F4C542" />
+      <circle cx="32" cy="32" r="8" fill="#173F8A" />
+      <path
+        d="M25 30a9 9 0 0114 0"
+        stroke="#FFFFFF"
+        strokeWidth="1.6"
+        fill="none"
+      />
     </svg>
   );
 }
-function PersonQuestionIcon() {
+function PersonQuestionIcon({ accent = "#0B6F27" }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <path d="M5 20c1-3.6 3.6-5.4 7-5.4s6 1.8 7 5.4" stroke="#F4F1EA" strokeWidth="1.8" strokeLinecap="round" />
-      <circle cx="12" cy="9" r="4" fill="#0F1D16" opacity="0" />
-      <text x="12" y="12.5" fontSize="10" textAnchor="middle" fill="#F4F1EA" fontFamily="Oswald, sans-serif" fontWeight="700">?</text>
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <path d="M12 54c2-11 9.5-17 20-17s18 6 20 17" fill="#FFFFFF" />
+      <circle cx="32" cy="24" r="12" fill="#FFFFFF" />
+      <circle cx="44" cy="46" r="11" fill={accent} />
+      <text
+        x="44"
+        y="51"
+        fontSize="15"
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontFamily="Baloo 2, sans-serif"
+        fontWeight="700"
+      >
+        ?
+      </text>
     </svg>
   );
 }
-function XIIcon() {
+function XIIcon({ accent = "#0B6F27" }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="#F4F1EA" strokeWidth="1.6" />
-      <text x="12" y="16" fontSize="10" textAnchor="middle" fill="#F4F1EA" fontFamily="Oswald, sans-serif" fontWeight="700">XI</text>
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect
+        x="12"
+        y="12"
+        width="40"
+        height="40"
+        rx="6"
+        fill="none"
+        stroke="#FFFFFF"
+        strokeWidth="2.4"
+      />
+      <line x1="12" y1="32" x2="52" y2="32" stroke="#FFFFFF" strokeWidth="2.4" />
+      <circle cx="32" cy="32" r="7" fill="none" stroke="#FFFFFF" strokeWidth="2.4" />
+      <circle cx="20" cy="42" r="3.4" fill={accent} />
+      <circle cx="32" cy="46" r="3.4" fill={accent} />
+      <circle cx="44" cy="42" r="3.4" fill={accent} />
+      <circle cx="32" cy="19" r="3.4" fill={accent} />
     </svg>
   );
 }
-function ShirtIcon() {
+function ShirtIcon({ accent = "#0B6F27" }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <path d="M8 4L4 7l2 3 2-1.3V20h8V8.7L18 10l2-3-4-3-2 2h-4L8 4z" stroke="#F4F1EA" strokeWidth="1.6" strokeLinejoin="round" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <path
+        d="M22 8L10 16l4 9 6-3v33h24V22l6 3 4-9L42 8l-6 5H28l-6-5z"
+        fill="#FFFFFF"
+      />
+      <rect x="26" y="10" width="12" height="5" rx="2.5" fill={accent} />
+      <circle cx="32" cy="34" r="7" fill={accent} />
+      <text
+        x="32"
+        y="39"
+        fontSize="10"
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontFamily="Baloo 2, sans-serif"
+        fontWeight="700"
+      >
+        ?
+      </text>
     </svg>
   );
 }
-function CalendarIcon() {
+function CalendarIcon({ accent = "#0B6F27" }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="5" width="16" height="15" rx="1.5" stroke="#F4F1EA" strokeWidth="1.6" />
-      <line x1="4" y1="9.5" x2="20" y2="9.5" stroke="#F4F1EA" strokeWidth="1.6" />
-      <line x1="8" y1="3" x2="8" y2="7" stroke="#F4F1EA" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="16" y1="3" x2="16" y2="7" stroke="#F4F1EA" strokeWidth="1.6" strokeLinecap="round" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect x="20" y="6" width="6" height="14" rx="3" fill={accent} />
+      <rect x="38" y="6" width="6" height="14" rx="3" fill={accent} />
+      <rect x="9" y="13" width="46" height="45" rx="9" fill="#FFFFFF" />
+      <rect x="9" y="13" width="46" height="16" rx="9" fill={accent} />
+      <rect x="9" y="22" width="46" height="7" fill={accent} />
+      <g fill="rgba(255,255,255,0.4)">
+        <rect x="16" y="34" width="9" height="8" rx="2" />
+        <rect x="27.5" y="34" width="9" height="8" rx="2" />
+        <rect x="16" y="45" width="9" height="8" rx="2" />
+      </g>
+      <rect x="39" y="34" width="9" height="19" rx="2" fill={accent} />
+      <rect x="27.5" y="45" width="9" height="8" rx="2" fill="rgba(255,255,255,0.4)" />
     </svg>
   );
 }
-function DiceIcon() {
+function DiceIcon({ accent = "#0B6F27" }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="4" width="16" height="16" rx="3" stroke="#F4F1EA" strokeWidth="1.6" />
-      <circle cx="8.3" cy="8.3" r="1.3" fill="#F4F1EA" />
-      <circle cx="15.7" cy="8.3" r="1.3" fill="#F4F1EA" />
-      <circle cx="8.3" cy="15.7" r="1.3" fill="#F4F1EA" />
-      <circle cx="15.7" cy="15.7" r="1.3" fill="#F4F1EA" />
-      <circle cx="12" cy="12" r="1.3" fill="#F4F1EA" />
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <rect x="20" y="20" width="34" height="34" rx="8" fill="#FFFFFF" opacity="0.35" />
+      <rect x="10" y="10" width="34" height="34" rx="8" fill="#FFFFFF" />
+      <circle cx="19" cy="19" r="3.4" fill={accent} />
+      <circle cx="35" cy="19" r="3.4" fill={accent} />
+      <circle cx="19" cy="35" r="3.4" fill={accent} />
+      <circle cx="35" cy="35" r="3.4" fill={accent} />
+      <circle cx="27" cy="27" r="3.4" fill={accent} />
     </svg>
   );
 }
-function LightCard({ icon, iconImage, imageScale, title, desc, cta, onClick }) {
+function VersusIcon({ accent = "#0B6F27" }) {
   return (
-    <div style={styles.lightCard}>
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <circle cx="17" cy="20" r="9" fill="#FFFFFF" />
+      <path d="M2 54c1.5-9 7-14 15-14s13.5 5 15 14" fill="#FFFFFF" />
+      <circle cx="47" cy="20" r="9" fill="#FFFFFF" opacity="0.75" />
+      <path d="M32 54c1.5-9 7-14 15-14s13.5 5 15 14" fill="#FFFFFF" opacity="0.75" />
+      <circle cx="32" cy="34" r="11" fill={accent} />
+      <text
+        x="32"
+        y="39"
+        fontSize="11"
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontFamily="Baloo 2, sans-serif"
+        fontWeight="700"
+      >
+        VS
+      </text>
+    </svg>
+  );
+}
+function EyeIcon({ open }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"
+        stroke="#5F666B"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="3" stroke="#5F666B" strokeWidth="2" />
+      {!open && (
+        <line
+          x1="3"
+          y1="21"
+          x2="21"
+          y2="3"
+          stroke="#5F666B"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      )}
+    </svg>
+  );
+}
+function SoloIcon({ accent = "#0B6F27" }) {
+  return (
+    <svg width="78" height="78" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="21" r="13" fill="#FFFFFF" />
+      <path d="M10 56c2-13 10-20 22-20s20 7 22 20" fill="#FFFFFF" />
+      <circle cx="47" cy="46" r="10" fill={accent} />
+      <path
+        d="M43 46l3 3 6-6"
+        stroke="#FFFFFF"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function LightCard({
+  icon,
+  iconImage,
+  imageScale,
+  title,
+  desc,
+  cta,
+  onClick,
+  accent = MODE_ACCENTS.random,
+}) {
+  return (
+    <div style={{ ...styles.lightCard, borderColor: `${accent.solid}33` }}>
       <div style={styles.lightCardIconCircle}>
         {iconImage ? (
           <img
@@ -3195,21 +4020,34 @@ function LightCard({ icon, iconImage, imageScale, title, desc, cta, onClick }) {
             }}
           />
         ) : (
-          <>
-            <div style={styles.lightCardSplashA} />
-            <div style={styles.lightCardSplashB} />
-            <div style={styles.lightCardIconInner}>{icon}</div>
-          </>
+          <div
+            style={{
+              ...styles.lightCardIconBadge,
+              background: accent.solid,
+              boxShadow: `inset 0 -7px 0 ${accent.dark}`,
+            }}
+          >
+            {icon}
+          </div>
         )}
       </div>
       <div style={styles.lightCardBody}>
         <div style={styles.lightCardTitleRow}>
           <div style={styles.lightCardTitle}>{title}</div>
-          <span style={styles.lightCardChevron}>›</span>
+          <span style={{ ...styles.lightCardChevron, color: accent.dark }}>
+            ›
+          </span>
         </div>
         <p style={styles.lightCardDesc}>{desc}</p>
-        <button style={styles.lightCardBtn} onClick={onClick}>
-          <span style={styles.lightCardBtnLabel}>{cta}</span>
+        <button
+          style={{
+            ...styles.lightCardBtn,
+            background: accent.solid,
+            boxShadow: `0 4px 0 ${accent.dark}`,
+          }}
+          onClick={onClick}
+        >
+          {cta}
         </button>
       </div>
     </div>
@@ -3220,6 +4058,35 @@ function StatItem({ icon, label }) {
     <div style={styles.statItem}>
       <div style={styles.statIcon}>{icon}</div>
       <div style={styles.statLabel}>{label}</div>
+    </div>
+  );
+}
+
+function RoomLeaderboard({ players, myUserId, medals = false }) {
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+  return (
+    <div style={styles.roomLeaderboard}>
+      {sorted.map((p, i) => (
+        <div
+          key={p.id}
+          style={{
+            ...styles.roomLeaderboardRow,
+            ...(p.user_id === myUserId ? styles.roomLeaderboardRowMe : {}),
+          }}
+        >
+          <span style={styles.roomLeaderboardRank}>
+            {medals && i === 0
+              ? "🥇"
+              : medals && i === 1
+              ? "🥈"
+              : medals && i === 2
+              ? "🥉"
+              : `${i + 1}.`}
+          </span>
+          <span style={styles.roomLeaderboardName}>{p.nickname}</span>
+          <span style={styles.roomLeaderboardScore}>{p.score}/100</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -3268,6 +4135,43 @@ function buildRandomRound(
   });
 }
 
+// Wraps any single mode's pool into the same {kind, data} shape
+// buildRandomRound() produces, so room games can reuse the same
+// "random" screen rendering regardless of which mode the host picked.
+function buildRoomQuestions(selectedMode) {
+  const isBrazil = selectedMode.endsWith("-br");
+  const baseMode = isBrazil ? selectedMode.slice(0, -3) : selectedMode;
+  if (baseMode === "clues") {
+    return shuffle(isBrazil ? BRAZIL_QUESTION_POOL : QUESTION_POOL)
+      .slice(0, QUESTIONS_PER_GAME)
+      .map((q) => ({ kind: "clues", data: { ...q, options: shuffle(q.options) } }));
+  }
+  if (baseMode === "lineup") {
+    return buildLineupRound(isBrazil ? BRAZIL_LINEUP_POOL : LINEUP_POOL).map((team) => ({
+      kind: "lineup",
+      data: team,
+    }));
+  }
+  if (baseMode === "clubs") {
+    return shuffle(isBrazil ? CLUBS_QUESTION_POOL_BRAZIL : CLUBS_QUESTION_POOL)
+      .slice(0, CLUBS_PER_GAME)
+      .map((q) => ({ kind: "clubs", data: q }));
+  }
+  if (baseMode === "year") {
+    return shuffle(isBrazil ? BRAZIL_YEAR_QUESTION_POOL : YEAR_QUESTION_POOL)
+      .slice(0, YEARS_PER_GAME)
+      .map((q) => ({ kind: "year", data: { ...q, options: shuffle(q.options) } }));
+  }
+  return isBrazil
+    ? buildRandomRound(
+        BRAZIL_QUESTION_POOL,
+        BRAZIL_LINEUP_POOL,
+        CLUBS_QUESTION_POOL_BRAZIL,
+        BRAZIL_YEAR_QUESTION_POOL
+      )
+    : buildRandomRound();
+}
+
 export default function SoccerQuiz() {
   const [screen, setScreen] = useState("start"); // start | clues | lineup | roundEnd
   const [mode, setMode] = useState("clues");
@@ -3276,6 +4180,601 @@ export default function SoccerQuiz() {
   const t = TRANSLATIONS[lang];
 
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const audioCtxRef = useRef(null);
+
+  // --- Multiplayer auth state ---
+  const [authUser, setAuthUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authMode, setAuthMode] = useState("login"); // login | signup
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [authBusy, setAuthBusy] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [authMessage, setAuthMessage] = useState("");
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthUser(data.session?.user ?? null);
+      setAuthLoading(false);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  async function handleAuthSubmit(e) {
+    e.preventDefault();
+    setAuthError("");
+    setAuthMessage("");
+    setAuthBusy(true);
+    try {
+      if (authMode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email: authEmail,
+          password: authPassword,
+          options: {
+            emailRedirectTo: window.location.origin + window.location.pathname,
+          },
+        });
+        if (error) throw error;
+        setAuthMessage(t.authCheckEmail);
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: authEmail,
+          password: authPassword,
+        });
+        if (error) throw error;
+      }
+    } catch (err) {
+      setAuthError(err.message || t.authGenericError);
+    } finally {
+      setAuthBusy(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    setAuthError("");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + window.location.pathname },
+    });
+    if (error) setAuthError(error.message || t.authGenericError);
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+  }
+
+  // --- Multiplayer profile + matchmaking state ---
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [nicknameInput, setNicknameInput] = useState("");
+  const [editingNickname, setEditingNickname] = useState(false);
+  const [profileBusy, setProfileBusy] = useState(false);
+  const [profileError, setProfileError] = useState("");
+
+  const [searching, setSearching] = useState(false);
+  const [matchmakingError, setMatchmakingError] = useState("");
+  const [currentMatch, setCurrentMatch] = useState(null);
+  const [opponentProfile, setOpponentProfile] = useState(null);
+  const [duelActive, setDuelActive] = useState(false);
+  const [myPlayerSlot, setMyPlayerSlot] = useState(null); // "player1" | "player2"
+  const [duelCountdown, setDuelCountdown] = useState(3);
+  const [pendingDuelMatch, setPendingDuelMatch] = useState(null);
+
+  // --- Friend rooms (Kahoot-style, N players) ---
+  const [room, setRoom] = useState(null);
+  const [roomPlayers, setRoomPlayers] = useState([]);
+  const [isRoomHost, setIsRoomHost] = useState(false);
+  const [roomBusy, setRoomBusy] = useState(false);
+  const [roomError, setRoomError] = useState("");
+  const [roomCodeInput, setRoomCodeInput] = useState("");
+  const [roomModeRegion, setRoomModeRegion] = useState(null); // null | "world" | "brazil" (pt only)
+  const [showJoinRoom, setShowJoinRoom] = useState(false);
+  const [roomCodeCopied, setRoomCodeCopied] = useState(false);
+  const [roomActive, setRoomActive] = useState(false);
+  const [roomCountdown, setRoomCountdown] = useState(3);
+  const [pendingRoomQuestions, setPendingRoomQuestions] = useState(null);
+
+  useEffect(() => {
+    if (!authUser) {
+      setProfile(null);
+      setProfileLoading(false);
+      return;
+    }
+    setProfileLoading(true);
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", authUser.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setProfile(data ?? null);
+        setProfileLoading(false);
+      });
+  }, [authUser]);
+
+  async function handleSaveNickname(e) {
+    e.preventDefault();
+    if (!nicknameInput.trim()) return;
+    setProfileBusy(true);
+    setProfileError("");
+    const { data, error } = await supabase
+      .from("profiles")
+      .upsert({ id: authUser.id, nickname: nicknameInput.trim() })
+      .select()
+      .single();
+    setProfileBusy(false);
+    if (error) {
+      setProfileError(error.message || t.authGenericError);
+      return;
+    }
+    setProfile(data);
+    setEditingNickname(false);
+  }
+
+  async function findRandomMatch() {
+    setMatchmakingError("");
+    setSearching(true);
+    const { data, error } = await supabase.rpc("try_match", { p_mode: "random" });
+    if (error) {
+      setMatchmakingError(error.message || t.authGenericError);
+      setSearching(false);
+      return;
+    }
+    if (data) {
+      // We're the one who just paired with a waiting opponent - we own
+      // generating the shared question set for this duel.
+      const queue = buildRandomRound();
+      await supabase.from("matches").update({ questions: queue }).eq("id", data);
+      openMatch(data);
+    }
+    // If data is null, we're now waiting in the queue - the realtime
+    // subscription below picks up the match once an opponent joins.
+  }
+
+  async function cancelSearch() {
+    setSearching(false);
+    if (authUser) {
+      await supabase.from("match_queue").delete().eq("user_id", authUser.id);
+    }
+  }
+
+  async function openMatch(matchId) {
+    setSearching(false);
+    const { data: match } = await supabase
+      .from("matches")
+      .select("*")
+      .eq("id", matchId)
+      .maybeSingle();
+    if (!match) return;
+    setCurrentMatch(match);
+    const opponentId = match.player1_id === authUser.id ? match.player2_id : match.player1_id;
+    const { data: opp } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", opponentId)
+      .maybeSingle();
+    setOpponentProfile(opp ?? null);
+  }
+
+  useEffect(() => {
+    if (!authUser || !profile) return;
+    const channel = supabase
+      .channel(`matches-${authUser.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "matches",
+          filter: `player1_id=eq.${authUser.id}`,
+        },
+        (payload) => openMatch(payload.new.id)
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "matches",
+          filter: `player2_id=eq.${authUser.id}`,
+        },
+        (payload) => openMatch(payload.new.id)
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [authUser, profile]);
+
+  // Live updates for the current match row: question set arriving,
+  // opponent's live score/progress, and the finished/winner state.
+  useEffect(() => {
+    if (!currentMatch?.id) return;
+    const channel = supabase
+      .channel(`match-row-${currentMatch.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "matches",
+          filter: `id=eq.${currentMatch.id}`,
+        },
+        (payload) => {
+          setCurrentMatch(payload.new);
+          maybeFinishMatch(payload.new);
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [currentMatch?.id]);
+
+  // Once the shared question set lands on the match row, kick off the
+  // pre-duel countdown.
+  useEffect(() => {
+    if (duelActive || screen === "duelCountdown") return;
+    if (currentMatch?.questions?.length > 0) {
+      startDuel(currentMatch);
+    }
+  }, [currentMatch, duelActive, screen]);
+
+  // Ticks the "3, 2, 1" countdown, then starts play.
+  useEffect(() => {
+    if (screen !== "duelCountdown") return;
+    if (duelCountdown <= 0) {
+      const goTimer = setTimeout(() => {
+        if (pendingDuelMatch) beginDuelMatch(pendingDuelMatch);
+      }, 400);
+      return () => clearTimeout(goTimer);
+    }
+    const tickTimer = setTimeout(() => setDuelCountdown((c) => c - 1), 800);
+    return () => clearTimeout(tickTimer);
+  }, [screen, duelCountdown]);
+
+  // Once both players have finished, move from "waiting" to the result screen.
+  useEffect(() => {
+    if (duelActive && currentMatch?.status === "finished" && screen !== "duelEnd") {
+      setScreen("duelEnd");
+    }
+  }, [currentMatch?.status, duelActive]);
+
+  function generateRoomCode() {
+    return String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  async function handleCreateRoom(selectedMode) {
+    if (!authUser || !profile) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const code = generateRoomCode();
+    const { data: newRoom, error } = await supabase
+      .from("rooms")
+      .insert({ code, mode: selectedMode, host_id: authUser.id })
+      .select()
+      .single();
+    if (error || !newRoom) {
+      setRoomBusy(false);
+      setRoomError(error?.message || t.authGenericError);
+      return;
+    }
+    await supabase
+      .from("room_players")
+      .insert({ room_id: newRoom.id, user_id: authUser.id, nickname: profile.nickname });
+    setRoomBusy(false);
+    setRoom(newRoom);
+    setIsRoomHost(true);
+    setRoomModeRegion(null);
+    setScreen("roomLobby");
+  }
+
+  async function handleJoinRoom(e) {
+    e.preventDefault();
+    if (!authUser || !profile) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const code = roomCodeInput.trim();
+    const { data: foundRoom } = await supabase
+      .from("rooms")
+      .select("*")
+      .eq("code", code)
+      .eq("status", "waiting")
+      .maybeSingle();
+    if (!foundRoom) {
+      setRoomBusy(false);
+      setRoomError(t.roomNotFound);
+      return;
+    }
+    const { error: joinError } = await supabase
+      .from("room_players")
+      .upsert(
+        { room_id: foundRoom.id, user_id: authUser.id, nickname: profile.nickname },
+        { onConflict: "room_id,user_id" }
+      );
+    setRoomBusy(false);
+    if (joinError) {
+      setRoomError(joinError.message || t.authGenericError);
+      return;
+    }
+    setRoom(foundRoom);
+    setIsRoomHost(foundRoom.host_id === authUser.id);
+    setShowJoinRoom(false);
+    setRoomCodeInput("");
+    setScreen("roomLobby");
+  }
+
+  async function handleStartRoom() {
+    if (!isRoomHost || !room) return;
+    const qs = buildRoomQuestions(room.mode);
+    await supabase.from("rooms").update({ questions: qs, status: "active" }).eq("id", room.id);
+  }
+
+  async function copyRoomCode() {
+    if (!room) return;
+    try {
+      await navigator.clipboard.writeText(room.code);
+      setRoomCodeCopied(true);
+      setTimeout(() => setRoomCodeCopied(false), 1500);
+    } catch (e) {
+      // clipboard unsupported/blocked — ignore
+    }
+  }
+
+  async function leaveRoom() {
+    if (room && authUser) {
+      await supabase.from("room_players").delete().eq("room_id", room.id).eq("user_id", authUser.id);
+      if (room.status === "active") {
+        const { data: remaining } = await supabase
+          .from("room_players")
+          .select("*")
+          .eq("room_id", room.id);
+        // Down to one player (or none) mid-game - end it instead of
+        // leaving them stuck waiting for someone who already left.
+        if ((remaining?.length ?? 0) <= 1) {
+          await supabase
+            .from("rooms")
+            .update({ status: "finished" })
+            .eq("id", room.id)
+            .eq("status", "active");
+        }
+      }
+    }
+    setRoomActive(false);
+    setIsRoomHost(false);
+    setRoom(null);
+    setRoomPlayers([]);
+    setPendingRoomQuestions(null);
+    setRoomCountdown(3);
+    setShowJoinRoom(false);
+    setRoomModeRegion(null);
+    setRoomError("");
+    setScreen("multiplayer");
+  }
+
+  // Shared cards for picking a room mode - for Portuguese, adds a first
+  // "Mundo ou Brasil?" step before the actual mode cards, mirroring the
+  // Single Player flow's world/brazil split. Used both when creating a
+  // room and when the host restarts one for another round.
+  function renderModeCards(onPick) {
+    const showRegionStep = lang === "pt";
+    if (showRegionStep && !roomModeRegion) {
+      return (
+        <>
+          <LightCard
+            icon={<GlobeIcon accent={MODE_ACCENTS.mundo.dark} />}
+            accent={MODE_ACCENTS.mundo}
+            title="🌍 Mundo"
+            desc="Craques e clubes do futebol mundial."
+            cta="ENTRAR"
+            onClick={() => setRoomModeRegion("world")}
+          />
+          <LightCard
+            icon={<FlagIcon />}
+            accent={MODE_ACCENTS.brasil}
+            title="🇧🇷 Brasil"
+            desc="Ídolos e clubes do futebol brasileiro."
+            cta="ENTRAR"
+            onClick={() => setRoomModeRegion("brazil")}
+          />
+        </>
+      );
+    }
+    const suffix = showRegionStep && roomModeRegion === "brazil" ? "-br" : "";
+    return (
+      <>
+        <LightCard
+          icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+          accent={MODE_ACCENTS.clues}
+          title={t.cluesModeTitle}
+          desc={t.cluesModeDesc}
+          cta={t.playClues}
+          onClick={() => onPick("clues" + suffix)}
+        />
+        <LightCard
+          icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+          accent={MODE_ACCENTS.lineup}
+          title={t.lineupModeTitle}
+          desc={t.lineupModeDesc}
+          cta={t.playLineup}
+          onClick={() => onPick("lineup" + suffix)}
+        />
+        <LightCard
+          icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+          accent={MODE_ACCENTS.clubs}
+          title={t.clubsModeTitle}
+          desc={t.clubsModeDesc}
+          cta={t.playClubsMode}
+          onClick={() => onPick("clubs" + suffix)}
+        />
+        <LightCard
+          icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+          accent={MODE_ACCENTS.year}
+          title={t.yearModeTitle}
+          desc={t.yearModeDesc}
+          cta={t.playYearMode}
+          onClick={() => onPick("year" + suffix)}
+        />
+        <LightCard
+          icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+          accent={MODE_ACCENTS.random}
+          title={t.randomModeTitle}
+          desc={t.randomModeDesc}
+          cta={t.playRandomMode}
+          onClick={() => onPick("random" + suffix)}
+        />
+      </>
+    );
+  }
+
+  async function restartRoom(selectedMode) {
+    if (!isRoomHost || !room) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const { error } = await supabase.rpc("restart_room", {
+      p_room_id: room.id,
+      p_mode: selectedMode,
+    });
+    setRoomBusy(false);
+    if (error) {
+      setRoomError(error.message || t.authGenericError);
+      return;
+    }
+    setRoomActive(false);
+    setPendingRoomQuestions(null);
+    setRoomCountdown(3);
+    setRoomModeRegion(null);
+    setScreen("roomLobby");
+  }
+
+  function roomModeLabel(mode) {
+    if (!mode) return "";
+    const isBrazil = mode.endsWith("-br");
+    const baseMode = isBrazil ? mode.slice(0, -3) : mode;
+    const titles = {
+      clues: t.cluesModeTitle,
+      lineup: t.lineupModeTitle,
+      clubs: t.clubsModeTitle,
+      year: t.yearModeTitle,
+      random: t.randomModeTitle,
+    };
+    const title = titles[baseMode] || baseMode;
+    return isBrazil ? `🇧🇷 ${title}` : title;
+  }
+
+  async function changeRoomMode(selectedMode) {
+    if (!isRoomHost || !room) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const { data: updatedRoom, error } = await supabase
+      .from("rooms")
+      .update({ mode: selectedMode })
+      .eq("id", room.id)
+      .select()
+      .single();
+    setRoomBusy(false);
+    if (error) {
+      setRoomError(error.message || t.authGenericError);
+      return;
+    }
+    setRoom(updatedRoom);
+    setRoomModeRegion(null);
+    setScreen("roomLobby");
+  }
+
+  function stayInRoom() {
+    setRoomActive(false);
+    setPendingRoomQuestions(null);
+    setRoomCountdown(3);
+    setScreen("roomLobby");
+  }
+
+  // Live updates for the current room row: questions arriving, status changes.
+  useEffect(() => {
+    if (!room?.id) return;
+    const channel = supabase
+      .channel(`room-${room.id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "rooms", filter: `id=eq.${room.id}` },
+        (payload) => setRoom(payload.new)
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [room?.id]);
+
+  // Live player list + live scores for the current room.
+  useEffect(() => {
+    if (!room?.id) return;
+    let cancelled = false;
+    function refetchPlayers() {
+      Promise.all([
+        supabase.from("room_players").select("*").eq("room_id", room.id).order("joined_at"),
+        supabase.from("rooms").select("*").eq("id", room.id).maybeSingle(),
+      ]).then(([{ data: players }, { data: freshRoom }]) => {
+        if (cancelled) return;
+        setRoomPlayers(players ?? []);
+        if (freshRoom) maybeFinishRoom(freshRoom, players ?? []);
+      });
+    }
+    refetchPlayers();
+    const channel = supabase
+      .channel(`room-players-${room.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "room_players", filter: `room_id=eq.${room.id}` },
+        refetchPlayers
+      )
+      .subscribe();
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, [room?.id]);
+
+  // Once the host starts the room, kick off the pre-game countdown for everyone.
+  useEffect(() => {
+    if (roomActive || screen === "roomCountdown") return;
+    if (room?.status === "active" && room?.questions?.length > 0) {
+      setPendingRoomQuestions(room.questions);
+      setRoomCountdown(3);
+      setScreen("roomCountdown");
+    }
+  }, [room, roomActive, screen]);
+
+  // Ticks the room's "3, 2, 1" countdown, then starts play.
+  useEffect(() => {
+    if (screen !== "roomCountdown") return;
+    if (roomCountdown <= 0) {
+      const goTimer = setTimeout(() => {
+        if (pendingRoomQuestions) beginRoomMatch(pendingRoomQuestions);
+      }, 400);
+      return () => clearTimeout(goTimer);
+    }
+    const tickTimer = setTimeout(() => setRoomCountdown((c) => c - 1), 800);
+    return () => clearTimeout(tickTimer);
+  }, [screen, roomCountdown]);
+
+  // Once everyone has finished, move from "waiting" to the final standings.
+  useEffect(() => {
+    if (roomActive && room?.status === "finished" && screen !== "roomEnd") {
+      setScreen("roomEnd");
+    }
+  }, [room?.status, roomActive]);
+
+  // Host restarted the room for another round - everyone else gets to
+  // choose whether to stay for it or leave.
+  useEffect(() => {
+    if (screen === "roomEnd" && room?.status === "waiting" && !isRoomHost) {
+      setScreen("roomRestartPrompt");
+    }
+  }, [room?.status, screen, isRoomHost]);
 
   // --- Clues mode state ---
   const [questions, setQuestions] = useState(() =>
@@ -3458,10 +4957,20 @@ export default function SoccerQuiz() {
   }, [randomAnswered]);
 
   // --- Sound effects (generated tones, no audio files needed) ---
+  function getAudioContext() {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
+    return audioCtxRef.current;
+  }
+
   function playTone(freqs, duration = 0.12, type = "sine") {
     if (!soundEnabled) return;
     try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = getAudioContext();
       freqs.forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -3510,7 +5019,7 @@ export default function SoccerQuiz() {
     setAnswered(true);
     setFlipped(true);
     if (option === currentQuestion.answer) {
-      setScore((s) => s + 10 + cluesTimeLeft);
+      setScore((s) => s + questionScore(cluesTimeLeft, CLUES_ROUND_SECONDS));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3555,9 +5064,8 @@ export default function SoccerQuiz() {
     setLCorrect(correct);
     setLAnswered(true);
     if (correct) {
-      const base = 10 + lTimeLeft;
       const factor = HINT_SCORE_FACTORS[Math.min(hintsUsed, MAX_HINTS)];
-      setScore((s) => s + Math.round(base * factor));
+      setScore((s) => s + questionScore(lTimeLeft, LINEUP_ROUND_SECONDS, factor));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3601,9 +5109,8 @@ export default function SoccerQuiz() {
     setClubsCorrect(correct);
     setClubsAnswered(true);
     if (correct) {
-      const base = 10 + clubsTimeLeft;
       const factor = CLUBS_HINT_SCORE_FACTORS[Math.min(clubsHintsUsed, MAX_CLUBS_HINTS)];
-      setScore((s) => s + Math.round(base * factor));
+      setScore((s) => s + questionScore(clubsTimeLeft, CLUBS_ROUND_SECONDS, factor));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3645,7 +5152,7 @@ export default function SoccerQuiz() {
     setYearSelected(option);
     setYearAnswered(true);
     if (option === currentYearQuestion.answer) {
-      setScore((s) => s + 10 + yearTimeLeft);
+      setScore((s) => s + questionScore(yearTimeLeft, YEAR_ROUND_SECONDS));
       playCorrectSound();
     } else {
         playWrongSound();
@@ -3700,16 +5207,19 @@ export default function SoccerQuiz() {
     }
     setRandomCorrect(correct);
     setRandomAnswered(true);
+    let gained = 0;
     if (correct) {
-      const base = 10 + randomTimeLeft;
       let factor = 1;
       if (item.kind === "lineup") factor = HINT_SCORE_FACTORS[Math.min(randomHintsUsed, MAX_HINTS)];
       if (item.kind === "clubs") factor = CLUBS_HINT_SCORE_FACTORS[Math.min(randomHintsUsed, MAX_CLUBS_HINTS)];
-      setScore((s) => s + Math.round(base * factor));
+      gained = questionScore(randomTimeLeft, timeForKind(item.kind), factor);
+      setScore((s) => s + gained);
       playCorrectSound();
     } else {
       playWrongSound();
     }
+    if (duelActive) pushDuelState(score + gained, rIndex);
+    if (roomActive) pushRoomState(score + gained, rIndex);
   }
 
   function requestRandomHint() {
@@ -3721,7 +5231,15 @@ export default function SoccerQuiz() {
 
   function nextRandomQuestion() {
     if (rIndex + 1 >= randomQueue.length) {
-      setScreen("roundEnd");
+      if (duelActive) {
+        setScreen("duelWaiting");
+        finishDuel();
+      } else if (roomActive) {
+        setScreen("roomWaiting");
+        finishRoomPlayer();
+      } else {
+        setScreen("roundEnd");
+      }
       return;
     }
     const nextItem = randomQueue[rIndex + 1];
@@ -3732,11 +5250,160 @@ export default function SoccerQuiz() {
     setRandomCorrect(false);
     setRandomTimeLeft(timeForKind(nextItem.kind));
     setRandomHintsUsed(0);
+    if (duelActive) pushDuelState(score, rIndex + 1);
+    if (roomActive) pushRoomState(score, rIndex + 1);
+  }
+
+  function startDuel(match) {
+    const slot = match.player1_id === authUser.id ? "player1" : "player2";
+    setMyPlayerSlot(slot);
+    setPendingDuelMatch(match);
+    setDuelCountdown(3);
+    setScreen("duelCountdown");
+  }
+
+  function beginDuelMatch(match) {
+    setMode("random");
+    setRandomQueue(match.questions);
+    setRIndex(0);
+    setScore(0);
+    setRandomPicked(null);
+    setRandomGuess("");
+    setRandomAnswered(false);
+    setRandomCorrect(false);
+    setRandomTimeLeft(timeForKind(match.questions[0].kind));
+    setRandomHintsUsed(0);
+    setDuelActive(true);
+    setScreen("random");
+  }
+
+  async function pushDuelState(scoreVal, indexVal, extra = {}) {
+    if (!currentMatch || !myPlayerSlot) return;
+    const scoreCol = myPlayerSlot === "player1" ? "player1_score" : "player2_score";
+    const indexCol = myPlayerSlot === "player1" ? "player1_index" : "player2_index";
+    await supabase
+      .from("matches")
+      .update({ [scoreCol]: scoreVal, [indexCol]: indexVal, ...extra })
+      .eq("id", currentMatch.id);
+  }
+
+  async function finishDuel() {
+    await pushDuelState(score, randomQueue.length);
+    const { data: freshMatch } = await supabase
+      .from("matches")
+      .select("*")
+      .eq("id", currentMatch.id)
+      .maybeSingle();
+    if (freshMatch) {
+      setCurrentMatch(freshMatch);
+      maybeFinishMatch(freshMatch);
+    }
+  }
+
+  async function maybeFinishMatch(match) {
+    if (!match || match.status === "finished") return;
+    const total = match.questions?.length ?? 0;
+    if (total > 0 && match.player1_index >= total && match.player2_index >= total) {
+      const winner =
+        match.player1_score === match.player2_score
+          ? null
+          : match.player1_score > match.player2_score
+          ? match.player1_id
+          : match.player2_id;
+      await supabase
+        .from("matches")
+        .update({ status: "finished", winner_id: winner })
+        .eq("id", match.id)
+        .eq("status", "active");
+    }
+  }
+
+  async function leaveDuel() {
+    if (currentMatch && currentMatch.status !== "finished" && myPlayerSlot) {
+      const opponentId =
+        myPlayerSlot === "player1" ? currentMatch.player2_id : currentMatch.player1_id;
+      await supabase
+        .from("matches")
+        .update({ status: "finished", winner_id: opponentId })
+        .eq("id", currentMatch.id)
+        .eq("status", "active");
+    }
+    setDuelActive(false);
+    setMyPlayerSlot(null);
+    setCurrentMatch(null);
+    setOpponentProfile(null);
+    setPendingDuelMatch(null);
+    setDuelCountdown(3);
+    setScreen("multiplayer");
+  }
+
+  function beginRoomMatch(qs) {
+    setMode("random");
+    setRandomQueue(qs);
+    setRIndex(0);
+    setScore(0);
+    setRandomPicked(null);
+    setRandomGuess("");
+    setRandomAnswered(false);
+    setRandomCorrect(false);
+    setRandomTimeLeft(timeForKind(qs[0].kind));
+    setRandomHintsUsed(0);
+    setRoomActive(true);
+    setScreen("random");
+  }
+
+  async function pushRoomState(scoreVal, indexVal) {
+    if (!room || !authUser) return;
+    await supabase
+      .from("room_players")
+      .update({ score: scoreVal, q_index: indexVal })
+      .eq("room_id", room.id)
+      .eq("user_id", authUser.id);
+  }
+
+  async function finishRoomPlayer() {
+    await pushRoomState(score, randomQueue.length);
+    const [{ data: freshRoom }, { data: players }] = await Promise.all([
+      supabase.from("rooms").select("*").eq("id", room.id).maybeSingle(),
+      supabase.from("room_players").select("*").eq("room_id", room.id),
+    ]);
+    if (freshRoom && players) {
+      setRoom(freshRoom);
+      setRoomPlayers(players);
+      maybeFinishRoom(freshRoom, players);
+    }
+  }
+
+  async function maybeFinishRoom(roomRow, players) {
+    if (!roomRow || roomRow.status === "finished") return;
+    const total = roomRow.questions?.length ?? 0;
+    if (total === 0 || players.length === 0) return;
+    const allDone = players.every((p) => p.q_index >= total);
+    if (allDone) {
+      await supabase
+        .from("rooms")
+        .update({ status: "finished" })
+        .eq("id", roomRow.id)
+        .eq("status", "active");
+    }
+  }
+
+  function changeLang(code) {
+    setLang(code);
+    setScreen("start");
   }
 
   function goToMenuFromGame() {
+    if (duelActive) {
+      leaveDuel();
+      return;
+    }
+    if (roomActive) {
+      leaveRoom();
+      return;
+    }
     if (lang !== "pt") {
-      setScreen("start");
+      setScreen("singlePlayer");
       return;
     }
     setScreen(mode.startsWith("brazil") ? "brazilModes" : "worldModes");
@@ -3769,6 +5436,19 @@ export default function SoccerQuiz() {
           "brazilModes",
           "settings",
           "roundEnd",
+          "multiplayer",
+          "singlePlayer",
+          "duelWaiting",
+          "duelEnd",
+          "duelCountdown",
+          "roomLobby",
+          "roomCountdown",
+          "roomWaiting",
+          "roomEnd",
+          "roomRestartPrompt",
+          "roomCreateModes",
+          "roomRestartModes",
+          "roomChangeMode",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -3786,6 +5466,16 @@ export default function SoccerQuiz() {
         "brazilModes",
         "settings",
         "roundEnd",
+        "multiplayer",
+        "singlePlayer",
+        "roomLobby",
+        "roomCountdown",
+        "roomWaiting",
+        "roomEnd",
+        "roomRestartPrompt",
+        "roomCreateModes",
+        "roomRestartModes",
+        "roomChangeMode",
       ].includes(screen) && <div style={styles.turfOverlay} />}
 
       {screen === "start" && (
@@ -3802,7 +5492,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
@@ -3830,28 +5520,79 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>{t.chooseMode}</p>
           <div style={styles.lightSubtitleRule} />
 
-          <div style={styles.heroFlow}>
-            <img
-              src="https://i.postimg.cc/kXB8RqPt/Chat-GPT-Image-Aug-2-2026-11-51-23-PM.png"
-              alt=""
-              style={styles.heroFlowImage}
+          <div className="gtpModeGrid">
+            <LightCard
+              icon={<SoloIcon accent={MODE_ACCENTS.singlePlayer.dark} />}
+              accent={MODE_ACCENTS.singlePlayer}
+              title={t.singlePlayerTitle}
+              desc={t.singlePlayerDesc}
+              cta={t.singlePlayerCta}
+              onClick={() => setScreen("singlePlayer")}
+            />
+            <LightCard
+              icon={<VersusIcon accent={MODE_ACCENTS.multiplayer.dark} />}
+              accent={MODE_ACCENTS.multiplayer}
+              title={t.multiplayerTitle}
+              desc={t.multiplayerDesc}
+              cta={t.multiplayerCta}
+              onClick={() => setScreen("multiplayer")}
             />
           </div>
+        </div>
+      )}
+
+      {screen === "singlePlayer" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => setScreen("start")}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={styles.lightLangRow}>
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => changeLang(l.code)}
+                  style={{
+                    ...styles.lightLangPill,
+                    ...(lang === l.code ? styles.lightLangPillActive : {}),
+                  }}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.singlePlayerEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.singlePlayerHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.chooseMode}</p>
+          <div style={styles.lightSubtitleRule} />
 
           <div className="gtpModeGrid">
             {lang === "pt" ? (
               <>
                 <LightCard
-                  iconImage="https://i.postimg.cc/pd55GQfT/5d2caace-08e8-4973-b968-3671c05cbad7.jpg"
+                  icon={<GlobeIcon accent={MODE_ACCENTS.mundo.dark} />}
+                  accent={MODE_ACCENTS.mundo}
                   title="🌍 Mundo"
-                  desc="Craques e clubes históricos do futebol internacional — pistas, escalações de grandes finais e clubes por onde cada jogador passou."
+                  desc="Craques e clubes do futebol mundial."
                   cta="ENTRAR"
                   onClick={() => setScreen("worldModes")}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/ydXdtLkH/ffde4eae-c0bf-4f2e-80b1-7941c0f01d3f.jpg"
+                  icon={<FlagIcon />}
+                  accent={MODE_ACCENTS.brasil}
                   title="🇧🇷 Brasil"
-                  desc="Ídolos e clubes do futebol brasileiro — de craques históricos como Pelé a escalações de grandes títulos deste século."
+                  desc="Ídolos e clubes do futebol brasileiro."
                   cta="ENTRAR"
                   onClick={() => setScreen("brazilModes")}
                 />
@@ -3859,36 +5600,40 @@ export default function SoccerQuiz() {
             ) : (
               <>
                 <LightCard
-                  iconImage="https://i.postimg.cc/jjrvsGfk/Chat-GPT-Image-Aug-2-2026-10-25-59-PM.png"
+                  icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+                  accent={MODE_ACCENTS.clues}
                   title={t.cluesModeTitle}
                   desc={t.cluesModeDesc}
                   cta={t.playClues}
                   onClick={() => startClues(QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/rpnJSzbr/Chat-GPT-Image-Aug-2-2026-10-29-25-PM.png"
+                  icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+                  accent={MODE_ACCENTS.lineup}
                   title={t.lineupModeTitle}
                   desc={t.lineupModeDesc}
                   cta={t.playLineup}
                   onClick={() => startLineup(LINEUP_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/6pxCRCpD/Chat-GPT-Image-Aug-2-2026-10-27-33-PM.png"
+                  icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+                  accent={MODE_ACCENTS.clubs}
                   title={t.clubsModeTitle}
                   desc={t.clubsModeDesc}
                   cta={t.playClubsMode}
                   onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/4NG9xVN9/Chat-GPT-Image-Aug-2-2026-11-01-26-PM.png"
-                  imageScale={1.35}
+                  icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+                  accent={MODE_ACCENTS.year}
                   title={t.yearModeTitle}
                   desc={t.yearModeDesc}
                   cta={t.playYearMode}
                   onClick={() => startYearMode(YEAR_QUESTION_POOL)}
                 />
                 <LightCard
-                  iconImage="https://i.postimg.cc/g2x1XFnk/Chat-GPT-Image-Aug-2-2026-10-24-38-PM-(1).png"
+                  icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+                  accent={MODE_ACCENTS.random}
                   title={t.randomModeTitle}
                   desc={t.randomModeDesc}
                   cta={t.playRandomMode}
@@ -3916,7 +5661,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
@@ -3942,46 +5687,43 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>Craques e clubes do futebol mundial.</p>
           <div style={styles.lightSubtitleRule} />
 
-          <div style={styles.heroFlow}>
-            <img
-              src="https://i.postimg.cc/kXB8RqPt/Chat-GPT-Image-Aug-2-2026-11-51-23-PM.png"
-              alt=""
-              style={styles.heroFlowImage}
-            />
-          </div>
 
           <div className="gtpModeGrid">
             <LightCard
-              iconImage="https://i.postimg.cc/jjrvsGfk/Chat-GPT-Image-Aug-2-2026-10-25-59-PM.png"
+              icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+              accent={MODE_ACCENTS.clues}
               title={t.cluesModeTitle}
               desc={t.cluesModeDesc}
               cta={t.playClues}
               onClick={() => startClues(QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/rpnJSzbr/Chat-GPT-Image-Aug-2-2026-10-29-25-PM.png"
+              icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+              accent={MODE_ACCENTS.lineup}
               title={t.lineupModeTitle}
               desc={t.lineupModeDesc}
               cta={t.playLineup}
               onClick={() => startLineup(LINEUP_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/6pxCRCpD/Chat-GPT-Image-Aug-2-2026-10-27-33-PM.png"
+              icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+              accent={MODE_ACCENTS.clubs}
               title={t.clubsModeTitle}
               desc={t.clubsModeDesc}
               cta={t.playClubsMode}
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/4NG9xVN9/Chat-GPT-Image-Aug-2-2026-11-01-26-PM.png"
-              imageScale={1.35}
+              icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+              accent={MODE_ACCENTS.year}
               title={t.yearModeTitle}
               desc={t.yearModeDesc}
               cta={t.playYearMode}
               onClick={() => startYearMode(YEAR_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/g2x1XFnk/Chat-GPT-Image-Aug-2-2026-10-24-38-PM-(1).png"
+              icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+              accent={MODE_ACCENTS.random}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
@@ -3989,7 +5731,7 @@ export default function SoccerQuiz() {
             />
           </div>
 
-          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
+          <button style={styles.menuBtn} onClick={() => setScreen("singlePlayer")}>
             {t.menu}
           </button>
         </div>
@@ -4009,7 +5751,7 @@ export default function SoccerQuiz() {
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => changeLang(l.code)}
                   style={{
                     ...styles.lightLangPill,
                     ...(lang === l.code ? styles.lightLangPillActive : {}),
@@ -4035,51 +5777,364 @@ export default function SoccerQuiz() {
           <p style={styles.lightSubtitle}>Craques e clubes do futebol brasileiro.</p>
           <div style={styles.lightSubtitleRule} />
 
-          <div style={styles.heroFlow}>
-            <img
-              src="https://i.postimg.cc/kXB8RqPt/Chat-GPT-Image-Aug-2-2026-11-51-23-PM.png"
-              alt=""
-              style={styles.heroFlowImage}
-            />
-          </div>
 
           <div className="gtpModeGrid">
             <LightCard
-              iconImage="https://i.postimg.cc/jjrvsGfk/Chat-GPT-Image-Aug-2-2026-10-25-59-PM.png"
+              icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+              accent={MODE_ACCENTS.clues}
               title="Modo Pistas"
-              desc="Craques do futebol brasileiro, de Pelé a Marta. Leia três pistas e escolha o nome certo entre quatro opções."
+              desc="Leia três pistas e adivinhe o craque brasileiro."
               cta="JOGAR MODO PISTAS"
               onClick={() => startClues(BRAZIL_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/rpnJSzbr/Chat-GPT-Image-Aug-2-2026-10-29-25-PM.png"
+              icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+              accent={MODE_ACCENTS.lineup}
               title="Modo Escalação"
-              desc="A escalação de um grande clube brasileiro deste século — falta um jogador. Digite o nome para completar. Até 3 dicas opcionais, mas cada uma reduz os pontos que você pode ganhar."
+              desc="Falta um jogador na escalação. Digite o nome. Até 3 dicas."
               cta="JOGAR MODO ESCALAÇÃO"
               onClick={() => startLineup(BRAZIL_LINEUP_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/4NG9xVN9/Chat-GPT-Image-Aug-2-2026-11-01-26-PM.png"
-              imageScale={1.35}
+              icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+              accent={MODE_ACCENTS.year}
               title="Modo Ano"
-              desc="Leia um fato marcante do futebol brasileiro e adivinhe em que ano ele aconteceu, entre quatro opções."
+              desc="Adivinhe o ano de um fato marcante do futebol brasileiro."
               cta="JOGAR MODO ANO"
               onClick={() => startYearMode(BRAZIL_YEAR_QUESTION_POOL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/6pxCRCpD/Chat-GPT-Image-Aug-2-2026-10-27-33-PM.png"
+              icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+              accent={MODE_ACCENTS.clubs}
               title="Modo Clubes"
-              desc="Veja os clubes de craques brasileiros e adivinhe quem é digitando o nome. Até 5 dicas opcionais disponíveis, mas cada uma reduz os pontos que você pode ganhar."
+              desc="Adivinhe o craque pelos clubes da carreira dele. Até 5 dicas."
               cta="JOGAR MODO CLUBES"
               onClick={() => startClubsMode(CLUBS_QUESTION_POOL_BRAZIL)}
             />
             <LightCard
-              iconImage="https://i.postimg.cc/g2x1XFnk/Chat-GPT-Image-Aug-2-2026-10-24-38-PM-(1).png"
+              icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+              accent={MODE_ACCENTS.random}
               title={t.randomModeTitle}
               desc={t.randomModeDesc}
               cta={t.playRandomMode}
               onClick={() => startRandomMode(true)}
             />
+          </div>
+
+          <button style={styles.menuBtn} onClick={() => setScreen("singlePlayer")}>
+            {t.menu}
+          </button>
+        </div>
+      )}
+
+      {screen === "multiplayer" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
+            <button
+              style={{ ...styles.lightIconBtn, fontSize: 22, color: "#101820" }}
+              onClick={() => setScreen("start")}
+              aria-label={t.menu}
+            >
+              ‹
+            </button>
+          </div>
+
+          <div style={styles.comingSoonWrap}>
+            <div
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 148,
+                height: 148,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -8px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <VersusIcon accent={MODE_ACCENTS.multiplayer.dark} />
+            </div>
+            <span style={styles.comingSoonBadge}>{t.multiplayerCta}</span>
+            <h1 style={{ ...styles.lightTitle, fontSize: "clamp(28px, 8vw, 44px)" }}>
+              {t.multiplayerComingTitle}
+            </h1>
+            <p style={{ ...styles.lightSubtitle, maxWidth: 340 }}>
+              {t.multiplayerComingDesc}
+            </p>
+
+            {authLoading || (authUser && profileLoading) ? null : authUser && !profile ? (
+              <form style={styles.authForm} onSubmit={handleSaveNickname}>
+                <span style={styles.authMessage}>{t.nicknameLabel}</span>
+                <input
+                  type="text"
+                  required
+                  maxLength={20}
+                  placeholder={t.nicknamePlaceholder}
+                  value={nicknameInput}
+                  onChange={(e) => setNicknameInput(e.target.value)}
+                  style={styles.authInput}
+                />
+                {profileError && <div style={styles.authError}>{profileError}</div>}
+                <button
+                  type="submit"
+                  disabled={profileBusy}
+                  style={{
+                    ...styles.authSubmitBtn,
+                    opacity: profileBusy ? 0.6 : 1,
+                    cursor: profileBusy ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {t.nicknameSaveBtn}
+                </button>
+              </form>
+            ) : authUser && profile ? (
+              <div style={styles.authLoggedInCard}>
+                <span style={styles.authMessage}>{t.authLoggedInAs}</span>
+                {editingNickname ? (
+                  <form
+                    style={{ ...styles.authForm, marginTop: 4 }}
+                    onSubmit={handleSaveNickname}
+                  >
+                    <input
+                      type="text"
+                      required
+                      maxLength={20}
+                      value={nicknameInput}
+                      onChange={(e) => setNicknameInput(e.target.value)}
+                      style={styles.authInput}
+                      autoFocus
+                    />
+                    {profileError && <div style={styles.authError}>{profileError}</div>}
+                    <div style={{ display: "flex", gap: 8, width: "100%" }}>
+                      <button
+                        type="submit"
+                        disabled={profileBusy}
+                        style={{
+                          ...styles.authSubmitBtn,
+                          marginTop: 0,
+                          flex: 1,
+                          opacity: profileBusy ? 0.6 : 1,
+                        }}
+                      >
+                        {t.nicknameSaveBtn}
+                      </button>
+                      <button
+                        type="button"
+                        style={{
+                          ...styles.authSubmitBtn,
+                          marginTop: 0,
+                          flex: 1,
+                          background: "#AAB4BE",
+                        }}
+                        onClick={() => {
+                          setEditingNickname(false);
+                          setProfileError("");
+                        }}
+                      >
+                        {t.cancelSearchBtn}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <strong>{profile.nickname}</strong>
+                    <button
+                      type="button"
+                      style={styles.authToggleLink}
+                      onClick={() => {
+                        setNicknameInput(profile.nickname);
+                        setEditingNickname(true);
+                      }}
+                    >
+                      {t.changeNicknameBtn}
+                    </button>
+                  </>
+                )}
+
+                {currentMatch ? (
+                  <>
+                    <p style={{ ...styles.authMessage, marginTop: 4 }}>
+                      {t.matchFoundText} {opponentProfile?.nickname ?? "..."}
+                    </p>
+                  </>
+                ) : searching ? (
+                  <>
+                    <p style={{ ...styles.authMessage, marginTop: 4 }}>
+                      {t.searchingText}
+                    </p>
+                    <button
+                      style={{ ...styles.authSubmitBtn, marginTop: 8, background: "#AAB4BE" }}
+                      onClick={cancelSearch}
+                    >
+                      {t.cancelSearchBtn}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {matchmakingError && (
+                      <div style={styles.authError}>{matchmakingError}</div>
+                    )}
+                    <button
+                      style={{ ...styles.authSubmitBtn, marginTop: 4 }}
+                      onClick={findRandomMatch}
+                    >
+                      {t.findMatchBtn}
+                    </button>
+
+                    <div style={styles.authDivider}>
+                      <span style={styles.authDividerLine} />
+                      {t.roomOrLabel}
+                      <span style={styles.authDividerLine} />
+                    </div>
+
+                    {!showJoinRoom && (
+                      <div style={{ display: "flex", gap: 8, width: "100%" }}>
+                        <button
+                          style={{
+                            ...styles.authSubmitBtn,
+                            marginTop: 0,
+                            flex: 1,
+                            background: MODE_ACCENTS.multiplayer.dark,
+                          }}
+                          onClick={() => {
+                            setRoomModeRegion(null);
+                            setScreen("roomCreateModes");
+                          }}
+                        >
+                          {t.createRoomBtn}
+                        </button>
+                        <button
+                          style={{
+                            ...styles.authSubmitBtn,
+                            marginTop: 0,
+                            flex: 1,
+                            background: "transparent",
+                            color: MODE_ACCENTS.multiplayer.dark,
+                            boxShadow: "none",
+                            border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+                          }}
+                          onClick={() => setShowJoinRoom(true)}
+                        >
+                          {t.joinRoomBtn}
+                        </button>
+                      </div>
+                    )}
+
+                    {showJoinRoom && (
+                      <form style={styles.authForm} onSubmit={handleJoinRoom}>
+                        <input
+                          type="text"
+                          required
+                          maxLength={6}
+                          inputMode="numeric"
+                          placeholder={t.roomCodePlaceholder}
+                          value={roomCodeInput}
+                          onChange={(e) => setRoomCodeInput(e.target.value.replace(/\D/g, ""))}
+                          style={styles.authInput}
+                        />
+                        {roomError && <div style={styles.authError}>{roomError}</div>}
+                        <button
+                          type="submit"
+                          disabled={roomBusy}
+                          style={{
+                            ...styles.authSubmitBtn,
+                            opacity: roomBusy ? 0.6 : 1,
+                            cursor: roomBusy ? "not-allowed" : "pointer",
+                          }}
+                        >
+                          {t.joinRoomSubmitBtn}
+                        </button>
+                        <button
+                          type="button"
+                          style={styles.authToggleLink}
+                          onClick={() => {
+                            setShowJoinRoom(false);
+                            setRoomError("");
+                            setRoomCodeInput("");
+                          }}
+                        >
+                          {t.cancelSearchBtn}
+                        </button>
+                      </form>
+                    )}
+                  </>
+                )}
+
+                <button
+                  style={{ ...styles.authToggleLink, marginTop: 4 }}
+                  onClick={handleLogout}
+                >
+                  {t.authLogoutBtn}
+                </button>
+              </div>
+            ) : (
+              <form style={styles.authForm} onSubmit={handleAuthSubmit}>
+                <input
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder={t.authEmailLabel}
+                  value={authEmail}
+                  onChange={(e) => setAuthEmail(e.target.value)}
+                  style={styles.authInput}
+                />
+                <div style={styles.passwordFieldWrap}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    minLength={6}
+                    autoComplete={authMode === "signup" ? "new-password" : "current-password"}
+                    placeholder={t.authPasswordLabel}
+                    value={authPassword}
+                    onChange={(e) => setAuthPassword(e.target.value)}
+                    style={{ ...styles.authInput, paddingRight: 44 }}
+                  />
+                  <button
+                    type="button"
+                    style={styles.passwordToggleBtn}
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? t.hidePasswordLabel : t.showPasswordLabel}
+                  >
+                    <EyeIcon open={showPassword} />
+                  </button>
+                </div>
+                {authError && <div style={styles.authError}>{authError}</div>}
+                {authMessage && <div style={styles.authMessage}>{authMessage}</div>}
+                <button
+                  type="submit"
+                  disabled={authBusy}
+                  style={{
+                    ...styles.authSubmitBtn,
+                    opacity: authBusy ? 0.6 : 1,
+                    cursor: authBusy ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {authMode === "signup" ? t.authSignupBtn : t.authLoginBtn}
+                </button>
+                <button
+                  type="button"
+                  style={styles.authToggleLink}
+                  onClick={() => {
+                    setAuthMode((m) => (m === "signup" ? "login" : "signup"));
+                    setAuthError("");
+                    setAuthMessage("");
+                  }}
+                >
+                  {authMode === "signup" ? t.authToggleToLogin : t.authToggleToSignup}
+                </button>
+
+                <div style={styles.authDivider}>
+                  <span style={styles.authDividerLine} />
+                  {t.authOr}
+                  <span style={styles.authDividerLine} />
+                </div>
+
+                <button
+                  type="button"
+                  style={styles.authGoogleBtn}
+                  onClick={handleGoogleLogin}
+                >
+                  {t.authGoogleBtn}
+                </button>
+              </form>
+            )}
           </div>
 
           <button style={styles.menuBtn} onClick={() => setScreen("start")}>
@@ -4089,10 +6144,27 @@ export default function SoccerQuiz() {
       )}
 
       {screen === "settings" && (
-        <div style={styles.centerCol}>
-          <div style={styles.eyebrow}>⚙️ {t.settingsTab}</div>
-          <h1 style={styles.title}>{t.settingsTitle}</h1>
-          <p style={styles.subtitle}>{t.settingsDesc}</p>
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => setScreen("start")}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.settingsTab}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.settingsTitle}</h1>
+          <p style={styles.lightSubtitle}>{t.settingsDesc}</p>
+          <div style={styles.lightSubtitleRule} />
 
           <div style={{ ...styles.modeCard, textAlign: "left" }}>
             <div style={styles.modeTitle}>{t.soundLabel}</div>
@@ -4120,10 +6192,6 @@ export default function SoccerQuiz() {
               </button>
             </div>
           </div>
-
-          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
-            {t.menu}
-          </button>
         </div>
       )}
 
@@ -4135,7 +6203,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4221,6 +6289,12 @@ export default function SoccerQuiz() {
             </button>
           )}
 
+          {!answered && (
+            <button style={styles.skipBtn} onClick={() => handleClueAnswer(null)}>
+              {t.skipBtn}
+            </button>
+          )}
+
           {answered && (
             <div className="fadeInUp" style={styles.feedbackText}>
               {selected === currentQuestion.answer
@@ -4239,7 +6313,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.lineupLabel}</div>
@@ -4287,12 +6361,15 @@ export default function SoccerQuiz() {
                       const showAsWrong = isHidden && lAnswered && !lCorrect;
                       const showAsRight = isHidden && lAnswered && lCorrect;
                       const lastName = p.shortName || p.name.split(" ").slice(-1)[0];
+                      const kit = getTeamKit(currentLineup.team);
                       return (
                         <div key={p.i} style={styles.chipWrap}>
                           <div
                             className={showAsRight ? "correctPulse" : ""}
                             style={{
                               ...styles.chip,
+                              background: kit.bg,
+                              color: kit.text,
                               ...(isHidden ? styles.chipHidden : {}),
                               ...(showAsRight ? styles.chipCorrect : {}),
                               ...(showAsWrong ? styles.chipWrong : {}),
@@ -4327,7 +6404,7 @@ export default function SoccerQuiz() {
                   <div style={styles.clueRow}>
                     <span style={styles.clueNumber}>2</span>
                     <span style={styles.clueText}>
-                      {t.clubs} {hiddenPlayerObj.clubs}
+                      {t.clubs} {otherClubsHint(hiddenPlayerObj.clubs, currentLineup.team)}
                     </span>
                   </div>
                 )}
@@ -4389,6 +6466,10 @@ export default function SoccerQuiz() {
                       .replace("{used}", hintsUsed)
                       .replace("{max}", MAX_HINTS)}
               </button>
+
+              <button style={styles.skipBtn} onClick={submitLineupGuess}>
+                {t.skipBtn}
+              </button>
             </>
           )}
 
@@ -4410,7 +6491,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4506,6 +6587,10 @@ export default function SoccerQuiz() {
                       .replace("{used}", clubsHintsUsed)
                       .replace("{max}", MAX_CLUBS_HINTS)}
               </button>
+
+              <button style={styles.skipBtn} onClick={submitClubsGuess}>
+                {t.skipBtn}
+              </button>
             </>
           )}
 
@@ -4525,7 +6610,7 @@ export default function SoccerQuiz() {
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4608,6 +6693,12 @@ export default function SoccerQuiz() {
             </button>
           )}
 
+          {!yearAnswered && (
+            <button style={styles.skipBtn} onClick={() => handleYearAnswer(null)}>
+              {t.skipBtn}
+            </button>
+          )}
+
           {yearAnswered && (
             <div className="fadeInUp" style={styles.feedbackText}>
               {yearSelected === currentYearQuestion.answer
@@ -4623,10 +6714,33 @@ export default function SoccerQuiz() {
           <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
+          {duelActive && (
+            <div style={styles.duelScoreRow}>
+              <div style={styles.duelScoreBlock}>
+                <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
+                <div style={styles.scoreboardValue}>{score}/100</div>
+              </div>
+              <div style={styles.duelScoreDivider}>VS</div>
+              <div style={styles.duelScoreBlock}>
+                <div style={styles.scoreboardLabel}>
+                  {opponentProfile?.nickname ?? t.duelOpponentLabel}
+                </div>
+                <div style={styles.scoreboardValue}>
+                  {(myPlayerSlot === "player1"
+                    ? currentMatch?.player2_score
+                    : currentMatch?.player1_score) ?? 0}
+                  /100
+                </div>
+              </div>
+            </div>
+          )}
+          {roomActive && (
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+          )}
           <div style={styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
-              <div style={styles.scoreboardValue}>{score}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
             </div>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.question}</div>
@@ -4758,12 +6872,15 @@ export default function SoccerQuiz() {
                             const showAsWrong = isHidden && randomAnswered && !randomCorrect;
                             const showAsRight = isHidden && randomAnswered && randomCorrect;
                             const lastName = p.shortName || p.name.split(" ").slice(-1)[0];
+                            const kit = getTeamKit(currentRandomItem.data.team);
                             return (
                               <div key={p.i} style={styles.chipWrap}>
                                 <div
                                   className={showAsRight ? "correctPulse" : ""}
                                   style={{
                                     ...styles.chip,
+                                    background: kit.bg,
+                                    color: kit.text,
                                     ...(isHidden ? styles.chipHidden : {}),
                                     ...(showAsRight ? styles.chipCorrect : {}),
                                     ...(showAsWrong ? styles.chipWrong : {}),
@@ -4801,7 +6918,7 @@ export default function SoccerQuiz() {
                         <div style={styles.clueRow}>
                           <span style={styles.clueNumber}>2</span>
                           <span style={styles.clueText}>
-                            {t.clubs} {hiddenP.clubs}
+                            {t.clubs} {otherClubsHint(hiddenP.clubs, currentRandomItem.data.team)}
                           </span>
                         </div>
                       )}
@@ -4948,6 +7065,12 @@ export default function SoccerQuiz() {
             </>
           )}
 
+          {!randomAnswered && (
+            <button style={styles.skipBtn} onClick={submitRandomAnswer}>
+              {t.skipBtn}
+            </button>
+          )}
+
           {randomAnswered && (
             <div className="fadeInUp" style={styles.feedbackText}>
               {randomCorrect
@@ -4968,9 +7091,9 @@ export default function SoccerQuiz() {
         <div style={styles.centerCol}>
           <div style={styles.eyebrow}>{t.fullTime}</div>
           <div className="trophyGlow" style={styles.trophyEmoji}>
-            {score >= 400 ? "🏆" : score >= 200 ? "⚽" : "🎯"}
+            {score >= 80 ? "🏆" : score >= 50 ? "⚽" : "🎯"}
           </div>
-          <h1 className="fadeInUp" style={styles.title}>{score} {t.pts}</h1>
+          <h1 className="fadeInUp" style={styles.title}>{score}/100</h1>
           <p style={styles.subtitle}>{t.niceReading}</p>
 
           <button style={styles.primaryBtn} onClick={playAgain}>
@@ -4990,12 +7113,444 @@ export default function SoccerQuiz() {
           </button>
         </div>
       )}
+
+      {screen === "duelWaiting" && (
+        <div style={styles.centerCol}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            ⏳
+          </div>
+          <h1 className="fadeInUp" style={styles.title}>
+            {t.duelWaitingTitle}
+          </h1>
+          <p style={styles.subtitle}>{t.duelWaitingDesc}</p>
+          <div style={styles.duelScoreRow}>
+            <div style={styles.duelScoreBlock}>
+              <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
+              <div style={styles.scoreboardValue}>{score}/100</div>
+            </div>
+            <div style={styles.duelScoreDivider}>VS</div>
+            <div style={styles.duelScoreBlock}>
+              <div style={styles.scoreboardLabel}>
+                {opponentProfile?.nickname ?? t.duelOpponentLabel}
+              </div>
+              <div style={styles.scoreboardValue}>
+                {(myPlayerSlot === "player1"
+                  ? currentMatch?.player2_score
+                  : currentMatch?.player1_score) ?? 0}
+                /100
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {screen === "duelEnd" && currentMatch && (
+        <div style={{ ...styles.centerCol, minHeight: "70vh", justifyContent: "center" }}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            {currentMatch.winner_id === authUser?.id
+              ? "🏆"
+              : currentMatch.winner_id
+              ? "😔"
+              : "🤝"}
+          </div>
+          <h1
+            className="fadeInUp"
+            style={{ ...styles.title, fontSize: "clamp(26px, 7vw, 38px)" }}
+          >
+            {currentMatch.winner_id === authUser?.id
+              ? t.duelEndWin
+              : currentMatch.winner_id
+              ? t.duelEndLose
+              : t.duelEndDraw}
+          </h1>
+          <div style={styles.duelScoreRow}>
+            <div style={styles.duelScoreBlock}>
+              <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
+              <div style={styles.scoreboardValue}>
+                {myPlayerSlot === "player1" ? currentMatch.player1_score : currentMatch.player2_score}
+                /100
+              </div>
+            </div>
+            <div style={styles.duelScoreDivider}>VS</div>
+            <div style={styles.duelScoreBlock}>
+              <div style={styles.scoreboardLabel}>
+                {opponentProfile?.nickname ?? t.duelOpponentLabel}
+              </div>
+              <div style={styles.scoreboardValue}>
+                {myPlayerSlot === "player1" ? currentMatch.player2_score : currentMatch.player1_score}
+                /100
+              </div>
+            </div>
+          </div>
+          <button style={styles.primaryBtn} onClick={leaveDuel}>
+            {t.duelBackBtn}
+          </button>
+        </div>
+      )}
+
+      {screen === "duelCountdown" && (
+        <div style={styles.centerCol}>
+          <div style={styles.eyebrow}>{t.duelGetReady}</div>
+          {opponentProfile && (
+            <p style={styles.subtitle}>
+              {profile?.nickname ?? t.duelYouLabel} {t.duelVsWord} {opponentProfile.nickname}
+            </p>
+          )}
+          <div
+            key={duelCountdown}
+            className="trophyGlow fadeInUp"
+            style={{ ...styles.trophyEmoji, fontSize: 88 }}
+          >
+            {duelCountdown > 0 ? duelCountdown : "⚽"}
+          </div>
+        </div>
+      )}
+
+      {screen === "roomCreateModes" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => {
+                if (lang === "pt" && roomModeRegion) {
+                  setRoomModeRegion(null);
+                } else {
+                  setRoomModeRegion(null);
+                  setScreen("multiplayer");
+                }
+              }}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomModesEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.roomModesSubtitle}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <div className="gtpModeGrid">{renderModeCards(handleCreateRoom)}</div>
+        </div>
+      )}
+
+      {screen === "roomRestartModes" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => {
+                if (lang === "pt" && roomModeRegion) {
+                  setRoomModeRegion(null);
+                } else {
+                  setRoomModeRegion(null);
+                  setScreen("roomEnd");
+                }
+              }}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomModesEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.roomModesSubtitle}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <div className="gtpModeGrid">{renderModeCards(restartRoom)}</div>
+        </div>
+      )}
+
+      {screen === "roomChangeMode" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => {
+                if (lang === "pt" && roomModeRegion) {
+                  setRoomModeRegion(null);
+                } else {
+                  setRoomModeRegion(null);
+                  setScreen("roomLobby");
+                }
+              }}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomModesEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.roomModesSubtitle}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <div className="gtpModeGrid">{renderModeCards(changeRoomMode)}</div>
+        </div>
+      )}
+
+      {screen === "roomLobby" && room && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={leaveRoom}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomCodeLabel}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1
+            className="fadeInUp"
+            style={{ ...styles.lightTitle, letterSpacing: "0.06em" }}
+          >
+            {room.code}
+          </h1>
+          <p style={styles.lightSubtitle}>{t.roomShareHint}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          <button
+            style={{
+              ...styles.primaryBtn,
+              background: "transparent",
+              color: MODE_ACCENTS.multiplayer.dark,
+              boxShadow: "none",
+              border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+            }}
+            onClick={copyRoomCode}
+          >
+            {roomCodeCopied ? t.roomCodeCopiedMsg : t.roomCopyBtn}
+          </button>
+
+          <div style={{ ...styles.lightEyebrow, fontSize: 13, marginTop: 24 }}>
+            {t.currentModeLabel}
+          </div>
+          <div style={{ ...styles.modeCard, textAlign: "left" }}>
+            <div style={{ ...styles.modeTitle, marginBottom: 0 }}>
+              {roomModeLabel(room.mode)}
+            </div>
+          </div>
+
+          <div style={{ ...styles.lightEyebrow, fontSize: 13 }}>
+            {t.roomPlayersLabel} ({roomPlayers.length})
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+          </div>
+
+          {isRoomHost ? (
+            <>
+              <button style={styles.primaryBtn} onClick={handleStartRoom}>
+                {t.roomStartBtn}
+              </button>
+              <button
+                style={{
+                  ...styles.primaryBtn,
+                  marginTop: 8,
+                  background: "transparent",
+                  color: MODE_ACCENTS.multiplayer.dark,
+                  boxShadow: "none",
+                  border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+                }}
+                onClick={() => {
+                  setRoomModeRegion(null);
+                  setScreen("roomChangeMode");
+                }}
+              >
+                {t.changeModeBtn}
+              </button>
+            </>
+          ) : (
+            <p style={styles.lightSubtitle}>{t.roomWaitingHostLabel}</p>
+          )}
+          <button
+            style={{ ...styles.authToggleLink, marginTop: 8 }}
+            onClick={leaveRoom}
+          >
+            {t.roomLeaveBtn}
+          </button>
+        </div>
+      )}
+
+      {screen === "roomCountdown" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div style={styles.lightEyebrowRow}>
+              <span style={styles.lightEyebrowLine} />
+              <span style={styles.lightEyebrow}>{t.duelGetReady}</span>
+              <span style={styles.lightEyebrowLine} />
+            </div>
+            <p style={{ ...styles.lightSubtitle, margin: 0 }}>
+              {roomPlayers.length} {t.roomPlayersLabel}
+            </p>
+            <div
+              key={roomCountdown}
+              className="trophyGlow fadeInUp"
+              style={{
+                fontFamily: "'Baloo 2', sans-serif",
+                fontWeight: 800,
+                fontSize: 96,
+                color: MODE_ACCENTS.multiplayer.dark,
+              }}
+            >
+              {roomCountdown > 0 ? roomCountdown : "⚽"}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {screen === "roomWaiting" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div
+              className="trophyGlow"
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 110,
+                height: 110,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -6px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <span style={{ fontSize: 46 }}>⏳</span>
+            </div>
+            <h1
+              className="fadeInUp"
+              style={{ ...styles.lightTitle, fontSize: "clamp(26px, 7vw, 38px)" }}
+            >
+              {t.roomWaitingTitle}
+            </h1>
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+          </div>
+        </div>
+      )}
+
+      {screen === "roomEnd" && room && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div
+              className="trophyGlow"
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 110,
+                height: 110,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -6px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <span style={{ fontSize: 48 }}>🏆</span>
+            </div>
+            <h1
+              className="fadeInUp"
+              style={{ ...styles.lightTitle, fontSize: "clamp(26px, 7vw, 38px)" }}
+            >
+              {t.roomEndTitle}
+            </h1>
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
+            {isRoomHost && (
+              <button
+                style={{ ...styles.primaryBtn, opacity: roomBusy ? 0.6 : 1 }}
+                onClick={() => {
+                  setRoomModeRegion(null);
+                  setScreen("roomRestartModes");
+                }}
+                disabled={roomBusy}
+              >
+                {t.roomPlayAgainBtn}
+              </button>
+            )}
+            {roomError && <div style={styles.authError}>{roomError}</div>}
+            <button
+              style={{
+                ...styles.primaryBtn,
+                background: isRoomHost ? "transparent" : styles.primaryBtn.background,
+                color: isRoomHost ? "#0B6F27" : "#FFFFFF",
+                boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
+                border: isRoomHost ? "1px solid #0B6F27" : "none",
+              }}
+              onClick={leaveRoom}
+            >
+              {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {screen === "roomRestartPrompt" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div
+              className="trophyGlow"
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 110,
+                height: 110,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -6px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <span style={{ fontSize: 48 }}>🔄</span>
+            </div>
+            <h1
+              className="fadeInUp"
+              style={{ ...styles.lightTitle, fontSize: "clamp(24px, 6.5vw, 34px)" }}
+            >
+              {t.roomRestartTitle}
+            </h1>
+            <button style={styles.primaryBtn} onClick={stayInRoom}>
+              {t.roomStayBtn}
+            </button>
+            <button
+              style={{
+                ...styles.primaryBtn,
+                background: "transparent",
+                color: "#0B6F27",
+                boxShadow: "none",
+                border: "1px solid #0B6F27",
+              }}
+              onClick={leaveRoom}
+            >
+              {t.roomLeaveBtn}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 const fontImport = `
-  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800;900&family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600;700;800&family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap');
 
   @keyframes correctPulse {
     0% { transform: scale(1); }
@@ -5017,7 +7572,7 @@ const fontImport = `
   .correctPulse { animation: correctPulse 0.4s ease; }
   .fadeInUp { animation: fadeInUp 0.35s ease; }
   .trophyGlow { display: inline-block; animation: trophyGlow 1.8s ease-in-out infinite; }
-  button { transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+  button { transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; touch-action: manipulation; }
   button:active:not(:disabled) { transform: scale(0.97); }
   input, textarea, select { font-size: 16px !important; }
   * { box-sizing: border-box; }
@@ -5108,29 +7663,14 @@ const styles = {
     justifyContent: "center",
     fontFamily: "'Inter', sans-serif",
     boxSizing: "border-box",
-    padding: "20px 16px 32px",
+    padding: "16px 16px 32px",
+    paddingTop: "calc(env(safe-area-inset-top, 0px) + 48px)",
   },
   lightPage: {
     width: "100%",
     maxWidth: 480,
     marginLeft: "auto",
     marginRight: "auto",
-  },
-  heroFlow: {
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 18,
-    height: 260,
-    borderRadius: 26,
-    overflow: "hidden",
-    boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
-  },
-  heroFlowImage: {
-    width: "100%",
-    height: "100%",
-    display: "block",
-    objectFit: "cover",
-    objectPosition: "center 22%",
   },
   heroSpacer: {
     height: 260,
@@ -5173,11 +7713,14 @@ const styles = {
     color: "#5B5B52",
     fontFamily: "'Oswald', sans-serif",
     fontWeight: 600,
-    fontSize: 13,
+    fontSize: 14,
     letterSpacing: "0.04em",
-    padding: "7px 16px",
+    minWidth: 40,
+    minHeight: 36,
+    padding: "8px 14px",
     borderRadius: 999,
     cursor: "pointer",
+    touchAction: "manipulation",
   },
   lightLangPillActive: {
     background: "linear-gradient(180deg, #22C744, #0B6F27)",
@@ -5198,7 +7741,7 @@ const styles = {
     opacity: 0.5,
   },
   lightEyebrow: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontWeight: 500,
     fontSize: "clamp(13px, 3.6vw, 16px)",
     letterSpacing: "7px",
@@ -5206,26 +7749,16 @@ const styles = {
     color: "#0B6F27",
   },
   lightTitle: {
-    fontFamily: "'Anton', sans-serif",
-    fontStyle: "italic",
-    fontSize: "clamp(40px, 12vw, 84px)",
-    fontWeight: 900,
-    lineHeight: 0.88,
-    letterSpacing: "-2px",
-    textTransform: "uppercase",
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: "clamp(36px, 11vw, 72px)",
+    fontWeight: 800,
+    lineHeight: 0.98,
     color: "#101820",
     margin: 0,
     textAlign: "center",
-    transform: "skewX(-7deg)",
   },
   lightTitleAccent: {
-    fontSize: "clamp(44px, 13vw, 91px)",
-    background:
-      "linear-gradient(to bottom, #22C744 0%, #159533 55%, #0B6F27 100%)",
-    WebkitBackgroundClip: "text",
-    backgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    filter: "drop-shadow(0 3px 6px rgba(0,0,0,.14))",
+    color: "#58CC02",
   },
   lightSubtitle: {
     fontFamily: "'Inter', sans-serif",
@@ -5241,7 +7774,7 @@ const styles = {
     height: 3,
     background: "#159533",
     borderRadius: 999,
-    margin: "10px auto 0",
+    margin: "10px auto 28px",
   },
   ballWrap: {
     position: "relative",
@@ -5319,53 +7852,35 @@ const styles = {
   lightCard: {
     width: "100%",
     margin: "0 0 18px 0",
-    background: "rgba(255,255,255,0.96)",
-    borderRadius: 30,
-    border: "1px solid rgba(11,111,39,0.08)",
-    padding: "24px 28px",
+    background: "#FFFFFF",
+    borderRadius: 24,
+    border: "2px solid",
+    padding: "22px 24px",
     display: "flex",
     alignItems: "flex-start",
-    gap: 22,
-    boxShadow:
-      "0 12px 28px rgba(16,24,32,0.12), inset 0 1px 0 rgba(255,255,255,0.9)",
+    gap: 20,
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
   },
   lightCardIconCircle: {
     position: "relative",
-    width: 148,
-    height: 148,
-    minWidth: 140,
+    width: 140,
+    height: 140,
+    minWidth: 132,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    filter: "drop-shadow(0 5px 8px rgba(11,111,39,0.15))",
   },
   lightCardIconImage: {
-    width: 140,
-    height: 140,
-    borderRadius: "50%",
-    objectFit: "cover",
+    width: 132,
+    height: 132,
+    objectFit: "contain",
     filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))",
   },
-  lightCardSplashA: {
-    position: "absolute",
-    width: 120,
-    height: 120,
-    background: "linear-gradient(140deg, #69C326 0%, #165D14 100%)",
-    borderRadius: "42% 58% 55% 45% / 48% 42% 58% 52%",
-    animation: "splashPulse 4s ease-in-out infinite",
-  },
-  lightCardSplashB: {
-    position: "absolute",
-    width: 96,
-    height: 96,
-    background: "#2F8F17",
-    opacity: 0.35,
-    borderRadius: "55% 45% 48% 52% / 42% 55% 45% 58%",
-    animation: "splashPulse 4s ease-in-out infinite 0.6s",
-  },
-  lightCardIconInner: {
+  lightCardIconBadge: {
     position: "relative",
-    zIndex: 1,
+    width: 124,
+    height: 124,
+    borderRadius: "50%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -5375,58 +7890,44 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   lightCardTitle: {
-    fontFamily: "'Anton', sans-serif",
-    fontWeight: 900,
-    fontStyle: "italic",
-    fontSize: 29,
-    letterSpacing: "-0.5px",
-    lineHeight: 1,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 800,
+    fontSize: 22,
+    lineHeight: 1.15,
     color: "#101820",
-    textTransform: "uppercase",
-    transform: "skewX(-6deg)",
   },
   lightCardChevron: {
-    color: "#0B6F27",
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: 700,
     lineHeight: 1,
     marginLeft: 8,
   },
   lightCardDesc: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 400,
-    lineHeight: 1.35,
-    color: "#555B61",
+    lineHeight: 1.4,
+    color: "#5F666B",
     margin: 0,
-    marginBottom: 20,
+    marginBottom: 18,
   },
   lightCardBtn: {
     width: "100%",
-    height: 44,
-    background: "linear-gradient(180deg, #22C744 0%, #159533 45%, #0B6F27 100%)",
+    height: 46,
     color: "#FFFFFF",
     border: "none",
-    borderRadius: 999,
+    borderRadius: 14,
     padding: "0 20px",
-    fontFamily: "'Anton', sans-serif",
-    fontWeight: 900,
-    fontStyle: "italic",
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 700,
     fontSize: 15,
     letterSpacing: "0.4px",
     textTransform: "uppercase",
     cursor: "pointer",
-    boxShadow:
-      "0 7px 14px rgba(11,111,39,0.28), inset 0 1px 0 rgba(255,255,255,0.25)",
-    transition: "filter 150ms ease, transform 150ms ease",
-    transform: "skewX(-6deg)",
-  },
-  lightCardBtnLabel: {
-    display: "inline-block",
-    transform: "skewX(6deg)",
+    transition: "transform 100ms ease, box-shadow 100ms ease",
   },
   statsBar: {
     marginTop: 8,
@@ -5477,7 +7978,7 @@ const styles = {
     border: "1px solid #0B6F27",
   },
   eyebrow: {
-    fontFamily: "'Bebas Neue', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     letterSpacing: "0.3em",
     fontSize: 13,
     color: "#0B6F27",
@@ -5485,7 +7986,7 @@ const styles = {
   },
   trophyEmoji: {
     fontSize: 52,
-    marginBottom: 4,
+    marginBottom: 18,
     marginTop: 4,
   },
   title: {
@@ -5507,22 +8008,20 @@ const styles = {
   },
   modeCard: {
     width: "100%",
-    background: "rgba(255,255,255,0.96)",
-    border: "1px solid rgba(11,111,39,0.08)",
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
     borderRadius: 22,
     padding: "18px 20px",
     marginBottom: 16,
     textAlign: "left",
-    boxShadow: "0 12px 28px rgba(16,24,32,0.10)",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
   },
   modeTitle: {
-    fontFamily: "'Anton', sans-serif",
-    fontStyle: "italic",
-    fontWeight: 900,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 800,
     fontSize: 18,
     color: "#101820",
     marginBottom: 6,
-    textTransform: "uppercase",
   },
   modeDesc: {
     fontFamily: "'Inter', sans-serif",
@@ -5532,37 +8031,185 @@ const styles = {
     margin: "0 0 14px 0",
   },
   primaryBtn: {
-    fontFamily: "'Anton', sans-serif",
-    fontStyle: "italic",
-    background: "linear-gradient(180deg, #22C744 0%, #159533 48%, #0B6F27 100%)",
+    fontFamily: "'Baloo 2', sans-serif",
+    background: "#22C744",
     color: "#FFFFFF",
     border: "none",
     padding: "14px 32px",
-    borderRadius: 999,
+    borderRadius: 14,
     fontSize: 15,
-    fontWeight: 900,
+    fontWeight: 700,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
     cursor: "pointer",
     marginTop: 8,
-    boxShadow: "0 9px 20px rgba(11,111,39,0.26), inset 0 1px 0 rgba(255,255,255,0.26)",
+    boxShadow: "0 4px 0 #0B6F27",
     width: "100%",
   },
   hintBtn: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     background: "transparent",
     color: "#0B6F27",
     border: "1px dashed #0B6F27",
     padding: "10px 16px",
-    borderRadius: 8,
+    borderRadius: 10,
     fontSize: 12.5,
     fontWeight: 700,
     letterSpacing: "0.03em",
   },
-  menuBtn: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: 12,
+  comingSoonWrap: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    gap: 14,
+    padding: "40px 16px 48px",
+  },
+  comingSoonBadge: {
+    fontFamily: "'Oswald', sans-serif",
     fontWeight: 700,
+    fontSize: 12,
+    letterSpacing: "0.08em",
+    color: "#FFFFFF",
+    background: MODE_ACCENTS.multiplayer.dark,
+    padding: "6px 16px",
+    borderRadius: 999,
+  },
+  authForm: {
+    width: "100%",
+    maxWidth: 340,
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+    marginTop: 8,
+  },
+  authInput: {
+    width: "100%",
+    height: 48,
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 16,
+    color: "#101820",
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 12,
+    padding: "0 14px",
+    boxSizing: "border-box",
+  },
+  passwordFieldWrap: {
+    position: "relative",
+    width: "100%",
+  },
+  passwordToggleBtn: {
+    position: "absolute",
+    right: 4,
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: 40,
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    padding: 0,
+  },
+  authSubmitBtn: {
+    width: "100%",
+    height: 48,
+    background: MODE_ACCENTS.multiplayer.solid,
+    color: "#FFFFFF",
+    border: "none",
+    borderRadius: 14,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontWeight: 700,
+    fontSize: 15,
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+    cursor: "pointer",
+    boxShadow: `0 4px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+  },
+  authToggleLink: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#0B6F27",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "center",
+    padding: "4px 0",
+  },
+  skipBtn: {
+    fontFamily: "'Oswald', sans-serif",
+    fontWeight: 700,
+    fontSize: 13,
+    letterSpacing: "0.05em",
+    color: "#5F666B",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "center",
+    width: "100%",
+    padding: "10px 0 0",
+    textDecoration: "underline",
+  },
+  authError: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    color: "#D9432E",
+    textAlign: "center",
+  },
+  authMessage: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    color: "#0B6F27",
+    textAlign: "center",
+  },
+  authDivider: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    color: "#5F666B",
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 11,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+  },
+  authDividerLine: {
+    flex: 1,
+    height: 1,
+    background: "#E4E0D4",
+  },
+  authGoogleBtn: {
+    width: "100%",
+    height: 48,
+    background: "#FFFFFF",
+    color: "#101820",
+    border: "2px solid #E4E0D4",
+    borderRadius: 14,
+    fontFamily: "'Inter', sans-serif",
+    fontWeight: 600,
+    fontSize: 14,
+    cursor: "pointer",
+  },
+  authLoggedInCard: {
+    width: "100%",
+    maxWidth: 340,
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 16,
+    padding: "16px 20px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 8,
+  },
+  menuBtn: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 13,
+    fontWeight: 600,
     letterSpacing: "0.05em",
     color: "#5F666B",
     background: "transparent",
@@ -5582,15 +8229,78 @@ const styles = {
   scoreboard: {
     display: "flex",
     justifyContent: "space-between",
-    background: "rgba(255,255,255,0.96)",
-    border: "1px solid rgba(11,111,39,0.08)",
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
     borderRadius: 18,
     padding: "12px 20px",
-    boxShadow: "0 8px 20px rgba(16,24,32,0.08)",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
   },
   scoreboardItem: { textAlign: "center", flex: 1 },
+  duelScoreRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 18,
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 18,
+    padding: "14px 16px",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
+  },
+  duelScoreBlock: { textAlign: "center", minWidth: 76 },
+  duelScoreDivider: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 13,
+    fontWeight: 700,
+    color: "#AAB4BE",
+    letterSpacing: "0.1em",
+  },
+  roomLeaderboard: {
+    width: "100%",
+    maxWidth: 340,
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
+    borderRadius: 18,
+    padding: "8px 6px",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
+    maxHeight: 320,
+    overflowY: "auto",
+  },
+  roomLeaderboardRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "8px 10px",
+    borderRadius: 12,
+  },
+  roomLeaderboardRowMe: {
+    background: "rgba(28,176,246,0.12)",
+  },
+  roomLeaderboardRank: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 13,
+    fontWeight: 700,
+    color: "#5F666B",
+    minWidth: 22,
+  },
+  roomLeaderboardName: {
+    flex: 1,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: 15,
+    fontWeight: 700,
+    color: "#101820",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  roomLeaderboardScore: {
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: 15,
+    fontWeight: 800,
+    color: "#101820",
+  },
   scoreboardLabel: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: 11,
     fontWeight: 600,
     letterSpacing: "0.15em",
@@ -5598,25 +8308,24 @@ const styles = {
     color: "#5F666B",
   },
   scoreboardValue: {
-    fontFamily: "'Anton', sans-serif",
-    fontStyle: "italic",
+    fontFamily: "'Baloo 2', sans-serif",
     fontSize: 22,
-    fontWeight: 900,
+    fontWeight: 800,
     color: "#101820",
   },
   card: {
-    background: "rgba(255,255,255,0.96)",
-    border: "1px solid rgba(11,111,39,0.08)",
+    background: "#FFFFFF",
+    border: "2px solid #E4E0D4",
     borderRadius: 22,
     padding: "22px 24px",
-    boxShadow: "0 12px 28px rgba(16,24,32,0.10)",
+    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
     transition: "transform 0.3s ease, opacity 0.3s ease",
   },
   cardFlipped: {
     transform: "scale(0.98)",
   },
   cardLabel: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Oswald', sans-serif",
     fontSize: 12,
     fontWeight: 700,
     letterSpacing: "0.2em",
@@ -5641,11 +8350,12 @@ const styles = {
     gap: 12,
   },
   clueNumber: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Baloo 2', sans-serif",
     fontWeight: 700,
     fontSize: 14,
     color: "#FFFFFF",
-    background: "linear-gradient(180deg, #22C744, #0B6F27)",
+    background: "#22C744",
+    boxShadow: "inset 0 -3px 0 #0B6F27",
     minWidth: 24,
     height: 24,
     borderRadius: "50%",
@@ -5668,8 +8378,8 @@ const styles = {
     gap: 12,
   },
   feedbackText: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: 15,
+    fontFamily: "'Baloo 2', sans-serif",
+    fontSize: 16,
     fontWeight: 700,
     color: "#0B6F27",
     textAlign: "center",
@@ -5680,16 +8390,16 @@ const styles = {
     fontWeight: 600,
     fontSize: 14,
     color: "#101820",
-    border: "1px solid",
-    borderRadius: 12,
+    border: "2px solid",
+    borderRadius: 14,
     padding: "14px 10px",
     transition: "all 0.2s ease",
   },
   pitch: {
     position: "relative",
-    background: "#1B5E33",
-    border: "2px solid rgba(255,255,255,0.55)",
-    borderRadius: 10,
+    background: "#0B6F27",
+    border: "2px solid #E4E0D4",
+    borderRadius: 16,
     padding: "18px 4px",
     display: "flex",
     flexDirection: "column",
@@ -5747,35 +8457,37 @@ const styles = {
     width: 30,
     height: 30,
     borderRadius: "50%",
-    background: "linear-gradient(160deg, #173821 0%, #0A1D12 100%)",
-    border: "1.5px solid rgba(255,255,255,0.55)",
+    background: "#FFFFFF",
+    border: "2px solid #FFFFFF",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontFamily: "'Oswald', sans-serif",
+    fontFamily: "'Baloo 2', sans-serif",
     fontWeight: 700,
     fontSize: 13,
-    color: "#F4C542",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.15)",
+    color: "#0B6F27",
+    boxShadow: "0 2px 0 rgba(0,0,0,0.15)",
     flexShrink: 0,
   },
   chipHidden: {
-    background: "#173821",
-    border: "2px dashed #F4C542",
+    background: "#FFFFFF",
+    border: `2px dashed ${MODE_ACCENTS.lineup.solid}`,
+    color: MODE_ACCENTS.lineup.dark,
   },
   chipCorrect: {
-    background: "#1F5C33",
-    border: "1.5px solid #F4C542",
+    background: "#E7F7EA",
+    border: "2px solid #0B6F27",
   },
   chipWrong: {
-    background: "#5C1F1F",
-    border: "1.5px solid #E85D4E",
+    background: "#FDEAEA",
+    border: "2px solid #D9432E",
+    color: "#D9432E",
   },
   chipLabel: {
     fontFamily: "'Inter', sans-serif",
     fontSize: 9,
-    fontWeight: 500,
-    color: "#F1F7F3",
+    fontWeight: 600,
+    color: "#FFFFFF",
     textAlign: "center",
     lineHeight: 1.15,
     maxWidth: "100%",
