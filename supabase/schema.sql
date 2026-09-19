@@ -172,12 +172,14 @@ alter publication supabase_realtime add table public.rooms;
 alter publication supabase_realtime add table public.room_players;
 
 -- ============ ROOM RESTART ============
--- Lets the host play another round in the same room/code: resets every
--- player's score and progress and puts the room back in "waiting".
--- Runs as security definer because a player can only update their own
--- room_players row under the RLS policies above - the host needs to
--- reset everyone's at once.
-create or replace function public.restart_room(p_room_id uuid)
+-- Lets the host play another round in the same room/code, optionally
+-- picking a new mode: resets every player's score and progress and
+-- puts the room back in "waiting". Runs as security definer because a
+-- player can only update their own room_players row under the RLS
+-- policies above - the host needs to reset everyone's at once.
+drop function if exists public.restart_room(uuid);
+
+create or replace function public.restart_room(p_room_id uuid, p_mode text)
 returns void
 language plpgsql
 security definer
@@ -195,7 +197,7 @@ begin
   where room_id = p_room_id;
 
   update public.rooms
-  set status = 'waiting', questions = '[]'::jsonb
+  set status = 'waiting', questions = '[]'::jsonb, mode = p_mode
   where id = p_room_id;
 end;
 $$;

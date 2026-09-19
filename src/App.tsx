@@ -3843,6 +3843,7 @@ export default function SoccerQuiz() {
   const [roomError, setRoomError] = useState("");
   const [roomCodeInput, setRoomCodeInput] = useState("");
   const [showCreateRoom, setShowCreateRoom] = useState(false);
+  const [showRestartModePicker, setShowRestartModePicker] = useState(false);
   const [showJoinRoom, setShowJoinRoom] = useState(false);
   const [roomCodeCopied, setRoomCodeCopied] = useState(false);
   const [roomActive, setRoomActive] = useState(false);
@@ -4123,15 +4124,19 @@ export default function SoccerQuiz() {
     setRoomCountdown(3);
     setShowCreateRoom(false);
     setShowJoinRoom(false);
+    setShowRestartModePicker(false);
     setRoomError("");
     setScreen("multiplayer");
   }
 
-  async function restartRoom() {
+  async function restartRoom(selectedMode) {
     if (!isRoomHost || !room) return;
     setRoomBusy(true);
     setRoomError("");
-    const { error } = await supabase.rpc("restart_room", { p_room_id: room.id });
+    const { error } = await supabase.rpc("restart_room", {
+      p_room_id: room.id,
+      p_mode: selectedMode,
+    });
     setRoomBusy(false);
     if (error) {
       setRoomError(error.message || t.authGenericError);
@@ -4140,6 +4145,7 @@ export default function SoccerQuiz() {
     setRoomActive(false);
     setPendingRoomQuestions(null);
     setRoomCountdown(3);
+    setShowRestartModePicker(false);
     setScreen("roomLobby");
   }
 
@@ -6777,28 +6783,65 @@ export default function SoccerQuiz() {
             {t.roomEndTitle}
           </h1>
           <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
-          {isRoomHost && (
+          {isRoomHost && !showRestartModePicker && (
             <button
               style={{ ...styles.primaryBtn, opacity: roomBusy ? 0.6 : 1 }}
-              onClick={restartRoom}
+              onClick={() => setShowRestartModePicker(true)}
               disabled={roomBusy}
             >
               {t.roomPlayAgainBtn}
             </button>
           )}
-          {roomError && <div style={styles.authError}>{roomError}</div>}
-          <button
-            style={{
-              ...styles.primaryBtn,
-              background: isRoomHost ? "transparent" : styles.primaryBtn.background,
-              color: isRoomHost ? "#0B6F27" : "#FFFFFF",
-              boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
-              border: isRoomHost ? "1px solid #0B6F27" : "none",
-            }}
-            onClick={leaveRoom}
-          >
-            {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
-          </button>
+          {isRoomHost && showRestartModePicker && (
+            <div style={{ width: "100%", maxWidth: 340 }}>
+              <p style={styles.authMessage}>{t.pickModeLabel}</p>
+              <div style={styles.roomModeGrid}>
+                {[
+                  ["random", t.randomModeTitle],
+                  ["clues", t.cluesModeTitle],
+                  ["lineup", t.lineupModeTitle],
+                  ["clubs", t.clubsModeTitle],
+                  ["year", t.yearModeTitle],
+                ].map(([m, label]) => (
+                  <button
+                    key={m}
+                    style={{ ...styles.roomModeBtn, opacity: roomBusy ? 0.6 : 1 }}
+                    disabled={roomBusy}
+                    onClick={() => restartRoom(m)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              {roomError && <div style={styles.authError}>{roomError}</div>}
+              <button
+                style={{ ...styles.authToggleLink, marginTop: 8 }}
+                onClick={() => {
+                  setShowRestartModePicker(false);
+                  setRoomError("");
+                }}
+              >
+                {t.cancelSearchBtn}
+              </button>
+            </div>
+          )}
+          {!showRestartModePicker && roomError && (
+            <div style={styles.authError}>{roomError}</div>
+          )}
+          {!showRestartModePicker && (
+            <button
+              style={{
+                ...styles.primaryBtn,
+                background: isRoomHost ? "transparent" : styles.primaryBtn.background,
+                color: isRoomHost ? "#0B6F27" : "#FFFFFF",
+                boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
+                border: isRoomHost ? "1px solid #0B6F27" : "none",
+              }}
+              onClick={leaveRoom}
+            >
+              {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
+            </button>
+          )}
         </div>
       )}
 
