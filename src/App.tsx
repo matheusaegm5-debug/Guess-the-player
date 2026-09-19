@@ -5479,7 +5479,14 @@ export default function SoccerQuiz() {
                           ].map(([m, label]) => (
                             <button
                               key={m}
-                              style={{ ...styles.roomModeBtn, opacity: roomBusy ? 0.6 : 1 }}
+                              style={{
+                                ...styles.roomModeBtn,
+                                background: MODE_ACCENTS[m].solid,
+                                borderColor: MODE_ACCENTS[m].dark,
+                                boxShadow: `0 3px 0 ${MODE_ACCENTS[m].dark}`,
+                                color: "#FFFFFF",
+                                opacity: roomBusy ? 0.6 : 1,
+                              }}
                               disabled={roomBusy}
                               onClick={() => handleCreateRoom(m)}
                             >
@@ -6805,7 +6812,14 @@ export default function SoccerQuiz() {
                 ].map(([m, label]) => (
                   <button
                     key={m}
-                    style={{ ...styles.roomModeBtn, opacity: roomBusy ? 0.6 : 1 }}
+                    style={{
+                      ...styles.roomModeBtn,
+                      background: MODE_ACCENTS[m].solid,
+                      borderColor: MODE_ACCENTS[m].dark,
+                      boxShadow: `0 3px 0 ${MODE_ACCENTS[m].dark}`,
+                      color: "#FFFFFF",
+                      opacity: roomBusy ? 0.6 : 1,
+                    }}
                     disabled={roomBusy}
                     onClick={() => restartRoom(m)}
                   >
