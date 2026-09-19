@@ -5652,10 +5652,10 @@ export default function SoccerQuiz() {
           <div style={styles.lightTopRow}>
             <button
               style={styles.lightIconBtn}
-              onClick={() => setScreen("settings")}
-              aria-label={t.settingsTab}
+              onClick={() => setScreen("singlePlayer")}
+              aria-label={t.menu}
             >
-              <GearIcon />
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
             </button>
             <div style={styles.lightLangRow}>
               {LANGUAGES.map((l) => (
@@ -5742,10 +5742,10 @@ export default function SoccerQuiz() {
           <div style={styles.lightTopRow}>
             <button
               style={styles.lightIconBtn}
-              onClick={() => setScreen("settings")}
-              aria-label={t.settingsTab}
+              onClick={() => setScreen("singlePlayer")}
+              aria-label={t.menu}
             >
-              <GearIcon />
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
             </button>
             <div style={styles.lightLangRow}>
               {LANGUAGES.map((l) => (
