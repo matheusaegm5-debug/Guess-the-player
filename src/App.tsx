@@ -3332,6 +3332,8 @@ const TRANSLATIONS = {
     joinRoomBtn: "JOIN WITH CODE",
     pickModeLabel: "Choose a mode for the room",
     pickRegionLabel: "World or Brazil?",
+    roomModesEyebrow: "NEW ROOM",
+    roomModesHeading: "Choose a Mode",
     roomCodePlaceholder: "6-digit code",
     joinRoomSubmitBtn: "JOIN",
     roomNotFound: "Room not found or already started.",
@@ -3454,6 +3456,8 @@ const TRANSLATIONS = {
     joinRoomBtn: "ENTRAR COM CÓDIGO",
     pickModeLabel: "Escolha um modo pra sala",
     pickRegionLabel: "Mundo ou Brasil?",
+    roomModesEyebrow: "NOVA SALA",
+    roomModesHeading: "Escolha um Modo",
     roomCodePlaceholder: "código de 6 dígitos",
     joinRoomSubmitBtn: "ENTRAR",
     roomNotFound: "Sala não encontrada ou já começou.",
@@ -3576,6 +3580,8 @@ const TRANSLATIONS = {
     joinRoomBtn: "UNIRSE CON CÓDIGO",
     pickModeLabel: "Elige un modo para la sala",
     pickRegionLabel: "¿Mundo o Brasil?",
+    roomModesEyebrow: "SALA NUEVA",
+    roomModesHeading: "Elige un Modo",
     roomCodePlaceholder: "código de 6 dígitos",
     joinRoomSubmitBtn: "UNIRSE",
     roomNotFound: "Sala no encontrada o ya comenzó.",
@@ -4256,8 +4262,6 @@ export default function SoccerQuiz() {
   const [roomBusy, setRoomBusy] = useState(false);
   const [roomError, setRoomError] = useState("");
   const [roomCodeInput, setRoomCodeInput] = useState("");
-  const [showCreateRoom, setShowCreateRoom] = useState(false);
-  const [showRestartModePicker, setShowRestartModePicker] = useState(false);
   const [roomModeRegion, setRoomModeRegion] = useState(null); // null | "world" | "brazil" (pt only)
   const [showJoinRoom, setShowJoinRoom] = useState(false);
   const [roomCodeCopied, setRoomCodeCopied] = useState(false);
@@ -4456,7 +4460,6 @@ export default function SoccerQuiz() {
     setRoomBusy(false);
     setRoom(newRoom);
     setIsRoomHost(true);
-    setShowCreateRoom(false);
     setRoomModeRegion(null);
     setScreen("roomLobby");
   }
@@ -4538,103 +4541,84 @@ export default function SoccerQuiz() {
     setRoomPlayers([]);
     setPendingRoomQuestions(null);
     setRoomCountdown(3);
-    setShowCreateRoom(false);
     setShowJoinRoom(false);
-    setShowRestartModePicker(false);
     setRoomModeRegion(null);
     setRoomError("");
     setScreen("multiplayer");
   }
 
-  // Shared UI for picking a room mode - for Portuguese, adds a first
-  // "Mundo ou Brasil?" step before the actual mode grid, mirroring the
+  // Shared cards for picking a room mode - for Portuguese, adds a first
+  // "Mundo ou Brasil?" step before the actual mode cards, mirroring the
   // Single Player flow's world/brazil split. Used both when creating a
   // room and when the host restarts one for another round.
-  function renderRoomModeGrid(onPick, onCancel) {
+  function renderModeCards(onPick) {
     const showRegionStep = lang === "pt";
     if (showRegionStep && !roomModeRegion) {
       return (
-        <div style={{ width: "100%", maxWidth: 340 }}>
-          <p style={styles.authMessage}>{t.pickRegionLabel}</p>
-          <div style={styles.roomModeGrid}>
-            <button
-              style={{
-                ...styles.roomModeBtn,
-                background: MODE_ACCENTS.mundo.solid,
-                borderColor: MODE_ACCENTS.mundo.dark,
-                boxShadow: `0 3px 0 ${MODE_ACCENTS.mundo.dark}`,
-                color: "#FFFFFF",
-              }}
-              onClick={() => setRoomModeRegion("world")}
-            >
-              🌍 Mundo
-            </button>
-            <button
-              style={{
-                ...styles.roomModeBtn,
-                background: MODE_ACCENTS.brasil.solid,
-                borderColor: MODE_ACCENTS.brasil.dark,
-                boxShadow: `0 3px 0 ${MODE_ACCENTS.brasil.dark}`,
-                color: "#101820",
-              }}
-              onClick={() => setRoomModeRegion("brazil")}
-            >
-              🇧🇷 Brasil
-            </button>
-          </div>
-          <button
-            style={{ ...styles.authToggleLink, marginTop: 8 }}
-            onClick={() => {
-              onCancel();
-              setRoomError("");
-            }}
-          >
-            {t.cancelSearchBtn}
-          </button>
-        </div>
+        <>
+          <LightCard
+            icon={<GlobeIcon accent={MODE_ACCENTS.mundo.dark} />}
+            accent={MODE_ACCENTS.mundo}
+            title="🌍 Mundo"
+            desc="Craques e clubes do futebol mundial."
+            cta="ENTRAR"
+            onClick={() => setRoomModeRegion("world")}
+          />
+          <LightCard
+            icon={<FlagIcon />}
+            accent={MODE_ACCENTS.brasil}
+            title="🇧🇷 Brasil"
+            desc="Ídolos e clubes do futebol brasileiro."
+            cta="ENTRAR"
+            onClick={() => setRoomModeRegion("brazil")}
+          />
+        </>
       );
     }
     const suffix = showRegionStep && roomModeRegion === "brazil" ? "-br" : "";
     return (
-      <div style={{ width: "100%", maxWidth: 340 }}>
-        <p style={styles.authMessage}>{t.pickModeLabel}</p>
-        <div style={styles.roomModeGrid}>
-          {[
-            ["random", t.randomModeTitle],
-            ["clues", t.cluesModeTitle],
-            ["lineup", t.lineupModeTitle],
-            ["clubs", t.clubsModeTitle],
-            ["year", t.yearModeTitle],
-          ].map(([m, label]) => (
-            <button
-              key={m}
-              style={{
-                ...styles.roomModeBtn,
-                background: MODE_ACCENTS[m].solid,
-                borderColor: MODE_ACCENTS[m].dark,
-                boxShadow: `0 3px 0 ${MODE_ACCENTS[m].dark}`,
-                color: "#FFFFFF",
-                opacity: roomBusy ? 0.6 : 1,
-              }}
-              disabled={roomBusy}
-              onClick={() => onPick(m + suffix)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        {roomError && <div style={styles.authError}>{roomError}</div>}
-        <button
-          style={{ ...styles.authToggleLink, marginTop: 8 }}
-          onClick={() => {
-            if (showRegionStep) setRoomModeRegion(null);
-            else onCancel();
-            setRoomError("");
-          }}
-        >
-          {t.cancelSearchBtn}
-        </button>
-      </div>
+      <>
+        <LightCard
+          icon={<PersonQuestionIcon accent={MODE_ACCENTS.clues.dark} />}
+          accent={MODE_ACCENTS.clues}
+          title={t.cluesModeTitle}
+          desc={t.cluesModeDesc}
+          cta={t.playClues}
+          onClick={() => onPick("clues" + suffix)}
+        />
+        <LightCard
+          icon={<XIIcon accent={MODE_ACCENTS.lineup.dark} />}
+          accent={MODE_ACCENTS.lineup}
+          title={t.lineupModeTitle}
+          desc={t.lineupModeDesc}
+          cta={t.playLineup}
+          onClick={() => onPick("lineup" + suffix)}
+        />
+        <LightCard
+          icon={<ShirtIcon accent={MODE_ACCENTS.clubs.dark} />}
+          accent={MODE_ACCENTS.clubs}
+          title={t.clubsModeTitle}
+          desc={t.clubsModeDesc}
+          cta={t.playClubsMode}
+          onClick={() => onPick("clubs" + suffix)}
+        />
+        <LightCard
+          icon={<CalendarIcon accent={MODE_ACCENTS.year.dark} />}
+          accent={MODE_ACCENTS.year}
+          title={t.yearModeTitle}
+          desc={t.yearModeDesc}
+          cta={t.playYearMode}
+          onClick={() => onPick("year" + suffix)}
+        />
+        <LightCard
+          icon={<DiceIcon accent={MODE_ACCENTS.random.dark} />}
+          accent={MODE_ACCENTS.random}
+          title={t.randomModeTitle}
+          desc={t.randomModeDesc}
+          cta={t.playRandomMode}
+          onClick={() => onPick("random" + suffix)}
+        />
+      </>
     );
   }
 
@@ -4654,7 +4638,6 @@ export default function SoccerQuiz() {
     setRoomActive(false);
     setPendingRoomQuestions(null);
     setRoomCountdown(3);
-    setShowRestartModePicker(false);
     setRoomModeRegion(null);
     setScreen("roomLobby");
   }
@@ -5419,6 +5402,8 @@ export default function SoccerQuiz() {
           "roomWaiting",
           "roomEnd",
           "roomRestartPrompt",
+          "roomCreateModes",
+          "roomRestartModes",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -5946,7 +5931,7 @@ export default function SoccerQuiz() {
                       <span style={styles.authDividerLine} />
                     </div>
 
-                    {!showCreateRoom && !showJoinRoom && (
+                    {!showJoinRoom && (
                       <div style={{ display: "flex", gap: 8, width: "100%" }}>
                         <button
                           style={{
@@ -5955,7 +5940,10 @@ export default function SoccerQuiz() {
                             flex: 1,
                             background: MODE_ACCENTS.multiplayer.dark,
                           }}
-                          onClick={() => setShowCreateRoom(true)}
+                          onClick={() => {
+                            setRoomModeRegion(null);
+                            setScreen("roomCreateModes");
+                          }}
                         >
                           {t.createRoomBtn}
                         </button>
@@ -5975,12 +5963,6 @@ export default function SoccerQuiz() {
                         </button>
                       </div>
                     )}
-
-                    {showCreateRoom &&
-                      renderRoomModeGrid(handleCreateRoom, () => {
-                        setShowCreateRoom(false);
-                        setRoomModeRegion(null);
-                      })}
 
                     {showJoinRoom && (
                       <form style={styles.authForm} onSubmit={handleJoinRoom}>
@@ -7171,6 +7153,76 @@ export default function SoccerQuiz() {
         </div>
       )}
 
+      {screen === "roomCreateModes" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => {
+                if (lang === "pt" && roomModeRegion) {
+                  setRoomModeRegion(null);
+                } else {
+                  setRoomModeRegion(null);
+                  setScreen("multiplayer");
+                }
+              }}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomModesEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.chooseMode}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <div className="gtpModeGrid">{renderModeCards(handleCreateRoom)}</div>
+        </div>
+      )}
+
+      {screen === "roomRestartModes" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => {
+                if (lang === "pt" && roomModeRegion) {
+                  setRoomModeRegion(null);
+                } else {
+                  setRoomModeRegion(null);
+                  setScreen("roomEnd");
+                }
+              }}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomModesEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.chooseMode}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <div className="gtpModeGrid">{renderModeCards(restartRoom)}</div>
+        </div>
+      )}
+
       {screen === "roomLobby" && room && (
         <div style={styles.centerCol}>
           <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
@@ -7265,38 +7317,31 @@ export default function SoccerQuiz() {
             {t.roomEndTitle}
           </h1>
           <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
-          {isRoomHost && !showRestartModePicker && (
+          {isRoomHost && (
             <button
               style={{ ...styles.primaryBtn, opacity: roomBusy ? 0.6 : 1 }}
-              onClick={() => setShowRestartModePicker(true)}
+              onClick={() => {
+                setRoomModeRegion(null);
+                setScreen("roomRestartModes");
+              }}
               disabled={roomBusy}
             >
               {t.roomPlayAgainBtn}
             </button>
           )}
-          {isRoomHost &&
-            showRestartModePicker &&
-            renderRoomModeGrid(restartRoom, () => {
-              setShowRestartModePicker(false);
-              setRoomModeRegion(null);
-            })}
-          {!showRestartModePicker && roomError && (
-            <div style={styles.authError}>{roomError}</div>
-          )}
-          {!showRestartModePicker && (
-            <button
-              style={{
-                ...styles.primaryBtn,
-                background: isRoomHost ? "transparent" : styles.primaryBtn.background,
-                color: isRoomHost ? "#0B6F27" : "#FFFFFF",
-                boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
-                border: isRoomHost ? "1px solid #0B6F27" : "none",
-              }}
-              onClick={leaveRoom}
-            >
-              {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
-            </button>
-          )}
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <button
+            style={{
+              ...styles.primaryBtn,
+              background: isRoomHost ? "transparent" : styles.primaryBtn.background,
+              color: isRoomHost ? "#0B6F27" : "#FFFFFF",
+              boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
+              border: isRoomHost ? "1px solid #0B6F27" : "none",
+            }}
+            onClick={leaveRoom}
+          >
+            {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
+          </button>
         </div>
       )}
 
@@ -8096,26 +8141,6 @@ const styles = {
     fontWeight: 800,
     letterSpacing: "0.12em",
     color: "#101820",
-  },
-  roomModeGrid: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 8,
-    justifyContent: "center",
-    width: "100%",
-    maxWidth: 340,
-  },
-  roomModeBtn: {
-    fontFamily: "'Oswald', sans-serif",
-    fontWeight: 700,
-    fontSize: 13,
-    letterSpacing: "0.04em",
-    color: "#101820",
-    background: "#FFFFFF",
-    border: "2px solid #E4E0D4",
-    borderRadius: 12,
-    padding: "10px 14px",
-    cursor: "pointer",
   },
   scoreboardLabel: {
     fontFamily: "'Oswald', sans-serif",
