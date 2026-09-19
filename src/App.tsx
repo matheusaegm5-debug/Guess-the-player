@@ -3301,6 +3301,10 @@ const TRANSLATIONS = {
     authSignupBtn: "CREATE ACCOUNT",
     authToggleToSignup: "No account yet? Create one",
     authToggleToLogin: "Already have an account? Log in",
+    authSignupHeading: "CREATE ACCOUNT",
+    authSignupHeadingDesc: "Pick an email and password to get started.",
+    authLoginHeading: "LOG IN",
+    authLoginHeadingDesc: "Enter your account to continue.",
     authGoogleBtn: "Continue with Google",
     authOr: "or",
     authCheckEmail: "Check your inbox to confirm your account.",
@@ -3428,6 +3432,10 @@ const TRANSLATIONS = {
     authSignupBtn: "CRIAR CONTA",
     authToggleToSignup: "Não tem conta? Criar uma",
     authToggleToLogin: "Já tem conta? Entrar",
+    authSignupHeading: "CRIAR CONTA",
+    authSignupHeadingDesc: "Escolha um email e senha para começar.",
+    authLoginHeading: "ENTRAR",
+    authLoginHeadingDesc: "Entre na sua conta para continuar.",
     authGoogleBtn: "Continuar com Google",
     authOr: "ou",
     authCheckEmail: "Confira seu email pra confirmar a conta.",
@@ -3555,6 +3563,10 @@ const TRANSLATIONS = {
     authSignupBtn: "CREAR CUENTA",
     authToggleToSignup: "¿No tienes cuenta? Crea una",
     authToggleToLogin: "¿Ya tienes cuenta? Inicia sesión",
+    authSignupHeading: "CREAR CUENTA",
+    authSignupHeadingDesc: "Elige un email y contraseña para empezar.",
+    authLoginHeading: "INICIAR SESIÓN",
+    authLoginHeadingDesc: "Ingresa a tu cuenta para continuar.",
     authGoogleBtn: "Continuar con Google",
     authOr: "o",
     authCheckEmail: "Revisa tu correo para confirmar la cuenta.",
@@ -6065,7 +6077,18 @@ export default function SoccerQuiz() {
                 </button>
               </div>
             ) : (
-              <form style={styles.authForm} onSubmit={handleAuthSubmit}>
+              <>
+                <div style={{ ...styles.lightEyebrowRow, marginTop: 8 }}>
+                  <span style={styles.lightEyebrowLine} />
+                  <span style={styles.lightEyebrow}>
+                    {authMode === "signup" ? t.authSignupHeading : t.authLoginHeading}
+                  </span>
+                  <span style={styles.lightEyebrowLine} />
+                </div>
+                <p style={{ ...styles.lightSubtitle, marginTop: 0, maxWidth: 320 }}>
+                  {authMode === "signup" ? t.authSignupHeadingDesc : t.authLoginHeadingDesc}
+                </p>
+                <form style={styles.authForm} onSubmit={handleAuthSubmit}>
                 <input
                   type="email"
                   required
@@ -6133,7 +6156,8 @@ export default function SoccerQuiz() {
                 >
                   {t.authGoogleBtn}
                 </button>
-              </form>
+                </form>
+              </>
             )}
           </div>
 
