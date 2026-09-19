@@ -171,6 +171,14 @@ create policy "Users can remove themselves from a room"
 alter publication supabase_realtime add table public.rooms;
 alter publication supabase_realtime add table public.room_players;
 
+-- Realtime filters DELETEs on room_players by room_id, but Postgres only
+-- includes the primary key in a delete's replication payload by default -
+-- room_id wouldn't be there to filter on, so a player leaving would never
+-- reach other clients' subscriptions. Full replica identity includes every
+-- column on delete/update so the room_id filter actually has something to
+-- match against.
+alter table public.room_players replica identity full;
+
 -- ============ ROOM RESTART ============
 -- Lets the host play another round in the same room/code, optionally
 -- picking a new mode: resets every player's score and progress and
