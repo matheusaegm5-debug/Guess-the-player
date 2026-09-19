@@ -7307,23 +7307,33 @@ export default function SoccerQuiz() {
       )}
 
       {screen === "roomLobby" && room && (
-        <div style={styles.centerCol}>
-          <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
             <button
-              style={{ ...styles.lightIconBtn, fontSize: 22, color: "#101820" }}
+              style={styles.lightIconBtn}
               onClick={leaveRoom}
               aria-label={t.menu}
             >
-              ‹
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
             </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
           </div>
-          <div style={styles.eyebrow}>{t.roomCodeLabel}</div>
-          <div style={styles.roomCodeBox}>
-            <div className="fadeInUp" style={styles.roomCodeValue}>
-              {room.code}
-            </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomCodeLabel}</span>
+            <span style={styles.lightEyebrowLine} />
           </div>
-          <p style={styles.subtitle}>{t.roomShareHint}</p>
+          <h1
+            className="fadeInUp"
+            style={{ ...styles.lightTitle, letterSpacing: "0.06em" }}
+          >
+            {room.code}
+          </h1>
+          <p style={styles.lightSubtitle}>{t.roomShareHint}</p>
+          <div style={styles.lightSubtitleRule} />
+
           <button
             style={{
               ...styles.primaryBtn,
@@ -7331,23 +7341,27 @@ export default function SoccerQuiz() {
               color: MODE_ACCENTS.multiplayer.dark,
               boxShadow: "none",
               border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
-              width: "auto",
-              padding: "10px 24px",
             }}
             onClick={copyRoomCode}
           >
             {roomCodeCopied ? t.roomCodeCopiedMsg : t.roomCopyBtn}
           </button>
 
-          <div style={{ ...styles.eyebrow, marginTop: 20 }}>{t.currentModeLabel}</div>
-          <p style={{ ...styles.subtitle, marginTop: 0, fontWeight: 700 }}>
-            {roomModeLabel(room.mode)}
-          </p>
+          <div style={{ ...styles.lightEyebrow, fontSize: 13, marginTop: 24 }}>
+            {t.currentModeLabel}
+          </div>
+          <div style={{ ...styles.modeCard, textAlign: "left" }}>
+            <div style={{ ...styles.modeTitle, marginBottom: 0 }}>
+              {roomModeLabel(room.mode)}
+            </div>
+          </div>
 
-          <div style={{ ...styles.eyebrow, marginTop: 12 }}>
+          <div style={{ ...styles.lightEyebrow, fontSize: 13 }}>
             {t.roomPlayersLabel} ({roomPlayers.length})
           </div>
-          <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+          <div style={{ marginBottom: 16 }}>
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+          </div>
 
           {isRoomHost ? (
             <>
@@ -7372,7 +7386,7 @@ export default function SoccerQuiz() {
               </button>
             </>
           ) : (
-            <p style={styles.subtitle}>{t.roomWaitingHostLabel}</p>
+            <p style={styles.lightSubtitle}>{t.roomWaitingHostLabel}</p>
           )}
           <button
             style={{ ...styles.authToggleLink, marginTop: 8 }}
@@ -8231,21 +8245,6 @@ const styles = {
     fontFamily: "'Baloo 2', sans-serif",
     fontSize: 15,
     fontWeight: 800,
-    color: "#101820",
-  },
-  roomCodeBox: {
-    background: "#FFFFFF",
-    border: "2px solid #E4E0D4",
-    borderRadius: 18,
-    padding: "18px 24px",
-    boxShadow: "0 3px 0 rgba(16,24,32,0.08)",
-    textAlign: "center",
-  },
-  roomCodeValue: {
-    fontFamily: "'Baloo 2', sans-serif",
-    fontSize: 40,
-    fontWeight: 800,
-    letterSpacing: "0.12em",
     color: "#101820",
   },
   scoreboardLabel: {
