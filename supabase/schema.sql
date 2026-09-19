@@ -146,9 +146,14 @@ create table if not exists public.room_players (
   nickname text not null,
   score int not null default 0,
   q_index int not null default 0,
+  ready boolean not null default false,
   joined_at timestamptz not null default now(),
   unique (room_id, user_id)
 );
+
+-- Already-deployed projects: create table above is a no-op once the table
+-- exists, so add the column here too.
+alter table public.room_players add column if not exists ready boolean not null default false;
 
 alter table public.room_players enable row level security;
 
@@ -201,7 +206,7 @@ begin
   end if;
 
   update public.room_players
-  set score = 0, q_index = 0
+  set score = 0, q_index = 0, ready = false
   where room_id = p_room_id;
 
   update public.rooms

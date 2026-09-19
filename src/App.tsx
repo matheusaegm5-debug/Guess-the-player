@@ -3354,6 +3354,13 @@ const TRANSLATIONS = {
     roomLeaveBtn: "LEAVE ROOM",
     currentModeLabel: "Mode:",
     changeModeBtn: "CHANGE MODE",
+    roomReadyBtn: "I'M READY",
+    roomUnreadyBtn: "✓ READY (TAP TO UNDO)",
+    roomReadyBadgeShort: "READY",
+    roomNotReadyBadgeShort: "WAITING",
+    roomHostBadgeShort: "HOST",
+    roomWaitingForReady: "Waiting for everyone to be ready...",
+    roomReadyCountSuffix: "players ready",
     roomWaitingTitle: "Waiting for everyone to finish...",
     roomEndTitle: "FINAL RESULTS",
     roomPlayAgainBtn: "PLAY AGAIN (SAME CODE)",
@@ -3487,6 +3494,13 @@ const TRANSLATIONS = {
     roomLeaveBtn: "SAIR DA SALA",
     currentModeLabel: "Modo:",
     changeModeBtn: "TROCAR MODO",
+    roomReadyBtn: "ESTOU PRONTO",
+    roomUnreadyBtn: "✓ PRONTO (TOQUE PARA DESMARCAR)",
+    roomReadyBadgeShort: "PRONTO",
+    roomNotReadyBadgeShort: "AGUARDANDO",
+    roomHostBadgeShort: "ANFITRIÃO",
+    roomWaitingForReady: "Aguardando todos ficarem prontos...",
+    roomReadyCountSuffix: "jogadores prontos",
     roomWaitingTitle: "Aguardando todo mundo terminar...",
     roomEndTitle: "RESULTADO FINAL",
     roomPlayAgainBtn: "JOGAR DE NOVO (MESMO CÓDIGO)",
@@ -3620,6 +3634,13 @@ const TRANSLATIONS = {
     roomLeaveBtn: "SALIR DE LA SALA",
     currentModeLabel: "Modo:",
     changeModeBtn: "CAMBIAR MODO",
+    roomReadyBtn: "ESTOY LISTO",
+    roomUnreadyBtn: "✓ LISTO (TOCA PARA CANCELAR)",
+    roomReadyBadgeShort: "LISTO",
+    roomNotReadyBadgeShort: "ESPERANDO",
+    roomHostBadgeShort: "ANFITRIÓN",
+    roomWaitingForReady: "Esperando a que todos estén listos...",
+    roomReadyCountSuffix: "jugadores listos",
     roomWaitingTitle: "Esperando a que todos terminen...",
     roomEndTitle: "RESULTADO FINAL",
     roomPlayAgainBtn: "JUGAR DE NUEVO (MISMO CÓDIGO)",
@@ -4080,7 +4101,16 @@ function StatItem({ icon, label }) {
   );
 }
 
-function RoomLeaderboard({ players, myUserId, medals = false }) {
+function RoomLeaderboard({
+  players,
+  myUserId,
+  medals = false,
+  showReady = false,
+  hostId = null,
+  readyLabel = "",
+  notReadyLabel = "",
+  hostLabel = "",
+}) {
   const sorted = [...players].sort((a, b) => b.score - a.score);
   return (
     <div style={styles.roomLeaderboard}>
@@ -4102,7 +4132,22 @@ function RoomLeaderboard({ players, myUserId, medals = false }) {
               : `${i + 1}.`}
           </span>
           <span style={styles.roomLeaderboardName}>{p.nickname}</span>
-          <span style={styles.roomLeaderboardScore}>{p.score}/100</span>
+          {showReady ? (
+            p.user_id === hostId ? (
+              <span style={styles.roomReadyBadge}>{hostLabel}</span>
+            ) : (
+              <span
+                style={{
+                  ...styles.roomReadyBadge,
+                  ...(p.ready ? styles.roomReadyBadgeActive : {}),
+                }}
+              >
+                {p.ready ? readyLabel : notReadyLabel}
+              </span>
+            )
+          ) : (
+            <span style={styles.roomLeaderboardScore}>{p.score}/100</span>
+          )}
         </div>
       ))}
     </div>
@@ -4514,7 +4559,7 @@ export default function SoccerQuiz() {
     const { error: joinError } = await supabase
       .from("room_players")
       .upsert(
-        { room_id: foundRoom.id, user_id: authUser.id, nickname: profile.nickname },
+        { room_id: foundRoom.id, user_id: authUser.id, nickname: profile.nickname, ready: false },
         { onConflict: "room_id,user_id" }
       );
     setRoomBusy(false);
@@ -4529,10 +4574,27 @@ export default function SoccerQuiz() {
     setScreen("roomLobby");
   }
 
+  function allPlayersReady() {
+    if (!room) return true;
+    const others = roomPlayers.filter((p) => p.user_id !== room.host_id);
+    return others.length === 0 || others.every((p) => p.ready);
+  }
+
   async function handleStartRoom() {
-    if (!isRoomHost || !room) return;
+    if (!isRoomHost || !room || !allPlayersReady()) return;
     const qs = buildRoomQuestions(room.mode);
     await supabase.from("rooms").update({ questions: qs, status: "active" }).eq("id", room.id);
+  }
+
+  async function toggleReady() {
+    if (!room || !authUser) return;
+    const me = roomPlayers.find((p) => p.user_id === authUser.id);
+    if (!me) return;
+    await supabase
+      .from("room_players")
+      .update({ ready: !me.ready })
+      .eq("room_id", room.id)
+      .eq("user_id", authUser.id);
   }
 
   async function copyRoomCode() {
@@ -7398,14 +7460,39 @@ export default function SoccerQuiz() {
             {t.roomPlayersLabel} ({roomPlayers.length})
           </div>
           <div style={{ marginBottom: 16 }}>
-            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
+            <RoomLeaderboard
+              players={roomPlayers}
+              myUserId={authUser?.id}
+              showReady
+              hostId={room.host_id}
+              readyLabel={t.roomReadyBadgeShort}
+              notReadyLabel={t.roomNotReadyBadgeShort}
+              hostLabel={t.roomHostBadgeShort}
+            />
           </div>
 
           {isRoomHost ? (
             <>
-              <button style={styles.primaryBtn} onClick={handleStartRoom}>
+              <button
+                style={{
+                  ...styles.primaryBtn,
+                  opacity: allPlayersReady() ? 1 : 0.5,
+                  cursor: allPlayersReady() ? "pointer" : "not-allowed",
+                }}
+                onClick={handleStartRoom}
+                disabled={!allPlayersReady()}
+              >
                 {t.roomStartBtn}
               </button>
+              {!allPlayersReady() && (
+                <p style={{ ...styles.lightSubtitle, marginTop: 4, marginBottom: 0 }}>
+                  {t.roomWaitingForReady}
+                  <br />
+                  {roomPlayers.filter((p) => p.user_id !== room.host_id && p.ready).length}/
+                  {roomPlayers.filter((p) => p.user_id !== room.host_id).length}{" "}
+                  {t.roomReadyCountSuffix}
+                </p>
+              )}
               <button
                 style={{
                   ...styles.primaryBtn,
@@ -7424,7 +7511,27 @@ export default function SoccerQuiz() {
               </button>
             </>
           ) : (
-            <p style={styles.lightSubtitle}>{t.roomWaitingHostLabel}</p>
+            <>
+              <button
+                style={{
+                  ...styles.primaryBtn,
+                  ...(roomPlayers.find((p) => p.user_id === authUser?.id)?.ready
+                    ? {
+                        background: "transparent",
+                        color: MODE_ACCENTS.multiplayer.dark,
+                        boxShadow: "none",
+                        border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+                      }
+                    : {}),
+                }}
+                onClick={toggleReady}
+              >
+                {roomPlayers.find((p) => p.user_id === authUser?.id)?.ready
+                  ? t.roomUnreadyBtn
+                  : t.roomReadyBtn}
+              </button>
+              <p style={styles.lightSubtitle}>{t.roomWaitingHostLabel}</p>
+            </>
           )}
           <button
             style={{ ...styles.authToggleLink, marginTop: 8 }}
@@ -8336,6 +8443,22 @@ const styles = {
     fontSize: 15,
     fontWeight: 800,
     color: "#101820",
+  },
+  roomReadyBadge: {
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: 11,
+    fontWeight: 700,
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+    color: "#8A8F94",
+    background: "#EDEAE0",
+    padding: "4px 10px",
+    borderRadius: 999,
+    flexShrink: 0,
+  },
+  roomReadyBadgeActive: {
+    color: "#FFFFFF",
+    background: "linear-gradient(180deg, #22C744, #0B6F27)",
   },
   scoreboardLabel: {
     fontFamily: "'Oswald', sans-serif",
