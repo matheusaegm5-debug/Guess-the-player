@@ -3305,6 +3305,18 @@ const TRANSLATIONS = {
     authSignupHeadingDesc: "Pick an email and password to get started.",
     authLoginHeading: "LOG IN",
     authLoginHeadingDesc: "Enter your account to continue.",
+    authForgotPasswordLink: "Forgot your password?",
+    authForgotPasswordHeading: "RESET PASSWORD",
+    authForgotPasswordDesc: "Enter your email and we'll send you a link to reset your password.",
+    authForgotPasswordBtn: "SEND RESET EMAIL",
+    authForgotPasswordSent: "Check your email for the reset link.",
+    authBackToLoginBtn: "Back to log in",
+    authNewPasswordHeading: "NEW PASSWORD",
+    authNewPasswordDesc: "Choose a new password for your account.",
+    authNewPasswordLabel: "New password",
+    authNewPasswordBtn: "SAVE NEW PASSWORD",
+    authNewPasswordSuccess: "Password updated! You can keep playing.",
+    authNewPasswordContinueBtn: "CONTINUE",
     authGoogleBtn: "Continue with Google",
     authOr: "or",
     authCheckEmail: "Check your inbox to confirm your account.",
@@ -3445,6 +3457,18 @@ const TRANSLATIONS = {
     authSignupHeadingDesc: "Escolha um email e senha para começar.",
     authLoginHeading: "ENTRAR",
     authLoginHeadingDesc: "Entre na sua conta para continuar.",
+    authForgotPasswordLink: "Esqueceu sua senha?",
+    authForgotPasswordHeading: "REDEFINIR SENHA",
+    authForgotPasswordDesc: "Digite seu email e enviaremos um link para redefinir sua senha.",
+    authForgotPasswordBtn: "ENVIAR EMAIL",
+    authForgotPasswordSent: "Confira seu email para o link de redefinição.",
+    authBackToLoginBtn: "Voltar para entrar",
+    authNewPasswordHeading: "NOVA SENHA",
+    authNewPasswordDesc: "Escolha uma nova senha para sua conta.",
+    authNewPasswordLabel: "Nova senha",
+    authNewPasswordBtn: "SALVAR NOVA SENHA",
+    authNewPasswordSuccess: "Senha atualizada! Você já pode continuar jogando.",
+    authNewPasswordContinueBtn: "CONTINUAR",
     authGoogleBtn: "Continuar com Google",
     authOr: "ou",
     authCheckEmail: "Confira seu email pra confirmar a conta.",
@@ -3585,6 +3609,18 @@ const TRANSLATIONS = {
     authSignupHeadingDesc: "Elige un email y contraseña para empezar.",
     authLoginHeading: "INICIAR SESIÓN",
     authLoginHeadingDesc: "Ingresa a tu cuenta para continuar.",
+    authForgotPasswordLink: "¿Olvidaste tu contraseña?",
+    authForgotPasswordHeading: "RESTABLECER CONTRASEÑA",
+    authForgotPasswordDesc: "Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña.",
+    authForgotPasswordBtn: "ENVIAR EMAIL",
+    authForgotPasswordSent: "Revisa tu email para el enlace de restablecimiento.",
+    authBackToLoginBtn: "Volver a iniciar sesión",
+    authNewPasswordHeading: "NUEVA CONTRASEÑA",
+    authNewPasswordDesc: "Elige una nueva contraseña para tu cuenta.",
+    authNewPasswordLabel: "Nueva contraseña",
+    authNewPasswordBtn: "GUARDAR NUEVA CONTRASEÑA",
+    authNewPasswordSuccess: "¡Contraseña actualizada! Ya puedes seguir jugando.",
+    authNewPasswordContinueBtn: "CONTINUAR",
     authGoogleBtn: "Continuar con Google",
     authOr: "o",
     authCheckEmail: "Revisa tu correo para confirmar la cuenta.",
@@ -4255,14 +4291,29 @@ export default function SoccerQuiz() {
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState("");
   const [authMessage, setAuthMessage] = useState("");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotBusy, setForgotBusy] = useState(false);
+  const [forgotError, setForgotError] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [newPasswordBusy, setNewPasswordBusy] = useState(false);
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [newPasswordDone, setNewPasswordDone] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setAuthUser(data.session?.user ?? null);
       setAuthLoading(false);
     });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       setAuthUser(session?.user ?? null);
+      if (event === "PASSWORD_RECOVERY") {
+        setPasswordRecovery(true);
+        setScreen("multiplayer");
+      }
     });
     return () => listener.subscription.unsubscribe();
   }, []);
@@ -4304,6 +4355,36 @@ export default function SoccerQuiz() {
       options: { redirectTo: window.location.origin + window.location.pathname },
     });
     if (error) setAuthError(error.message || t.authGenericError);
+  }
+
+  async function handleForgotPassword(e) {
+    e.preventDefault();
+    setForgotError("");
+    setForgotMessage("");
+    setForgotBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+    setForgotBusy(false);
+    if (error) {
+      setForgotError(error.message || t.authGenericError);
+      return;
+    }
+    setForgotMessage(t.authForgotPasswordSent);
+  }
+
+  async function handleSetNewPassword(e) {
+    e.preventDefault();
+    setNewPasswordError("");
+    setNewPasswordBusy(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setNewPasswordBusy(false);
+    if (error) {
+      setNewPasswordError(error.message || t.authGenericError);
+      return;
+    }
+    setNewPassword("");
+    setNewPasswordDone(true);
   }
 
   async function handleLogout() {
@@ -5930,7 +6011,67 @@ export default function SoccerQuiz() {
               {t.multiplayerComingDesc}
             </p>
 
-            {authLoading || (authUser && profileLoading) ? null : authUser && !profile ? (
+            {passwordRecovery ? (
+              <>
+                <div style={{ ...styles.lightEyebrowRow, marginTop: 8 }}>
+                  <span style={styles.lightEyebrowLine} />
+                  <span style={styles.lightEyebrow}>{t.authNewPasswordHeading}</span>
+                  <span style={styles.lightEyebrowLine} />
+                </div>
+                <p style={{ ...styles.lightSubtitle, marginTop: 0, maxWidth: 320 }}>
+                  {t.authNewPasswordDesc}
+                </p>
+                {newPasswordDone ? (
+                  <div style={styles.authForm}>
+                    <span style={styles.authMessage}>{t.authNewPasswordSuccess}</span>
+                    <button
+                      style={styles.authSubmitBtn}
+                      onClick={() => {
+                        setPasswordRecovery(false);
+                        setNewPasswordDone(false);
+                      }}
+                    >
+                      {t.authNewPasswordContinueBtn}
+                    </button>
+                  </div>
+                ) : (
+                  <form style={styles.authForm} onSubmit={handleSetNewPassword}>
+                    <div style={styles.passwordFieldWrap}>
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        required
+                        minLength={6}
+                        autoComplete="new-password"
+                        placeholder={t.authNewPasswordLabel}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        style={{ ...styles.authInput, paddingRight: 44 }}
+                      />
+                      <button
+                        type="button"
+                        style={styles.passwordToggleBtn}
+                        onClick={() => setShowNewPassword((v) => !v)}
+                        aria-label={showNewPassword ? t.hidePasswordLabel : t.showPasswordLabel}
+                      >
+                        <EyeIcon open={showNewPassword} />
+                      </button>
+                    </div>
+                    {newPasswordError && <div style={styles.authError}>{newPasswordError}</div>}
+                    <button
+                      type="submit"
+                      disabled={newPasswordBusy}
+                      style={{
+                        ...styles.authSubmitBtn,
+                        opacity: newPasswordBusy ? 0.6 : 1,
+                        cursor: newPasswordBusy ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {t.authNewPasswordBtn}
+                    </button>
+                  </form>
+                )}
+              </>
+            ) : authLoading || (authUser && profileLoading) ? null : authUser && !profile ? (
               <form style={styles.authForm} onSubmit={handleSaveNickname}>
                 <span style={styles.authMessage}>{t.nicknameLabel}</span>
                 <input
@@ -6135,6 +6276,52 @@ export default function SoccerQuiz() {
                   {t.authLogoutBtn}
                 </button>
               </div>
+            ) : showForgotPassword ? (
+              <>
+                <div style={{ ...styles.lightEyebrowRow, marginTop: 8 }}>
+                  <span style={styles.lightEyebrowLine} />
+                  <span style={styles.lightEyebrow}>{t.authForgotPasswordHeading}</span>
+                  <span style={styles.lightEyebrowLine} />
+                </div>
+                <p style={{ ...styles.lightSubtitle, marginTop: 0, maxWidth: 320 }}>
+                  {t.authForgotPasswordDesc}
+                </p>
+                <form style={styles.authForm} onSubmit={handleForgotPassword}>
+                  <input
+                    type="email"
+                    required
+                    autoComplete="email"
+                    placeholder={t.authEmailLabel}
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    style={styles.authInput}
+                  />
+                  {forgotError && <div style={styles.authError}>{forgotError}</div>}
+                  {forgotMessage && <div style={styles.authMessage}>{forgotMessage}</div>}
+                  <button
+                    type="submit"
+                    disabled={forgotBusy}
+                    style={{
+                      ...styles.authSubmitBtn,
+                      opacity: forgotBusy ? 0.6 : 1,
+                      cursor: forgotBusy ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {t.authForgotPasswordBtn}
+                  </button>
+                  <button
+                    type="button"
+                    style={styles.authToggleLink}
+                    onClick={() => {
+                      setShowForgotPassword(false);
+                      setForgotError("");
+                      setForgotMessage("");
+                    }}
+                  >
+                    {t.authBackToLoginBtn}
+                  </button>
+                </form>
+              </>
             ) : (
               <>
                 <div style={{ ...styles.lightEyebrowRow, marginTop: 8 }}>
@@ -6177,6 +6364,20 @@ export default function SoccerQuiz() {
                     <EyeIcon open={showPassword} />
                   </button>
                 </div>
+                {authMode === "login" && (
+                  <button
+                    type="button"
+                    style={{ ...styles.authToggleLink, alignSelf: "flex-end", marginTop: -4 }}
+                    onClick={() => {
+                      setForgotEmail(authEmail);
+                      setForgotError("");
+                      setForgotMessage("");
+                      setShowForgotPassword(true);
+                    }}
+                  >
+                    {t.authForgotPasswordLink}
+                  </button>
+                )}
                 {authError && <div style={styles.authError}>{authError}</div>}
                 {authMessage && <div style={styles.authMessage}>{authMessage}</div>}
                 <button
