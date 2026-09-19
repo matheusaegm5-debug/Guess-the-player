@@ -3348,6 +3348,8 @@ const TRANSLATIONS = {
     roomCodeCopiedMsg: "Copied!",
     roomPlayersLabel: "PLAYERS",
     roomWaitingHostLabel: "Waiting for the host to start the game...",
+    roomEndWaitInfo:
+      "Stick around to see if the host starts another round - leaving removes you from the room.",
     roomStartBtn: "START GAME",
     roomLeaveBtn: "LEAVE ROOM",
     currentModeLabel: "Mode:",
@@ -3479,6 +3481,8 @@ const TRANSLATIONS = {
     roomCodeCopiedMsg: "Copiado!",
     roomPlayersLabel: "JOGADORES",
     roomWaitingHostLabel: "Aguardando o anfitrião iniciar a partida...",
+    roomEndWaitInfo:
+      "Fique aqui para ver se o anfitrião começa outra rodada - sair remove você da sala.",
     roomStartBtn: "INICIAR PARTIDA",
     roomLeaveBtn: "SAIR DA SALA",
     currentModeLabel: "Modo:",
@@ -3610,6 +3614,8 @@ const TRANSLATIONS = {
     roomCodeCopiedMsg: "¡Copiado!",
     roomPlayersLabel: "JUGADORES",
     roomWaitingHostLabel: "Esperando a que el anfitrión inicie la partida...",
+    roomEndWaitInfo:
+      "Quédate para ver si el anfitrión empieza otra ronda - salir te quita de la sala.",
     roomStartBtn: "INICIAR PARTIDA",
     roomLeaveBtn: "SALIR DE LA SALA",
     currentModeLabel: "Modo:",
@@ -4495,9 +4501,12 @@ export default function SoccerQuiz() {
       .from("rooms")
       .select("*")
       .eq("code", code)
-      .eq("status", "waiting")
       .maybeSingle();
-    if (!foundRoom) {
+    // "active" means a round is in progress - only block joining then.
+    // "waiting" and "finished" (the host hasn't restarted yet) both let
+    // someone rejoin with the same code instead of the room disappearing
+    // the moment the round ends.
+    if (!foundRoom || foundRoom.status === "active") {
       setRoomBusy(false);
       setRoomError(t.roomNotFound);
       return;
@@ -7513,18 +7522,23 @@ export default function SoccerQuiz() {
                 {t.roomPlayAgainBtn}
               </button>
             )}
+            {!isRoomHost && (
+              <p style={{ ...styles.lightSubtitle, marginTop: 12, maxWidth: 320 }}>
+                {t.roomEndWaitInfo}
+              </p>
+            )}
             {roomError && <div style={styles.authError}>{roomError}</div>}
             <button
               style={{
                 ...styles.primaryBtn,
-                background: isRoomHost ? "transparent" : styles.primaryBtn.background,
-                color: isRoomHost ? "#0B6F27" : "#FFFFFF",
-                boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
-                border: isRoomHost ? "1px solid #0B6F27" : "none",
+                background: "transparent",
+                color: "#0B6F27",
+                boxShadow: "none",
+                border: "1px solid #0B6F27",
               }}
               onClick={leaveRoom}
             >
-              {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
+              {t.roomLeaveBtn}
             </button>
           </div>
         </div>
