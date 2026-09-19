@@ -3331,6 +3331,7 @@ const TRANSLATIONS = {
     createRoomBtn: "CREATE ROOM",
     joinRoomBtn: "JOIN WITH CODE",
     pickModeLabel: "Choose a mode for the room",
+    pickRegionLabel: "World or Brazil?",
     roomCodePlaceholder: "6-digit code",
     joinRoomSubmitBtn: "JOIN",
     roomNotFound: "Room not found or already started.",
@@ -3452,6 +3453,7 @@ const TRANSLATIONS = {
     createRoomBtn: "CRIAR SALA",
     joinRoomBtn: "ENTRAR COM CÓDIGO",
     pickModeLabel: "Escolha um modo pra sala",
+    pickRegionLabel: "Mundo ou Brasil?",
     roomCodePlaceholder: "código de 6 dígitos",
     joinRoomSubmitBtn: "ENTRAR",
     roomNotFound: "Sala não encontrada ou já começou.",
@@ -3573,6 +3575,7 @@ const TRANSLATIONS = {
     createRoomBtn: "CREAR SALA",
     joinRoomBtn: "UNIRSE CON CÓDIGO",
     pickModeLabel: "Elige un modo para la sala",
+    pickRegionLabel: "¿Mundo o Brasil?",
     roomCodePlaceholder: "código de 6 dígitos",
     joinRoomSubmitBtn: "UNIRSE",
     roomNotFound: "Sala no encontrada o ya comenzó.",
@@ -4121,25 +4124,37 @@ function buildRandomRound(
 // buildRandomRound() produces, so room games can reuse the same
 // "random" screen rendering regardless of which mode the host picked.
 function buildRoomQuestions(selectedMode) {
-  if (selectedMode === "clues") {
-    return shuffle(QUESTION_POOL)
+  const isBrazil = selectedMode.endsWith("-br");
+  const baseMode = isBrazil ? selectedMode.slice(0, -3) : selectedMode;
+  if (baseMode === "clues") {
+    return shuffle(isBrazil ? BRAZIL_QUESTION_POOL : QUESTION_POOL)
       .slice(0, QUESTIONS_PER_GAME)
       .map((q) => ({ kind: "clues", data: { ...q, options: shuffle(q.options) } }));
   }
-  if (selectedMode === "lineup") {
-    return buildLineupRound(LINEUP_POOL).map((team) => ({ kind: "lineup", data: team }));
+  if (baseMode === "lineup") {
+    return buildLineupRound(isBrazil ? BRAZIL_LINEUP_POOL : LINEUP_POOL).map((team) => ({
+      kind: "lineup",
+      data: team,
+    }));
   }
-  if (selectedMode === "clubs") {
-    return shuffle(CLUBS_QUESTION_POOL)
+  if (baseMode === "clubs") {
+    return shuffle(isBrazil ? CLUBS_QUESTION_POOL_BRAZIL : CLUBS_QUESTION_POOL)
       .slice(0, CLUBS_PER_GAME)
       .map((q) => ({ kind: "clubs", data: q }));
   }
-  if (selectedMode === "year") {
-    return shuffle(YEAR_QUESTION_POOL)
+  if (baseMode === "year") {
+    return shuffle(isBrazil ? BRAZIL_YEAR_QUESTION_POOL : YEAR_QUESTION_POOL)
       .slice(0, YEARS_PER_GAME)
       .map((q) => ({ kind: "year", data: { ...q, options: shuffle(q.options) } }));
   }
-  return buildRandomRound();
+  return isBrazil
+    ? buildRandomRound(
+        BRAZIL_QUESTION_POOL,
+        BRAZIL_LINEUP_POOL,
+        CLUBS_QUESTION_POOL_BRAZIL,
+        BRAZIL_YEAR_QUESTION_POOL
+      )
+    : buildRandomRound();
 }
 
 export default function SoccerQuiz() {
@@ -4243,6 +4258,7 @@ export default function SoccerQuiz() {
   const [roomCodeInput, setRoomCodeInput] = useState("");
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showRestartModePicker, setShowRestartModePicker] = useState(false);
+  const [roomModeRegion, setRoomModeRegion] = useState(null); // null | "world" | "brazil" (pt only)
   const [showJoinRoom, setShowJoinRoom] = useState(false);
   const [roomCodeCopied, setRoomCodeCopied] = useState(false);
   const [roomActive, setRoomActive] = useState(false);
@@ -4441,6 +4457,7 @@ export default function SoccerQuiz() {
     setRoom(newRoom);
     setIsRoomHost(true);
     setShowCreateRoom(false);
+    setRoomModeRegion(null);
     setScreen("roomLobby");
   }
 
@@ -4524,8 +4541,101 @@ export default function SoccerQuiz() {
     setShowCreateRoom(false);
     setShowJoinRoom(false);
     setShowRestartModePicker(false);
+    setRoomModeRegion(null);
     setRoomError("");
     setScreen("multiplayer");
+  }
+
+  // Shared UI for picking a room mode - for Portuguese, adds a first
+  // "Mundo ou Brasil?" step before the actual mode grid, mirroring the
+  // Single Player flow's world/brazil split. Used both when creating a
+  // room and when the host restarts one for another round.
+  function renderRoomModeGrid(onPick, onCancel) {
+    const showRegionStep = lang === "pt";
+    if (showRegionStep && !roomModeRegion) {
+      return (
+        <div style={{ width: "100%", maxWidth: 340 }}>
+          <p style={styles.authMessage}>{t.pickRegionLabel}</p>
+          <div style={styles.roomModeGrid}>
+            <button
+              style={{
+                ...styles.roomModeBtn,
+                background: MODE_ACCENTS.mundo.solid,
+                borderColor: MODE_ACCENTS.mundo.dark,
+                boxShadow: `0 3px 0 ${MODE_ACCENTS.mundo.dark}`,
+                color: "#FFFFFF",
+              }}
+              onClick={() => setRoomModeRegion("world")}
+            >
+              🌍 Mundo
+            </button>
+            <button
+              style={{
+                ...styles.roomModeBtn,
+                background: MODE_ACCENTS.brasil.solid,
+                borderColor: MODE_ACCENTS.brasil.dark,
+                boxShadow: `0 3px 0 ${MODE_ACCENTS.brasil.dark}`,
+                color: "#101820",
+              }}
+              onClick={() => setRoomModeRegion("brazil")}
+            >
+              🇧🇷 Brasil
+            </button>
+          </div>
+          <button
+            style={{ ...styles.authToggleLink, marginTop: 8 }}
+            onClick={() => {
+              onCancel();
+              setRoomError("");
+            }}
+          >
+            {t.cancelSearchBtn}
+          </button>
+        </div>
+      );
+    }
+    const suffix = showRegionStep && roomModeRegion === "brazil" ? "-br" : "";
+    return (
+      <div style={{ width: "100%", maxWidth: 340 }}>
+        <p style={styles.authMessage}>{t.pickModeLabel}</p>
+        <div style={styles.roomModeGrid}>
+          {[
+            ["random", t.randomModeTitle],
+            ["clues", t.cluesModeTitle],
+            ["lineup", t.lineupModeTitle],
+            ["clubs", t.clubsModeTitle],
+            ["year", t.yearModeTitle],
+          ].map(([m, label]) => (
+            <button
+              key={m}
+              style={{
+                ...styles.roomModeBtn,
+                background: MODE_ACCENTS[m].solid,
+                borderColor: MODE_ACCENTS[m].dark,
+                boxShadow: `0 3px 0 ${MODE_ACCENTS[m].dark}`,
+                color: "#FFFFFF",
+                opacity: roomBusy ? 0.6 : 1,
+              }}
+              disabled={roomBusy}
+              onClick={() => onPick(m + suffix)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        {roomError && <div style={styles.authError}>{roomError}</div>}
+        <button
+          style={{ ...styles.authToggleLink, marginTop: 8 }}
+          onClick={() => {
+            if (showRegionStep) setRoomModeRegion(null);
+            else onCancel();
+            setRoomError("");
+          }}
+        >
+          {t.cancelSearchBtn}
+        </button>
+      </div>
+    );
   }
 
   async function restartRoom(selectedMode) {
@@ -4545,6 +4655,7 @@ export default function SoccerQuiz() {
     setPendingRoomQuestions(null);
     setRoomCountdown(3);
     setShowRestartModePicker(false);
+    setRoomModeRegion(null);
     setScreen("roomLobby");
   }
 
@@ -5865,46 +5976,11 @@ export default function SoccerQuiz() {
                       </div>
                     )}
 
-                    {showCreateRoom && (
-                      <div style={{ width: "100%" }}>
-                        <p style={styles.authMessage}>{t.pickModeLabel}</p>
-                        <div style={styles.roomModeGrid}>
-                          {[
-                            ["random", t.randomModeTitle],
-                            ["clues", t.cluesModeTitle],
-                            ["lineup", t.lineupModeTitle],
-                            ["clubs", t.clubsModeTitle],
-                            ["year", t.yearModeTitle],
-                          ].map(([m, label]) => (
-                            <button
-                              key={m}
-                              style={{
-                                ...styles.roomModeBtn,
-                                background: MODE_ACCENTS[m].solid,
-                                borderColor: MODE_ACCENTS[m].dark,
-                                boxShadow: `0 3px 0 ${MODE_ACCENTS[m].dark}`,
-                                color: "#FFFFFF",
-                                opacity: roomBusy ? 0.6 : 1,
-                              }}
-                              disabled={roomBusy}
-                              onClick={() => handleCreateRoom(m)}
-                            >
-                              {label}
-                            </button>
-                          ))}
-                        </div>
-                        {roomError && <div style={styles.authError}>{roomError}</div>}
-                        <button
-                          style={{ ...styles.authToggleLink, marginTop: 8 }}
-                          onClick={() => {
-                            setShowCreateRoom(false);
-                            setRoomError("");
-                          }}
-                        >
-                          {t.cancelSearchBtn}
-                        </button>
-                      </div>
-                    )}
+                    {showCreateRoom &&
+                      renderRoomModeGrid(handleCreateRoom, () => {
+                        setShowCreateRoom(false);
+                        setRoomModeRegion(null);
+                      })}
 
                     {showJoinRoom && (
                       <form style={styles.authForm} onSubmit={handleJoinRoom}>
@@ -7198,46 +7274,12 @@ export default function SoccerQuiz() {
               {t.roomPlayAgainBtn}
             </button>
           )}
-          {isRoomHost && showRestartModePicker && (
-            <div style={{ width: "100%", maxWidth: 340 }}>
-              <p style={styles.authMessage}>{t.pickModeLabel}</p>
-              <div style={styles.roomModeGrid}>
-                {[
-                  ["random", t.randomModeTitle],
-                  ["clues", t.cluesModeTitle],
-                  ["lineup", t.lineupModeTitle],
-                  ["clubs", t.clubsModeTitle],
-                  ["year", t.yearModeTitle],
-                ].map(([m, label]) => (
-                  <button
-                    key={m}
-                    style={{
-                      ...styles.roomModeBtn,
-                      background: MODE_ACCENTS[m].solid,
-                      borderColor: MODE_ACCENTS[m].dark,
-                      boxShadow: `0 3px 0 ${MODE_ACCENTS[m].dark}`,
-                      color: "#FFFFFF",
-                      opacity: roomBusy ? 0.6 : 1,
-                    }}
-                    disabled={roomBusy}
-                    onClick={() => restartRoom(m)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              {roomError && <div style={styles.authError}>{roomError}</div>}
-              <button
-                style={{ ...styles.authToggleLink, marginTop: 8 }}
-                onClick={() => {
-                  setShowRestartModePicker(false);
-                  setRoomError("");
-                }}
-              >
-                {t.cancelSearchBtn}
-              </button>
-            </div>
-          )}
+          {isRoomHost &&
+            showRestartModePicker &&
+            renderRoomModeGrid(restartRoom, () => {
+              setShowRestartModePicker(false);
+              setRoomModeRegion(null);
+            })}
           {!showRestartModePicker && roomError && (
             <div style={styles.authError}>{roomError}</div>
           )}
