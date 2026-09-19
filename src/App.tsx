@@ -3346,6 +3346,8 @@ const TRANSLATIONS = {
     roomWaitingHostLabel: "Waiting for the host to start the game...",
     roomStartBtn: "START GAME",
     roomLeaveBtn: "LEAVE ROOM",
+    currentModeLabel: "Mode:",
+    changeModeBtn: "CHANGE MODE",
     roomWaitingTitle: "Waiting for everyone to finish...",
     roomEndTitle: "FINAL RESULTS",
     roomPlayAgainBtn: "PLAY AGAIN (SAME CODE)",
@@ -3471,6 +3473,8 @@ const TRANSLATIONS = {
     roomWaitingHostLabel: "Aguardando o anfitrião iniciar a partida...",
     roomStartBtn: "INICIAR PARTIDA",
     roomLeaveBtn: "SAIR DA SALA",
+    currentModeLabel: "Modo:",
+    changeModeBtn: "TROCAR MODO",
     roomWaitingTitle: "Aguardando todo mundo terminar...",
     roomEndTitle: "RESULTADO FINAL",
     roomPlayAgainBtn: "JOGAR DE NOVO (MESMO CÓDIGO)",
@@ -3596,6 +3600,8 @@ const TRANSLATIONS = {
     roomWaitingHostLabel: "Esperando a que el anfitrión inicie la partida...",
     roomStartBtn: "INICIAR PARTIDA",
     roomLeaveBtn: "SALIR DE LA SALA",
+    currentModeLabel: "Modo:",
+    changeModeBtn: "CAMBIAR MODO",
     roomWaitingTitle: "Esperando a que todos terminen...",
     roomEndTitle: "RESULTADO FINAL",
     roomPlayAgainBtn: "JUGAR DE NUEVO (MISMO CÓDIGO)",
@@ -4645,6 +4651,41 @@ export default function SoccerQuiz() {
     setScreen("roomLobby");
   }
 
+  function roomModeLabel(mode) {
+    if (!mode) return "";
+    const isBrazil = mode.endsWith("-br");
+    const baseMode = isBrazil ? mode.slice(0, -3) : mode;
+    const titles = {
+      clues: t.cluesModeTitle,
+      lineup: t.lineupModeTitle,
+      clubs: t.clubsModeTitle,
+      year: t.yearModeTitle,
+      random: t.randomModeTitle,
+    };
+    const title = titles[baseMode] || baseMode;
+    return isBrazil ? `🇧🇷 ${title}` : title;
+  }
+
+  async function changeRoomMode(selectedMode) {
+    if (!isRoomHost || !room) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const { data: updatedRoom, error } = await supabase
+      .from("rooms")
+      .update({ mode: selectedMode })
+      .eq("id", room.id)
+      .select()
+      .single();
+    setRoomBusy(false);
+    if (error) {
+      setRoomError(error.message || t.authGenericError);
+      return;
+    }
+    setRoom(updatedRoom);
+    setRoomModeRegion(null);
+    setScreen("roomLobby");
+  }
+
   function stayInRoom() {
     setRoomActive(false);
     setPendingRoomQuestions(null);
@@ -5407,6 +5448,7 @@ export default function SoccerQuiz() {
           "roomRestartPrompt",
           "roomCreateModes",
           "roomRestartModes",
+          "roomChangeMode",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -5428,6 +5470,7 @@ export default function SoccerQuiz() {
         "singlePlayer",
         "roomCreateModes",
         "roomRestartModes",
+        "roomChangeMode",
       ].includes(screen) && <div style={styles.turfOverlay} />}
 
       {screen === "start" && (
@@ -7228,6 +7271,41 @@ export default function SoccerQuiz() {
         </div>
       )}
 
+      {screen === "roomChangeMode" && (
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.lightTopRow}>
+            <button
+              style={styles.lightIconBtn}
+              onClick={() => {
+                if (lang === "pt" && roomModeRegion) {
+                  setRoomModeRegion(null);
+                } else {
+                  setRoomModeRegion(null);
+                  setScreen("roomLobby");
+                }
+              }}
+              aria-label={t.menu}
+            >
+              <span style={{ fontSize: 22, color: "#101820" }}>‹</span>
+            </button>
+            <div style={{ width: 42 }} />
+            <div style={{ width: 42 }} />
+          </div>
+
+          <div style={styles.lightEyebrowRow}>
+            <span style={styles.lightEyebrowLine} />
+            <span style={styles.lightEyebrow}>{t.roomModesEyebrow}</span>
+            <span style={styles.lightEyebrowLine} />
+          </div>
+          <h1 style={styles.lightTitle}>{t.roomModesHeading}</h1>
+          <p style={styles.lightSubtitle}>{t.roomModesSubtitle}</p>
+          <div style={styles.lightSubtitleRule} />
+
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <div className="gtpModeGrid">{renderModeCards(changeRoomMode)}</div>
+        </div>
+      )}
+
       {screen === "roomLobby" && room && (
         <div style={styles.centerCol}>
           <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
@@ -7261,15 +7339,38 @@ export default function SoccerQuiz() {
             {roomCodeCopied ? t.roomCodeCopiedMsg : t.roomCopyBtn}
           </button>
 
-          <div style={{ ...styles.eyebrow, marginTop: 24 }}>
+          <div style={{ ...styles.eyebrow, marginTop: 20 }}>{t.currentModeLabel}</div>
+          <p style={{ ...styles.subtitle, marginTop: 0, fontWeight: 700 }}>
+            {roomModeLabel(room.mode)}
+          </p>
+
+          <div style={{ ...styles.eyebrow, marginTop: 12 }}>
             {t.roomPlayersLabel} ({roomPlayers.length})
           </div>
           <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
 
           {isRoomHost ? (
-            <button style={styles.primaryBtn} onClick={handleStartRoom}>
-              {t.roomStartBtn}
-            </button>
+            <>
+              <button style={styles.primaryBtn} onClick={handleStartRoom}>
+                {t.roomStartBtn}
+              </button>
+              <button
+                style={{
+                  ...styles.primaryBtn,
+                  marginTop: 8,
+                  background: "transparent",
+                  color: MODE_ACCENTS.multiplayer.dark,
+                  boxShadow: "none",
+                  border: `2px solid ${MODE_ACCENTS.multiplayer.dark}`,
+                }}
+                onClick={() => {
+                  setRoomModeRegion(null);
+                  setScreen("roomChangeMode");
+                }}
+              >
+                {t.changeModeBtn}
+              </button>
+            </>
           ) : (
             <p style={styles.subtitle}>{t.roomWaitingHostLabel}</p>
           )}
