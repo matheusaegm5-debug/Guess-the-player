@@ -5423,6 +5423,8 @@ export default function SoccerQuiz() {
         "roundEnd",
         "multiplayer",
         "singlePlayer",
+        "roomCreateModes",
+        "roomRestartModes",
       ].includes(screen) && <div style={styles.turfOverlay} />}
 
       {screen === "start" && (
