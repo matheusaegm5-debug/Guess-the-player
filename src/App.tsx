@@ -5468,6 +5468,11 @@ export default function SoccerQuiz() {
         "roundEnd",
         "multiplayer",
         "singlePlayer",
+        "roomLobby",
+        "roomCountdown",
+        "roomWaiting",
+        "roomEnd",
+        "roomRestartPrompt",
         "roomCreateModes",
         "roomRestartModes",
         "roomChangeMode",
@@ -7398,99 +7403,146 @@ export default function SoccerQuiz() {
       )}
 
       {screen === "roomCountdown" && (
-        <div style={styles.centerCol}>
-          <div style={styles.eyebrow}>{t.duelGetReady}</div>
-          <p style={styles.subtitle}>
-            {roomPlayers.length} {t.roomPlayersLabel}
-          </p>
-          <div
-            key={roomCountdown}
-            className="trophyGlow fadeInUp"
-            style={{ ...styles.trophyEmoji, fontSize: 88 }}
-          >
-            {roomCountdown > 0 ? roomCountdown : "⚽"}
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div style={styles.lightEyebrowRow}>
+              <span style={styles.lightEyebrowLine} />
+              <span style={styles.lightEyebrow}>{t.duelGetReady}</span>
+              <span style={styles.lightEyebrowLine} />
+            </div>
+            <p style={{ ...styles.lightSubtitle, margin: 0 }}>
+              {roomPlayers.length} {t.roomPlayersLabel}
+            </p>
+            <div
+              key={roomCountdown}
+              className="trophyGlow fadeInUp"
+              style={{
+                fontFamily: "'Baloo 2', sans-serif",
+                fontWeight: 800,
+                fontSize: 96,
+                color: MODE_ACCENTS.multiplayer.dark,
+              }}
+            >
+              {roomCountdown > 0 ? roomCountdown : "⚽"}
+            </div>
           </div>
         </div>
       )}
 
       {screen === "roomWaiting" && (
-        <div style={styles.centerCol}>
-          <div className="trophyGlow" style={styles.trophyEmoji}>
-            ⏳
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div
+              className="trophyGlow"
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 110,
+                height: 110,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -6px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <span style={{ fontSize: 46 }}>⏳</span>
+            </div>
+            <h1
+              className="fadeInUp"
+              style={{ ...styles.lightTitle, fontSize: "clamp(26px, 7vw, 38px)" }}
+            >
+              {t.roomWaitingTitle}
+            </h1>
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
           </div>
-          <h1 className="fadeInUp" style={styles.title}>
-            {t.roomWaitingTitle}
-          </h1>
-          <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
         </div>
       )}
 
       {screen === "roomEnd" && room && (
-        <div style={{ ...styles.centerCol, minHeight: "70vh", justifyContent: "center" }}>
-          <div className="trophyGlow" style={styles.trophyEmoji}>
-            🏆
-          </div>
-          <h1
-            className="fadeInUp"
-            style={{ ...styles.title, fontSize: "clamp(26px, 7vw, 38px)" }}
-          >
-            {t.roomEndTitle}
-          </h1>
-          <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
-          {isRoomHost && (
-            <button
-              style={{ ...styles.primaryBtn, opacity: roomBusy ? 0.6 : 1 }}
-              onClick={() => {
-                setRoomModeRegion(null);
-                setScreen("roomRestartModes");
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div
+              className="trophyGlow"
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 110,
+                height: 110,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -6px 0 ${MODE_ACCENTS.multiplayer.dark}`,
               }}
-              disabled={roomBusy}
             >
-              {t.roomPlayAgainBtn}
+              <span style={{ fontSize: 48 }}>🏆</span>
+            </div>
+            <h1
+              className="fadeInUp"
+              style={{ ...styles.lightTitle, fontSize: "clamp(26px, 7vw, 38px)" }}
+            >
+              {t.roomEndTitle}
+            </h1>
+            <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
+            {isRoomHost && (
+              <button
+                style={{ ...styles.primaryBtn, opacity: roomBusy ? 0.6 : 1 }}
+                onClick={() => {
+                  setRoomModeRegion(null);
+                  setScreen("roomRestartModes");
+                }}
+                disabled={roomBusy}
+              >
+                {t.roomPlayAgainBtn}
+              </button>
+            )}
+            {roomError && <div style={styles.authError}>{roomError}</div>}
+            <button
+              style={{
+                ...styles.primaryBtn,
+                background: isRoomHost ? "transparent" : styles.primaryBtn.background,
+                color: isRoomHost ? "#0B6F27" : "#FFFFFF",
+                boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
+                border: isRoomHost ? "1px solid #0B6F27" : "none",
+              }}
+              onClick={leaveRoom}
+            >
+              {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
             </button>
-          )}
-          {roomError && <div style={styles.authError}>{roomError}</div>}
-          <button
-            style={{
-              ...styles.primaryBtn,
-              background: isRoomHost ? "transparent" : styles.primaryBtn.background,
-              color: isRoomHost ? "#0B6F27" : "#FFFFFF",
-              boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
-              border: isRoomHost ? "1px solid #0B6F27" : "none",
-            }}
-            onClick={leaveRoom}
-          >
-            {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
-          </button>
+          </div>
         </div>
       )}
 
       {screen === "roomRestartPrompt" && (
-        <div style={{ ...styles.centerCol, minHeight: "70vh", justifyContent: "center" }}>
-          <div className="trophyGlow" style={styles.trophyEmoji}>
-            🔄
+        <div style={styles.lightPage} className="gtpDesktopPage">
+          <div style={styles.comingSoonWrap}>
+            <div
+              className="trophyGlow"
+              style={{
+                ...styles.lightCardIconBadge,
+                width: 110,
+                height: 110,
+                background: MODE_ACCENTS.multiplayer.solid,
+                boxShadow: `inset 0 -6px 0 ${MODE_ACCENTS.multiplayer.dark}`,
+              }}
+            >
+              <span style={{ fontSize: 48 }}>🔄</span>
+            </div>
+            <h1
+              className="fadeInUp"
+              style={{ ...styles.lightTitle, fontSize: "clamp(24px, 6.5vw, 34px)" }}
+            >
+              {t.roomRestartTitle}
+            </h1>
+            <button style={styles.primaryBtn} onClick={stayInRoom}>
+              {t.roomStayBtn}
+            </button>
+            <button
+              style={{
+                ...styles.primaryBtn,
+                background: "transparent",
+                color: "#0B6F27",
+                boxShadow: "none",
+                border: "1px solid #0B6F27",
+              }}
+              onClick={leaveRoom}
+            >
+              {t.roomLeaveBtn}
+            </button>
           </div>
-          <h1
-            className="fadeInUp"
-            style={{ ...styles.title, fontSize: "clamp(24px, 6.5vw, 34px)" }}
-          >
-            {t.roomRestartTitle}
-          </h1>
-          <button style={styles.primaryBtn} onClick={stayInRoom}>
-            {t.roomStayBtn}
-          </button>
-          <button
-            style={{
-              ...styles.primaryBtn,
-              background: "transparent",
-              color: "#0B6F27",
-              boxShadow: "none",
-              border: "1px solid #0B6F27",
-            }}
-            onClick={leaveRoom}
-          >
-            {t.roomLeaveBtn}
-          </button>
         </div>
       )}
     </div>
