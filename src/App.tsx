@@ -4391,7 +4391,12 @@ export default function SoccerQuiz() {
       // We're the one who just paired with a waiting opponent - we own
       // generating the shared question set for this duel.
       const queue = buildRandomRound();
-      await supabase.from("matches").update({ questions: queue }).eq("id", data);
+      // RPC guards against overwriting an already-started match's
+      // questions - a direct update wasn't restricted to a one-time set.
+      await supabase.rpc("submit_match_questions", {
+        p_match_id: data,
+        p_questions: queue,
+      });
       openMatch(data);
     }
     // If data is null, we're now waiting in the queue - the realtime
@@ -5352,14 +5357,17 @@ export default function SoccerQuiz() {
     setScreen("random");
   }
 
-  async function pushDuelState(scoreVal, indexVal, extra = {}) {
+  async function pushDuelState(scoreVal, indexVal) {
     if (!currentMatch || !myPlayerSlot) return;
-    const scoreCol = myPlayerSlot === "player1" ? "player1_score" : "player2_score";
-    const indexCol = myPlayerSlot === "player1" ? "player1_index" : "player2_index";
-    await supabase
-      .from("matches")
-      .update({ [scoreCol]: scoreVal, [indexCol]: indexVal, ...extra })
-      .eq("id", currentMatch.id);
+    // RPC instead of a direct update: the RLS policy on "matches" only
+    // scopes by row (either participant), not by column, so a plain
+    // client update could let one player overwrite the other's score.
+    // The function figures out the caller's own slot server-side.
+    await supabase.rpc("push_match_progress", {
+      p_match_id: currentMatch.id,
+      p_score: scoreVal,
+      p_index: indexVal,
+    });
   }
 
   async function finishDuel() {
@@ -5379,29 +5387,19 @@ export default function SoccerQuiz() {
     if (!match || match.status === "finished") return;
     const total = match.questions?.length ?? 0;
     if (total > 0 && match.player1_index >= total && match.player2_index >= total) {
-      const winner =
-        match.player1_score === match.player2_score
-          ? null
-          : match.player1_score > match.player2_score
-          ? match.player1_id
-          : match.player2_id;
-      await supabase
-        .from("matches")
-        .update({ status: "finished", winner_id: winner })
-        .eq("id", match.id)
-        .eq("status", "active");
+      // RPC so the winner is computed from the scores actually stored on
+      // the row, server-side - a direct client update could otherwise
+      // declare either player the winner regardless of the real scores.
+      await supabase.rpc("finish_match_if_done", { p_match_id: match.id });
     }
   }
 
   async function leaveDuel() {
     if (currentMatch && currentMatch.status !== "finished" && myPlayerSlot) {
-      const opponentId =
-        myPlayerSlot === "player1" ? currentMatch.player2_id : currentMatch.player1_id;
-      await supabase
-        .from("matches")
-        .update({ status: "finished", winner_id: opponentId })
-        .eq("id", currentMatch.id)
-        .eq("status", "active");
+      // RPC always credits the OTHER participant as winner server-side -
+      // a direct client update could otherwise let a player "forfeit" a
+      // win to themselves instead of their opponent.
+      await supabase.rpc("forfeit_match", { p_match_id: currentMatch.id });
     }
     setDuelActive(false);
     setMyPlayerSlot(null);

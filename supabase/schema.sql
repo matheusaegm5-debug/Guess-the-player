@@ -256,3 +256,168 @@ begin
   end if;
 end;
 $$;
+
+-- ============ 1V1 DUEL INTEGRITY ============
+-- "Players can update their own matches" scopes which ROW either player
+-- may touch, but not which columns or values within it - as written, one
+-- player could update the opponent's score, declare themselves the
+-- winner, or rewrite the question set mid-match with a raw client call
+-- (open devtools, call supabase.from('matches').update(...) directly).
+-- Every legitimate write now goes through one of the functions below
+-- instead, each of which only ever touches the caller's own side of the
+-- match and computes anything security-sensitive (the winner) itself
+-- rather than trusting a client-supplied value - so the old blanket
+-- update policy is dropped.
+drop policy if exists "Players can update their own matches" on public.matches;
+
+-- Sets the shared question set once, right after matchmaking pairs two
+-- players. Refuses to run again once a match already has questions, so
+-- an in-progress match's questions can't be swapped out mid-game.
+create or replace function public.submit_match_questions(p_match_id uuid, p_questions jsonb)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_match record;
+begin
+  select * into v_match from public.matches where id = p_match_id;
+  if not found then
+    return;
+  end if;
+  if auth.uid() <> v_match.player1_id and auth.uid() <> v_match.player2_id then
+    raise exception 'not a participant in this match';
+  end if;
+  if coalesce(jsonb_array_length(v_match.questions), 0) > 0 then
+    return;
+  end if;
+
+  update public.matches set questions = p_questions where id = p_match_id;
+end;
+$$;
+
+-- Pushes the caller's own score/progress during an active duel. Figures
+-- out which side of the match the caller is on itself, so a player can
+-- never write to their opponent's columns, and clamps both values to
+-- sane bounds.
+create or replace function public.push_match_progress(p_match_id uuid, p_score int, p_index int)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_match record;
+  v_total int;
+  v_score int;
+  v_index int;
+begin
+  select * into v_match from public.matches where id = p_match_id and status = 'active';
+  if not found then
+    return;
+  end if;
+  if auth.uid() <> v_match.player1_id and auth.uid() <> v_match.player2_id then
+    raise exception 'not a participant in this match';
+  end if;
+
+  v_total := coalesce(jsonb_array_length(v_match.questions), 0);
+  v_score := greatest(0, least(p_score, 100));
+  v_index := greatest(0, least(p_index, v_total));
+
+  if auth.uid() = v_match.player1_id then
+    update public.matches set player1_score = v_score, player1_index = v_index where id = p_match_id;
+  else
+    update public.matches set player2_score = v_score, player2_index = v_index where id = p_match_id;
+  end if;
+end;
+$$;
+
+-- Ends a duel once both players have answered every question, with the
+-- winner computed here from the scores already stored on the row -
+-- never from a value the client hands in.
+create or replace function public.finish_match_if_done(p_match_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_match record;
+  v_total int;
+  v_winner uuid;
+begin
+  select * into v_match from public.matches where id = p_match_id and status = 'active';
+  if not found then
+    return;
+  end if;
+  if auth.uid() <> v_match.player1_id and auth.uid() <> v_match.player2_id then
+    raise exception 'not a participant in this match';
+  end if;
+
+  v_total := coalesce(jsonb_array_length(v_match.questions), 0);
+  if v_total = 0 or v_match.player1_index < v_total or v_match.player2_index < v_total then
+    return;
+  end if;
+
+  v_winner := case
+    when v_match.player1_score = v_match.player2_score then null
+    when v_match.player1_score > v_match.player2_score then v_match.player1_id
+    else v_match.player2_id
+  end;
+
+  update public.matches
+  set status = 'finished', winner_id = v_winner
+  where id = p_match_id and status = 'active';
+end;
+$$;
+
+-- The leaving player always forfeits TO the other participant, computed
+-- here - a direct client update could otherwise let someone "forfeit" a
+-- win to themselves instead of their opponent.
+create or replace function public.forfeit_match(p_match_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_match record;
+begin
+  select * into v_match from public.matches where id = p_match_id and status = 'active';
+  if not found then
+    return;
+  end if;
+  if auth.uid() <> v_match.player1_id and auth.uid() <> v_match.player2_id then
+    raise exception 'not a participant in this match';
+  end if;
+
+  update public.matches
+  set status = 'finished',
+      winner_id = case when auth.uid() = v_match.player1_id then v_match.player2_id else v_match.player1_id end
+  where id = p_match_id and status = 'active';
+end;
+$$;
+
+-- ============ ROOM SCORE BOUNDS ============
+-- room_players.score/q_index are written directly by the row's owner
+-- (see "Users can update their own room progress" above) rather than
+-- through an RPC, since a friend inflating their own score in a private
+-- room they share with people they know is a much lower-stakes problem
+-- than the cross-player match tampering fixed above. These bounds are
+-- still cheap defense in depth against an obviously-bogus value.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'room_players_score_range'
+  ) then
+    alter table public.room_players
+      add constraint room_players_score_range check (score >= 0 and score <= 100);
+  end if;
+  if not exists (
+    select 1 from pg_constraint where conname = 'room_players_q_index_range'
+  ) then
+    alter table public.room_players
+      add constraint room_players_q_index_range check (q_index >= 0);
+  end if;
+end $$;
