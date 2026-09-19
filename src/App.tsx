@@ -2948,6 +2948,9 @@ const TRANSLATIONS = {
     roomLeaveBtn: "LEAVE ROOM",
     roomWaitingTitle: "Waiting for everyone to finish...",
     roomEndTitle: "FINAL RESULTS",
+    roomPlayAgainBtn: "PLAY AGAIN (SAME CODE)",
+    roomRestartTitle: "The host wants to play another round!",
+    roomStayBtn: "STAY IN THE ROOM",
     yearLabel: "EVENT",
     score: "SCORE",
     question: "QUESTION",
@@ -3066,6 +3069,9 @@ const TRANSLATIONS = {
     roomLeaveBtn: "SAIR DA SALA",
     roomWaitingTitle: "Aguardando todo mundo terminar...",
     roomEndTitle: "RESULTADO FINAL",
+    roomPlayAgainBtn: "JOGAR DE NOVO (MESMO CÓDIGO)",
+    roomRestartTitle: "O anfitrião quer jogar outra rodada!",
+    roomStayBtn: "FICAR NA SALA",
     yearLabel: "ACONTECIMENTO",
     score: "PONTOS",
     question: "PERGUNTA",
@@ -3184,6 +3190,9 @@ const TRANSLATIONS = {
     roomLeaveBtn: "SALIR DE LA SALA",
     roomWaitingTitle: "Esperando a que todos terminen...",
     roomEndTitle: "RESULTADO FINAL",
+    roomPlayAgainBtn: "JUGAR DE NUEVO (MISMO CÓDIGO)",
+    roomRestartTitle: "¡El anfitrión quiere jugar otra ronda!",
+    roomStayBtn: "QUEDARME EN LA SALA",
     yearLabel: "ACONTECIMIENTO",
     score: "PUNTOS",
     question: "PREGUNTA",
@@ -4118,6 +4127,29 @@ export default function SoccerQuiz() {
     setScreen("multiplayer");
   }
 
+  async function restartRoom() {
+    if (!isRoomHost || !room) return;
+    setRoomBusy(true);
+    setRoomError("");
+    const { error } = await supabase.rpc("restart_room", { p_room_id: room.id });
+    setRoomBusy(false);
+    if (error) {
+      setRoomError(error.message || t.authGenericError);
+      return;
+    }
+    setRoomActive(false);
+    setPendingRoomQuestions(null);
+    setRoomCountdown(3);
+    setScreen("roomLobby");
+  }
+
+  function stayInRoom() {
+    setRoomActive(false);
+    setPendingRoomQuestions(null);
+    setRoomCountdown(3);
+    setScreen("roomLobby");
+  }
+
   // Live updates for the current room row: questions arriving, status changes.
   useEffect(() => {
     if (!room?.id) return;
@@ -4192,6 +4224,14 @@ export default function SoccerQuiz() {
       setScreen("roomEnd");
     }
   }, [room?.status, roomActive]);
+
+  // Host restarted the room for another round - everyone else gets to
+  // choose whether to stay for it or leave.
+  useEffect(() => {
+    if (screen === "roomEnd" && room?.status === "waiting" && !isRoomHost) {
+      setScreen("roomRestartPrompt");
+    }
+  }, [room?.status, screen, isRoomHost]);
 
   // --- Clues mode state ---
   const [questions, setQuestions] = useState(() =>
@@ -4862,6 +4902,7 @@ export default function SoccerQuiz() {
           "roomCountdown",
           "roomWaiting",
           "roomEnd",
+          "roomRestartPrompt",
         ].includes(screen)
           ? styles.pageLight
           : styles.page
@@ -6736,8 +6777,56 @@ export default function SoccerQuiz() {
             {t.roomEndTitle}
           </h1>
           <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} medals />
-          <button style={styles.primaryBtn} onClick={leaveRoom}>
-            {t.duelBackBtn}
+          {isRoomHost && (
+            <button
+              style={{ ...styles.primaryBtn, opacity: roomBusy ? 0.6 : 1 }}
+              onClick={restartRoom}
+              disabled={roomBusy}
+            >
+              {t.roomPlayAgainBtn}
+            </button>
+          )}
+          {roomError && <div style={styles.authError}>{roomError}</div>}
+          <button
+            style={{
+              ...styles.primaryBtn,
+              background: isRoomHost ? "transparent" : styles.primaryBtn.background,
+              color: isRoomHost ? "#0B6F27" : "#FFFFFF",
+              boxShadow: isRoomHost ? "none" : styles.primaryBtn.boxShadow,
+              border: isRoomHost ? "1px solid #0B6F27" : "none",
+            }}
+            onClick={leaveRoom}
+          >
+            {isRoomHost ? t.roomLeaveBtn : t.duelBackBtn}
+          </button>
+        </div>
+      )}
+
+      {screen === "roomRestartPrompt" && (
+        <div style={{ ...styles.centerCol, minHeight: "70vh", justifyContent: "center" }}>
+          <div className="trophyGlow" style={styles.trophyEmoji}>
+            🔄
+          </div>
+          <h1
+            className="fadeInUp"
+            style={{ ...styles.title, fontSize: "clamp(24px, 6.5vw, 34px)" }}
+          >
+            {t.roomRestartTitle}
+          </h1>
+          <button style={styles.primaryBtn} onClick={stayInRoom}>
+            {t.roomStayBtn}
+          </button>
+          <button
+            style={{
+              ...styles.primaryBtn,
+              background: "transparent",
+              color: "#0B6F27",
+              boxShadow: "none",
+              border: "1px solid #0B6F27",
+            }}
+            onClick={leaveRoom}
+          >
+            {t.roomLeaveBtn}
           </button>
         </div>
       )}

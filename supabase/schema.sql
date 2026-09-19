@@ -170,3 +170,32 @@ create policy "Users can remove themselves from a room"
 
 alter publication supabase_realtime add table public.rooms;
 alter publication supabase_realtime add table public.room_players;
+
+-- ============ ROOM RESTART ============
+-- Lets the host play another round in the same room/code: resets every
+-- player's score and progress and puts the room back in "waiting".
+-- Runs as security definer because a player can only update their own
+-- room_players row under the RLS policies above - the host needs to
+-- reset everyone's at once.
+create or replace function public.restart_room(p_room_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not exists (
+    select 1 from public.rooms where id = p_room_id and host_id = auth.uid()
+  ) then
+    raise exception 'only the host can restart this room';
+  end if;
+
+  update public.room_players
+  set score = 0, q_index = 0
+  where room_id = p_room_id;
+
+  update public.rooms
+  set status = 'waiting', questions = '[]'::jsonb
+  where id = p_room_id;
+end;
+$$;
