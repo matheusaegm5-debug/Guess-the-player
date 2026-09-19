@@ -214,3 +214,45 @@ begin
   where id = p_room_id;
 end;
 $$;
+
+-- ============ FINISH AN ACTIVE ROOM ============
+-- Ends an in-progress round, either because everyone has answered every
+-- question, or because enough players left that at most one remains.
+-- Runs as security definer because "rooms" can only be updated by its
+-- host under the RLS policy above - without this, a non-host player
+-- finishing their last question, or leaving mid-game, could never flip
+-- the room to "finished" themselves and everyone still there would be
+-- stuck waiting. Safe for any room member to call: it recomputes both
+-- conditions itself from the current rows, so it can't end a room that
+-- isn't actually abandoned or complete.
+create or replace function public.finish_active_room(p_room_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_room record;
+  v_total int;
+  v_remaining int;
+  v_all_done boolean;
+begin
+  select * into v_room from public.rooms where id = p_room_id and status = 'active';
+  if not found then
+    return;
+  end if;
+
+  select count(*) into v_remaining from public.room_players where room_id = p_room_id;
+  v_total := coalesce(jsonb_array_length(v_room.questions), 0);
+
+  select bool_and(q_index >= v_total) into v_all_done
+  from public.room_players
+  where room_id = p_room_id;
+
+  if v_remaining <= 1 or (v_total > 0 and coalesce(v_all_done, false)) then
+    update public.rooms
+    set status = 'finished'
+    where id = p_room_id and status = 'active';
+  end if;
+end;
+$$;

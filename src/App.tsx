@@ -4612,19 +4612,11 @@ export default function SoccerQuiz() {
     if (room && authUser) {
       await supabase.from("room_players").delete().eq("room_id", room.id).eq("user_id", authUser.id);
       if (room.status === "active") {
-        const { data: remaining } = await supabase
-          .from("room_players")
-          .select("*")
-          .eq("room_id", room.id);
         // Down to one player (or none) mid-game - end it instead of
-        // leaving them stuck waiting for someone who already left.
-        if ((remaining?.length ?? 0) <= 1) {
-          await supabase
-            .from("rooms")
-            .update({ status: "finished" })
-            .eq("id", room.id)
-            .eq("status", "active");
-        }
+        // leaving them stuck waiting for someone who already left. Runs
+        // as an RPC because only the host can normally update "rooms" -
+        // a non-host player leaving still needs to be able to close it out.
+        await supabase.rpc("finish_active_room", { p_room_id: room.id });
       }
     }
     setRoomActive(false);
@@ -5458,16 +5450,14 @@ export default function SoccerQuiz() {
   }
 
   async function maybeFinishRoom(roomRow, players) {
-    if (!roomRow || roomRow.status === "finished") return;
+    if (!roomRow || roomRow.status !== "active") return;
     const total = roomRow.questions?.length ?? 0;
     if (total === 0 || players.length === 0) return;
     const allDone = players.every((p) => p.q_index >= total);
     if (allDone) {
-      await supabase
-        .from("rooms")
-        .update({ status: "finished" })
-        .eq("id", roomRow.id)
-        .eq("status", "active");
+      // Only the host can normally update "rooms" - this runs as an RPC
+      // so whichever player finishes last can close the round out too.
+      await supabase.rpc("finish_active_room", { p_room_id: roomRow.id });
     }
   }
 
