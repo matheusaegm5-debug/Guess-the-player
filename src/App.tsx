@@ -4318,6 +4318,51 @@ export default function SoccerQuiz() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
+  // Edge-swipe to go back, like iOS/Instagram/X: a rightward drag starting
+  // within a thin strip along the left edge triggers whichever back/menu
+  // button is currently on screen, reusing its exact click handler (and
+  // any side effects like leaving a room or forfeiting a duel) instead of
+  // duplicating that navigation logic here.
+  useEffect(() => {
+    const EDGE_ZONE = 24;
+    const MIN_DX = 60;
+    const MAX_DY = 60;
+    let startX = null;
+    let startY = null;
+    let armed = false;
+
+    function onTouchStart(e) {
+      const touch = e.touches[0];
+      if (!touch) return;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      armed = startX <= EDGE_ZONE;
+    }
+    function onTouchEnd(e) {
+      const wasArmed = armed;
+      const fromX = startX;
+      const fromY = startY;
+      armed = false;
+      startX = null;
+      startY = null;
+      if (!wasArmed || fromX === null) return;
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+      const dx = touch.clientX - fromX;
+      const dy = Math.abs(touch.clientY - fromY);
+      if (dx > MIN_DX && dy < MAX_DY) {
+        document.getElementById("gtpBackBtn")?.click();
+      }
+    }
+
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
+
   async function handleAuthSubmit(e) {
     e.preventDefault();
     setAuthError("");
@@ -5697,6 +5742,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => setScreen("start")}
               aria-label={t.menu}
@@ -5803,6 +5849,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => setScreen("singlePlayer")}
               aria-label={t.menu}
@@ -5893,6 +5940,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => setScreen("singlePlayer")}
               aria-label={t.menu}
@@ -5983,6 +6031,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={{ ...styles.lightTopRow, justifyContent: "flex-start" }}>
             <button
+              id="gtpBackBtn"
               style={{ ...styles.lightIconBtn, fontSize: 22, color: "#101820" }}
               onClick={() => setScreen("start")}
               aria-label={t.menu}
@@ -6431,6 +6480,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => setScreen("start")}
               aria-label={t.menu}
@@ -6481,7 +6531,7 @@ export default function SoccerQuiz() {
 
       {screen === "clues" && currentQuestion && (
         <div style={styles.gameWrap}>
-          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6591,7 +6641,7 @@ export default function SoccerQuiz() {
 
       {screen === "lineup" && currentLineup && (
         <div style={styles.gameWrap}>
-          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6769,7 +6819,7 @@ export default function SoccerQuiz() {
 
       {screen === "clubs" && currentClubsQuestion && (
         <div style={styles.gameWrap}>
-          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6888,7 +6938,7 @@ export default function SoccerQuiz() {
 
       {screen === "year" && currentYearQuestion && (
         <div style={styles.gameWrap}>
-          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6995,7 +7045,7 @@ export default function SoccerQuiz() {
 
       {screen === "random" && currentRandomItem && (
         <div style={styles.gameWrap}>
-          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           {duelActive && (
@@ -7494,6 +7544,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => {
                 if (lang === "pt" && roomModeRegion) {
@@ -7529,6 +7580,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => {
                 if (lang === "pt" && roomModeRegion) {
@@ -7564,6 +7616,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={() => {
                 if (lang === "pt" && roomModeRegion) {
@@ -7599,6 +7652,7 @@ export default function SoccerQuiz() {
         <div style={styles.lightPage} className="gtpDesktopPage">
           <div style={styles.lightTopRow}>
             <button
+              id="gtpBackBtn"
               style={styles.lightIconBtn}
               onClick={leaveRoom}
               aria-label={t.menu}
