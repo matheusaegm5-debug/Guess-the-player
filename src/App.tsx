@@ -2955,6 +2955,7 @@ const TRANSLATIONS = {
     lineupLabel: "LINEUP",
     cluesLabel: "CLUES",
     submitAnswer: "SUBMIT ANSWER",
+    skipBtn: "SKIP - I DON'T KNOW",
     correct: "Correct! ⚽",
     answerLabel: "Answer:",
     missingPlayer: "Missing player:",
@@ -3072,6 +3073,7 @@ const TRANSLATIONS = {
     lineupLabel: "ESCALAÇÃO",
     cluesLabel: "PISTAS",
     submitAnswer: "ENVIAR RESPOSTA",
+    skipBtn: "PULAR - NÃO SEI",
     correct: "Correto! ⚽",
     answerLabel: "Resposta:",
     missingPlayer: "Jogador que faltava:",
@@ -3189,6 +3191,7 @@ const TRANSLATIONS = {
     lineupLabel: "ALINEACIÓN",
     cluesLabel: "PISTAS",
     submitAnswer: "ENVIAR RESPUESTA",
+    skipBtn: "SALTAR - NO SÉ",
     correct: "¡Correcto! ⚽",
     answerLabel: "Respuesta:",
     missingPlayer: "Jugador que faltaba:",
@@ -5722,6 +5725,12 @@ export default function SoccerQuiz() {
             </button>
           )}
 
+          {!answered && (
+            <button style={styles.skipBtn} onClick={() => handleClueAnswer(null)}>
+              {t.skipBtn}
+            </button>
+          )}
+
           {answered && (
             <div className="fadeInUp" style={styles.feedbackText}>
               {selected === currentQuestion.answer
@@ -5893,6 +5902,10 @@ export default function SoccerQuiz() {
                       .replace("{used}", hintsUsed)
                       .replace("{max}", MAX_HINTS)}
               </button>
+
+              <button style={styles.skipBtn} onClick={submitLineupGuess}>
+                {t.skipBtn}
+              </button>
             </>
           )}
 
@@ -6010,6 +6023,10 @@ export default function SoccerQuiz() {
                       .replace("{used}", clubsHintsUsed)
                       .replace("{max}", MAX_CLUBS_HINTS)}
               </button>
+
+              <button style={styles.skipBtn} onClick={submitClubsGuess}>
+                {t.skipBtn}
+              </button>
             </>
           )}
 
@@ -6109,6 +6126,12 @@ export default function SoccerQuiz() {
               disabled={!yearPicked}
             >
               {t.submitAnswer}
+            </button>
+          )}
+
+          {!yearAnswered && (
+            <button style={styles.skipBtn} onClick={() => handleYearAnswer(null)}>
+              {t.skipBtn}
             </button>
           )}
 
@@ -6476,6 +6499,12 @@ export default function SoccerQuiz() {
                 </>
               )}
             </>
+          )}
+
+          {!randomAnswered && (
+            <button style={styles.skipBtn} onClick={submitRandomAnswer}>
+              {t.skipBtn}
+            </button>
           )}
 
           {randomAnswered && (
@@ -7306,6 +7335,20 @@ const styles = {
     cursor: "pointer",
     textAlign: "center",
     padding: "4px 0",
+  },
+  skipBtn: {
+    fontFamily: "'Oswald', sans-serif",
+    fontWeight: 700,
+    fontSize: 13,
+    letterSpacing: "0.05em",
+    color: "#5F666B",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "center",
+    width: "100%",
+    padding: "10px 0 0",
+    textDecoration: "underline",
   },
   authError: {
     fontFamily: "'Inter', sans-serif",
