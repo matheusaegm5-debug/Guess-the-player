@@ -7540,7 +7540,7 @@ export default function SoccerQuiz() {
               <span style={styles.lightEyebrow}>{t.duelGetReady}</span>
               <span style={styles.lightEyebrowLine} />
             </div>
-            <p style={{ ...styles.lightSubtitle, margin: 0 }}>
+            <p style={{ ...styles.lightSubtitle, margin: "8px 0 0" }}>
               {roomPlayers.length} {t.roomPlayersLabel}
             </p>
             <div
@@ -7550,6 +7550,8 @@ export default function SoccerQuiz() {
                 fontFamily: "'Baloo 2', sans-serif",
                 fontWeight: 800,
                 fontSize: 96,
+                lineHeight: 1.3,
+                marginTop: 20,
                 color: MODE_ACCENTS.multiplayer.dark,
               }}
             >
