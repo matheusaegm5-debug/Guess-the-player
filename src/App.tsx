@@ -6447,12 +6447,6 @@ export default function SoccerQuiz() {
                   </>
                 )}
 
-                <button
-                  style={{ ...styles.authToggleLink, marginTop: 4 }}
-                  onClick={handleLogout}
-                >
-                  {t.authLogoutBtn}
-                </button>
               </div>
             ) : showForgotPassword ? (
               <>
@@ -6602,6 +6596,14 @@ export default function SoccerQuiz() {
           <button style={styles.menuBtn} onClick={() => setScreen("start")}>
             {t.menu}
           </button>
+          {authUser && profile && (
+            <button
+              style={{ ...styles.menuBtn, marginTop: 4 }}
+              onClick={handleLogout}
+            >
+              {t.authLogoutBtn}
+            </button>
+          )}
         </div>
       )}
 
