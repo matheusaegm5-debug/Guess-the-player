@@ -197,17 +197,17 @@ const QUESTION_POOL = [
   {
     clues: {
       en: [
-        "Born in Munich, Germany",
+        "Born in Warsaw, Poland",
         "Prolific striker, all-time top scorer of the Bundesliga",
         "Left Bayern Munich for Barcelona in 2022",
       ],
       pt: [
-        "Nascido em Munique, Alemanha",
+        "Nascido em Varsóvia, Polônia",
         "Atacante prolífico, maior artilheiro da história da Bundesliga",
         "Deixou o Bayern de Munique para se transferir ao Barcelona em 2022",
       ],
       es: [
-        "Nacido en Múnich, Alemania",
+        "Nacido en Varsovia, Polonia",
         "Delantero prolífico, máximo goleador histórico de la Bundesliga",
         "Dejó el Bayern de Múnich para fichar por el Barcelona en 2022",
       ],
@@ -739,6 +739,342 @@ const QUESTION_POOL = [
     },
     options: ["Raphael Guerreiro", "Nuno Mendes", "Diogo Dalot", "Antonio Silva"],
     answer: "Raphael Guerreiro",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Rosario, Argentina",
+        "Scored in the 2022 World Cup final",
+        "Has played for Real Madrid, PSG, Juventus and Benfica",
+      ],
+      pt: [
+        "Nascido em Rosário, Argentina",
+        "Marcou na final da Copa do Mundo de 2022",
+        "Já jogou por Real Madrid, PSG, Juventus e Benfica",
+      ],
+      es: [
+        "Nacido en Rosario, Argentina",
+        "Anotó en la final de la Copa del Mundo de 2022",
+        "Ha jugado en Real Madrid, PSG, Juventus y Benfica",
+      ],
+    },
+    options: ["Angel Di Maria", "Lautaro Martinez", "Rodrigo De Paul", "Nicolas Otamendi"],
+    answer: "Angel Di Maria",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Calchin, Argentina",
+        "Scored crucial goals in the 2022 World Cup semifinal",
+        "Left Manchester City for Atletico Madrid in 2024",
+      ],
+      pt: [
+        "Nascido em Calchín, Argentina",
+        "Marcou gols decisivos na semifinal da Copa do Mundo de 2022",
+        "Deixou o Manchester City para se transferir ao Atlético de Madrid em 2024",
+      ],
+      es: [
+        "Nacido en Calchín, Argentina",
+        "Anotó goles decisivos en la semifinal de la Copa del Mundo de 2022",
+        "Dejó el Manchester City para fichar por el Atlético de Madrid en 2024",
+      ],
+    },
+    options: ["Julian Alvarez", "Lautaro Martinez", "Alejandro Garnacho", "Enzo Fernandez"],
+    answer: "Julian Alvarez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Bahia Blanca, Argentina",
+        "Nicknamed 'El Toro'",
+        "Captain and star striker of Inter Milan",
+      ],
+      pt: [
+        "Nascido em Bahía Blanca, Argentina",
+        "Apelidado de 'El Toro'",
+        "Capitão e principal atacante da Inter de Milão",
+      ],
+      es: [
+        "Nacido en Bahía Blanca, Argentina",
+        "Apodado 'El Toro'",
+        "Capitán y delantero estrella del Inter de Milán",
+      ],
+    },
+    options: ["Lautaro Martinez", "Julian Alvarez", "Angel Di Maria", "Paulo Dybala"],
+    answer: "Lautaro Martinez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Laguna Larga, Argentina",
+        "Nicknamed 'La Joya' (The Jewel)",
+        "Spent seven seasons at Juventus before joining Roma",
+      ],
+      pt: [
+        "Nascido em Laguna Larga, Argentina",
+        "Apelidado de 'La Joya' (A Joia)",
+        "Passou sete temporadas na Juventus antes de ir para a Roma",
+      ],
+      es: [
+        "Nacido en Laguna Larga, Argentina",
+        "Apodado 'La Joya'",
+        "Pasó siete temporadas en la Juventus antes de fichar por la Roma",
+      ],
+    },
+    options: ["Paulo Dybala", "Lautaro Martinez", "Angel Di Maria", "Julian Alvarez"],
+    answer: "Paulo Dybala",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Mar del Plata, Argentina",
+        "Goalkeeper who won the Golden Glove at the 2022 World Cup",
+        "Plays for Aston Villa after starting out at Arsenal",
+      ],
+      pt: [
+        "Nascido em Mar del Plata, Argentina",
+        "Goleiro que venceu a Luva de Ouro na Copa do Mundo de 2022",
+        "Joga no Aston Villa após começar no Arsenal",
+      ],
+      es: [
+        "Nacido en Mar del Plata, Argentina",
+        "Portero que ganó el Guante de Oro en la Copa del Mundo de 2022",
+        "Juega en el Aston Villa tras empezar en el Arsenal",
+      ],
+    },
+    options: ["Emiliano Martinez", "Franco Armani", "Geronimo Rulli", "Nahuel Molina"],
+    answer: "Emiliano Martinez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in San Martin, Argentina",
+        "Won the Young Player Award at the 2022 World Cup",
+        "Joined Chelsea from Benfica for a club-record fee",
+      ],
+      pt: [
+        "Nascido em San Martín, Argentina",
+        "Venceu o prêmio de Melhor Jovem na Copa do Mundo de 2022",
+        "Foi para o Chelsea vindo do Benfica por uma taxa recorde do clube",
+      ],
+      es: [
+        "Nacido en San Martín, Argentina",
+        "Ganó el premio al Mejor Jugador Joven en la Copa del Mundo de 2022",
+        "Fichó por el Chelsea procedente del Benfica por una cifra récord del club",
+      ],
+    },
+    options: ["Enzo Fernandez", "Julian Alvarez", "Alexis Mac Allister", "Rodrigo De Paul"],
+    answer: "Enzo Fernandez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Malmo, Sweden",
+        "Known for his flair, power and outspoken quotes",
+        "Played for Ajax, Juventus, Inter, Barcelona, Milan, PSG and Man United",
+      ],
+      pt: [
+        "Nascido em Malmö, Suécia",
+        "Conhecido por seu estilo, força e frases marcantes",
+        "Jogou por Ajax, Juventus, Inter, Barcelona, Milan, PSG e Man United",
+      ],
+      es: [
+        "Nacido en Malmö, Suecia",
+        "Conocido por su estilo, potencia y frases célebres",
+        "Jugó en Ajax, Juventus, Inter, Barcelona, Milan, PSG y Man United",
+      ],
+    },
+    options: ["Zlatan Ibrahimovic", "Henrik Larsson", "Freddie Ljungberg", "Kim Kallstrom"],
+    answer: "Zlatan Ibrahimovic",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Cardiff, Wales",
+        "Won five Champions League titles with Real Madrid",
+        "Scored an iconic overhead kick in the 2018 final",
+      ],
+      pt: [
+        "Nascido em Cardiff, País de Gales",
+        "Venceu cinco Champions League pelo Real Madrid",
+        "Marcou um gol de bicicleta icônico na final de 2018",
+      ],
+      es: [
+        "Nacido en Cardiff, Gales",
+        "Ganó cinco Champions League con el Real Madrid",
+        "Marcó una icónica chilena en la final de 2018",
+      ],
+    },
+    options: ["Gareth Bale", "Aaron Ramsey", "Ryan Giggs", "Joe Allen"],
+    answer: "Gareth Bale",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Salto, Uruguay",
+        "Paris Saint-Germain's all-time top scorer",
+        "Also played for Napoli and Manchester United",
+      ],
+      pt: [
+        "Nascido em Salto, Uruguai",
+        "Maior artilheiro da história do Paris Saint-Germain",
+        "Também jogou por Napoli e Manchester United",
+      ],
+      es: [
+        "Nacido en Salto, Uruguay",
+        "Máximo goleador histórico del Paris Saint-Germain",
+        "También jugó en el Napoli y el Manchester United",
+      ],
+    },
+    options: ["Edinson Cavani", "Luis Suarez", "Diego Forlan", "Darwin Nunez"],
+    answer: "Edinson Cavani",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Cucuta, Colombia",
+        "Won the Golden Boot at the 2014 World Cup",
+        "Played for Real Madrid, Bayern Munich and Everton",
+      ],
+      pt: [
+        "Nascido em Cúcuta, Colômbia",
+        "Venceu a Chuteira de Ouro na Copa do Mundo de 2014",
+        "Jogou por Real Madrid, Bayern de Munique e Everton",
+      ],
+      es: [
+        "Nacido en Cúcuta, Colombia",
+        "Ganó la Bota de Oro en la Copa del Mundo de 2014",
+        "Jugó en el Real Madrid, el Bayern Múnich y el Everton",
+      ],
+    },
+    options: ["James Rodriguez", "Radamel Falcao", "Juan Cuadrado", "Luis Diaz"],
+    answer: "James Rodriguez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Sedhiou, Senegal",
+        "Won the Africa Cup of Nations with his country",
+        "Starred for Southampton, Liverpool and Bayern Munich",
+      ],
+      pt: [
+        "Nascido em Sedhiou, Senegal",
+        "Venceu a Copa Africana de Nações pela seleção do seu país",
+        "Destacou-se por Southampton, Liverpool e Bayern de Munique",
+      ],
+      es: [
+        "Nacido en Sedhiou, Senegal",
+        "Ganó la Copa Africana de Naciones con su país",
+        "Brilló en el Southampton, el Liverpool y el Bayern Múnich",
+      ],
+    },
+    options: ["Sadio Mane", "Kalidou Koulibaly", "Idrissa Gueye", "Ismaila Sarr"],
+    answer: "Sadio Mane",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Belgrade, Serbia",
+        "Powerful striker who moved from Fiorentina to Juventus",
+        "Known for his goal celebration mimicking a double-headed eagle",
+      ],
+      pt: [
+        "Nascido em Belgrado, Sérvia",
+        "Atacante potente que saiu da Fiorentina para a Juventus",
+        "Conhecido pela comemoração de gol imitando uma águia bicéfala",
+      ],
+      es: [
+        "Nacido en Belgrado, Serbia",
+        "Delantero potente que pasó de la Fiorentina a la Juventus",
+        "Conocido por su celebración de gol imitando un águila bicéfala",
+      ],
+    },
+    options: ["Dusan Vlahovic", "Aleksandar Mitrovic", "Sergej Milinkovic-Savic", "Nemanja Matic"],
+    answer: "Dusan Vlahovic",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Chuncheon, South Korea",
+        "Captain of Tottenham Hotspur",
+        "Shared the Premier League Golden Boot in 2021-22",
+      ],
+      pt: [
+        "Nascido em Chuncheon, Coreia do Sul",
+        "Capitão do Tottenham Hotspur",
+        "Dividiu a artilharia da Premier League em 2021-22",
+      ],
+      es: [
+        "Nacido en Chuncheon, Corea del Sur",
+        "Capitán del Tottenham Hotspur",
+        "Compartió el título de máximo goleador de la Premier League en 2021-22",
+      ],
+    },
+    options: ["Son Heung-min", "Kang-in Lee", "Hwang Hee-chan", "Ki Sung-yueng"],
+    answer: "Son Heung-min",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Abidjan, Ivory Coast",
+        "Chelsea legend and multiple Premier League champion",
+        "Scored the equalizer in the 2012 Champions League final",
+      ],
+      pt: [
+        "Nascido em Abidjan, Costa do Marfim",
+        "Lenda do Chelsea e multicampeão da Premier League",
+        "Marcou o gol de empate na final da Champions League de 2012",
+      ],
+      es: [
+        "Nacido en Abiyán, Costa de Marfil",
+        "Leyenda del Chelsea y multicampeón de la Premier League",
+        "Marcó el gol del empate en la final de la Champions League de 2012",
+      ],
+    },
+    options: ["Didier Drogba", "Yaya Toure", "Kolo Toure", "Wilfried Zaha"],
+    answer: "Didier Drogba",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Hershey, Pennsylvania, USA",
+        "Nicknamed 'Captain America'",
+        "Won the Champions League with Chelsea in 2021",
+      ],
+      pt: [
+        "Nascido em Hershey, Pensilvânia, EUA",
+        "Apelidado de 'Captain America'",
+        "Venceu a Champions League pelo Chelsea em 2021",
+      ],
+      es: [
+        "Nacido en Hershey, Pensilvania, EUA",
+        "Apodado 'Captain America'",
+        "Ganó la Champions League con el Chelsea en 2021",
+      ],
+    },
+    options: ["Christian Pulisic", "Weston McKennie", "Tyler Adams", "Gio Reyna"],
+    answer: "Christian Pulisic",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Lagos, Nigeria",
+        "Prolific striker who led Napoli to the 2022-23 Serie A title",
+        "Later transferred to Galatasaray",
+      ],
+      pt: [
+        "Nascido em Lagos, Nigéria",
+        "Atacante prolífico que liderou o Napoli ao título da Serie A 2022-23",
+        "Depois se transferiu para o Galatasaray",
+      ],
+      es: [
+        "Nacido en Lagos, Nigeria",
+        "Delantero prolífico que lideró al Napoli hacia el título de la Serie A 2022-23",
+        "Después fichó por el Galatasaray",
+      ],
+    },
+    options: ["Victor Osimhen", "Samuel Chukwueze", "Wilfred Ndidi", "Ademola Lookman"],
+    answer: "Victor Osimhen",
   },
 ];
 
