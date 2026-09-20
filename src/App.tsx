@@ -6593,17 +6593,16 @@ export default function SoccerQuiz() {
             )}
           </div>
 
-          <button style={styles.menuBtn} onClick={() => setScreen("start")}>
-            {t.menu}
-          </button>
-          {authUser && profile && (
-            <button
-              style={{ ...styles.menuBtn, marginTop: 4 }}
-              onClick={handleLogout}
-            >
-              {t.authLogoutBtn}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <button style={styles.menuBtn} onClick={() => setScreen("start")}>
+              {t.menu}
             </button>
-          )}
+            {authUser && profile && (
+              <button style={styles.menuBtn} onClick={handleLogout}>
+                {t.authLogoutBtn}
+              </button>
+            )}
+          </div>
         </div>
       )}
 
