@@ -3331,6 +3331,7 @@ const TRANSLATIONS = {
     changeNicknameBtn: "Change nickname",
     findMatchBtn: "FIND RANDOM MATCH",
     searchingText: "Looking for an opponent...",
+    noOpponentFoundError: "No opponent found. Try again later.",
     cancelSearchBtn: "CANCEL",
     matchFoundText: "Match found! Opponent:",
     inviteComingSoon: "Inviting a friend is coming soon.",
@@ -3484,6 +3485,7 @@ const TRANSLATIONS = {
     changeNicknameBtn: "Trocar apelido",
     findMatchBtn: "BUSCAR PARTIDA ALEATÓRIA",
     searchingText: "Procurando um oponente...",
+    noOpponentFoundError: "Nenhum oponente encontrado. Tente novamente mais tarde.",
     cancelSearchBtn: "CANCELAR",
     matchFoundText: "Partida encontrada! Oponente:",
     inviteComingSoon: "Convidar um amigo vem em breve.",
@@ -3637,6 +3639,7 @@ const TRANSLATIONS = {
     changeNicknameBtn: "Cambiar apodo",
     findMatchBtn: "BUSCAR PARTIDA ALEATORIA",
     searchingText: "Buscando un oponente...",
+    noOpponentFoundError: "No se encontró ningún oponente. Intenta más tarde.",
     cancelSearchBtn: "CANCELAR",
     matchFoundText: "¡Partida encontrada! Oponente:",
     inviteComingSoon: "Invitar a un amigo llega pronto.",
@@ -4618,6 +4621,20 @@ export default function SoccerQuiz() {
       await supabase.from("match_queue").delete().eq("user_id", authUser.id);
     }
   }
+
+  // Give up on matchmaking after a while instead of leaving the player
+  // staring at "Looking for an opponent..." forever if nobody else queues.
+  useEffect(() => {
+    if (!searching) return;
+    const timer = setTimeout(async () => {
+      setSearching(false);
+      setMatchmakingError(t.noOpponentFoundError);
+      if (authUser) {
+        await supabase.from("match_queue").delete().eq("user_id", authUser.id);
+      }
+    }, 40000);
+    return () => clearTimeout(timer);
+  }, [searching, authUser]);
 
   async function openMatch(matchId) {
     setSearching(false);
