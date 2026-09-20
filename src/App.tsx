@@ -1076,6 +1076,300 @@ const QUESTION_POOL = [
     options: ["Victor Osimhen", "Samuel Chukwueze", "Wilfred Ndidi", "Ademola Lookman"],
     answer: "Victor Osimhen",
   },
+  {
+    clues: {
+      en: [
+        "Born in a refugee camp in Ghana, but represents Canada",
+        "Fast attacking left-back",
+        "Plays for Bayern Munich",
+      ],
+      pt: [
+        "Nascido em um campo de refugiados em Gana, mas representa o Canadá",
+        "Lateral-esquerdo veloz e ofensivo",
+        "Joga no Bayern de Munique",
+      ],
+      es: [
+        "Nacido en un campo de refugiados en Ghana, pero representa a Canadá",
+        "Lateral izquierdo veloz y ofensivo",
+        "Juega en el Bayern Munich",
+      ],
+    },
+    options: ["Alphonso Davies", "Cyle Larin", "Jonathan David", "Tajon Buchanan"],
+    answer: "Alphonso Davies",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Sarcelles, France, but represents Algeria",
+        "Won the Premier League with Leicester City's 5000-1 title in 2016",
+        "Later starred for Manchester City and Al-Ahli",
+      ],
+      pt: [
+        "Nascido em Sarcelles, França, mas representa a Argélia",
+        "Venceu a Premier League com o milagre do Leicester City em 2016",
+        "Depois se destacou por Manchester City e Al-Ahli",
+      ],
+      es: [
+        "Nacido en Sarcelles, Francia, pero representa a Argelia",
+        "Ganó la Premier League con el milagro del Leicester City en 2016",
+        "Después brilló en el Manchester City y el Al-Ahli",
+      ],
+    },
+    options: ["Riyad Mahrez", "Youcef Belaili", "Islam Slimani", "Sofiane Feghouli"],
+    answer: "Riyad Mahrez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Nkon, Cameroon",
+        "Won the Champions League three times, including Inter's 2010 treble",
+        "Four-time African Player of the Year",
+      ],
+      pt: [
+        "Nascido em Nkon, Camarões",
+        "Venceu a Champions League três vezes, incluindo a tríplice coroa da Inter em 2010",
+        "Eleito Jogador Africano do Ano quatro vezes",
+      ],
+      es: [
+        "Nacido en Nkon, Camerún",
+        "Ganó la Champions League tres veces, incluido el triplete del Inter en 2010",
+        "Elegido Jugador Africano del Año cuatro veces",
+      ],
+    },
+    options: ["Samuel Eto'o", "Vincent Aboubakar", "Andre Onana", "Joel Matip"],
+    answer: "Samuel Eto'o",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Tocopilla, Chile",
+        "Nicknamed 'Nino Maravilla' (Wonder Boy)",
+        "Played for Barcelona, Arsenal, Manchester United and Inter Milan",
+      ],
+      pt: [
+        "Nascido em Tocopilla, Chile",
+        "Apelidado de 'Niño Maravilla'",
+        "Jogou por Barcelona, Arsenal, Manchester United e Inter de Milão",
+      ],
+      es: [
+        "Nacido en Tocopilla, Chile",
+        "Apodado 'Niño Maravilla'",
+        "Jugó en el Barcelona, el Arsenal, el Manchester United y el Inter de Milán",
+      ],
+    },
+    options: ["Alexis Sanchez", "Arturo Vidal", "Claudio Bravo", "Eduardo Vargas"],
+    answer: "Alexis Sanchez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Middelfart, Denmark",
+        "Suffered a cardiac arrest at Euro 2020 and made a remarkable return to football",
+        "Played for Ajax, Tottenham, Inter and Manchester United",
+      ],
+      pt: [
+        "Nascido em Middelfart, Dinamarca",
+        "Sofreu uma parada cardíaca na Eurocopa de 2020 e fez um retorno notável ao futebol",
+        "Jogou por Ajax, Tottenham, Inter e Manchester United",
+      ],
+      es: [
+        "Nacido en Middelfart, Dinamarca",
+        "Sufrió un paro cardíaco en la Eurocopa 2020 e hizo un regreso notable al fútbol",
+        "Jugó en el Ajax, el Tottenham, el Inter y el Manchester United",
+      ],
+    },
+    options: ["Christian Eriksen", "Kasper Schmeichel", "Pierre-Emile Hojbjerg", "Simon Kjaer"],
+    answer: "Christian Eriksen",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Guadalajara, Mexico",
+        "Nicknamed 'Chicharito'",
+        "Mexico's all-time leading World Cup goalscorer",
+      ],
+      pt: [
+        "Nascido em Guadalajara, México",
+        "Apelidado de 'Chicharito'",
+        "Maior artilheiro da história do México em Copas do Mundo",
+      ],
+      es: [
+        "Nacido en Guadalajara, México",
+        "Apodado 'Chicharito'",
+        "Máximo goleador histórico de México en Copas del Mundo",
+      ],
+    },
+    options: ["Javier Hernandez", "Hirving Lozano", "Raul Jimenez", "Andres Guardado"],
+    answer: "Javier Hernandez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Castellammare di Stabia, Italy",
+        "Goalkeeper named Player of the Tournament at Euro 2020",
+        "Played for AC Milan before joining PSG",
+      ],
+      pt: [
+        "Nascido em Castellammare di Stabia, Itália",
+        "Goleiro eleito o melhor jogador da Eurocopa de 2020",
+        "Jogou pelo AC Milan antes de ir para o PSG",
+      ],
+      es: [
+        "Nacido en Castellammare di Stabia, Italia",
+        "Portero elegido el mejor jugador de la Eurocopa 2020",
+        "Jugó en el AC Milan antes de fichar por el PSG",
+      ],
+    },
+    options: ["Gianluigi Donnarumma", "Alex Meret", "Wojciech Szczesny", "Mike Maignan"],
+    answer: "Gianluigi Donnarumma",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Genoa, Italy",
+        "Won Euro 2020 with the Italian national team",
+        "Played for Fiorentina and Juventus before joining Liverpool",
+      ],
+      pt: [
+        "Nascido em Gênova, Itália",
+        "Venceu a Eurocopa de 2020 com a seleção italiana",
+        "Jogou por Fiorentina e Juventus antes de ir para o Liverpool",
+      ],
+      es: [
+        "Nacido en Génova, Italia",
+        "Ganó la Eurocopa 2020 con la selección italiana",
+        "Jugó en la Fiorentina y la Juventus antes de fichar por el Liverpool",
+      ],
+    },
+    options: ["Federico Chiesa", "Lorenzo Insigne", "Nicolo Barella", "Marco Verratti"],
+    answer: "Federico Chiesa",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Kawasaki, Japan",
+        "Nicknamed the 'Japanese Messi' after his time in Barcelona's academy",
+        "Plays for Real Sociedad",
+      ],
+      pt: [
+        "Nascido em Kawasaki, Japão",
+        "Apelidado de 'Messi japonês' após passar pela base do Barcelona",
+        "Joga na Real Sociedad",
+      ],
+      es: [
+        "Nacido en Kawasaki, Japón",
+        "Apodado el 'Messi japonés' tras pasar por la cantera del Barcelona",
+        "Juega en la Real Sociedad",
+      ],
+    },
+    options: ["Takefusa Kubo", "Kaoru Mitoma", "Ritsu Doan", "Daichi Kamada"],
+    answer: "Takefusa Kubo",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Dvirkivshchyna, Ukraine",
+        "Won the Ballon d'Or in 2004",
+        "Starred for AC Milan and Chelsea",
+      ],
+      pt: [
+        "Nascido em Dvirkivshchyna, Ucrânia",
+        "Venceu a Bola de Ouro em 2004",
+        "Foi destaque por AC Milan e Chelsea",
+      ],
+      es: [
+        "Nacido en Dvirkivshchyna, Ucrania",
+        "Ganó el Balón de Oro en 2004",
+        "Fue figura en el AC Milan y el Chelsea",
+      ],
+    },
+    options: ["Andriy Shevchenko", "Andriy Yarmolenko", "Oleksandr Zinchenko", "Ruslan Malinovskyi"],
+    answer: "Andriy Shevchenko",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Accra, Ghana",
+        "Africa's all-time top World Cup goalscorer",
+        "Famous for a near-miss penalty against Uruguay at the 2010 World Cup",
+      ],
+      pt: [
+        "Nascido em Acra, Gana",
+        "Maior artilheiro africano na história das Copas do Mundo",
+        "Famoso por perder um pênalti decisivo contra o Uruguai na Copa de 2010",
+      ],
+      es: [
+        "Nacido en Acra, Ghana",
+        "Máximo goleador africano en la historia de los Mundiales",
+        "Famoso por fallar un penal decisivo ante Uruguay en el Mundial de 2010",
+      ],
+    },
+    options: ["Asamoah Gyan", "Andre Ayew", "Sulley Muntari", "Michael Essien"],
+    answer: "Asamoah Gyan",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Ankara, Turkey",
+        "Young attacking midfielder known for his free kicks",
+        "Joined Real Madrid from Fenerbahce",
+      ],
+      pt: [
+        "Nascido em Ancara, Turquia",
+        "Jovem meia ofensivo conhecido por suas cobranças de falta",
+        "Foi para o Real Madrid vindo do Fenerbahçe",
+      ],
+      es: [
+        "Nacido en Ankara, Turquía",
+        "Joven mediapunta conocido por sus tiros libres",
+        "Fichó por el Real Madrid procedente del Fenerbahçe",
+      ],
+    },
+    options: ["Arda Guler", "Kenan Yildiz", "Hakan Calhanoglu", "Cengiz Under"],
+    answer: "Arda Guler",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Bushehr, Iran",
+        "Prolific striker for Porto before joining Inter Milan",
+        "One of Asia's top international goalscorers",
+      ],
+      pt: [
+        "Nascido em Bushehr, Irã",
+        "Atacante prolífico do Porto antes de ir para a Inter de Milão",
+        "Um dos maiores artilheiros da Ásia em seleções",
+      ],
+      es: [
+        "Nacido en Bushehr, Irán",
+        "Delantero prolífico del Porto antes de fichar por el Inter de Milán",
+        "Uno de los máximos goleadores de Asia a nivel de selecciones",
+      ],
+    },
+    options: ["Mehdi Taremi", "Sardar Azmoun", "Alireza Jahanbakhsh", "Karim Ansarifard"],
+    answer: "Mehdi Taremi",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Perez Zeledon, Costa Rica",
+        "Starred as goalkeeper at the 2014 World Cup",
+        "Won multiple Champions League titles with Real Madrid before joining PSG",
+      ],
+      pt: [
+        "Nascido em Pérez Zeledón, Costa Rica",
+        "Foi destaque como goleiro na Copa do Mundo de 2014",
+        "Venceu várias Champions League pelo Real Madrid antes de ir para o PSG",
+      ],
+      es: [
+        "Nacido en Pérez Zeledón, Costa Rica",
+        "Fue figura como portero en el Mundial de 2014",
+        "Ganó varias Champions League con el Real Madrid antes de fichar por el PSG",
+      ],
+    },
+    options: ["Keylor Navas", "Joel Campbell", "Bryan Ruiz", "Celso Borges"],
+    answer: "Keylor Navas",
+  },
 ];
 
 // ============ LINEUP MODE DATA ============
