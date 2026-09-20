@@ -2504,6 +2504,636 @@ const QUESTION_POOL = [
     options: ["N'Golo Kante", "Paul Pogba", "Blaise Matuidi", "Corentin Tolisso"],
     answer: "N'Golo Kante",
   },
+  {
+    clues: {
+      en: [
+        "Born in Belfast, Northern Ireland",
+        "Won the European Cup with Manchester United in 1968",
+        "Considered one of the greatest dribblers in football history",
+      ],
+      pt: [
+        "Nascido em Belfast, Irlanda do Norte",
+        "Venceu a Copa dos Campeões pelo Manchester United em 1968",
+        "Considerado um dos maiores driblador da história do futebol",
+      ],
+      es: [
+        "Nacido en Belfast, Irlanda del Norte",
+        "Ganó la Copa de Europa con el Manchester United en 1968",
+        "Considerado uno de los mejores regateadores de la historia del fútbol",
+      ],
+    },
+    options: ["George Best", "Denis Law", "Bobby Charlton", "Nobby Stiles"],
+    answer: "George Best",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Ashington, England",
+        "Survived the 1958 Munich air disaster",
+        "Won the 1966 World Cup and the 1968 European Cup with Manchester United",
+      ],
+      pt: [
+        "Nascido em Ashington, Inglaterra",
+        "Sobreviveu ao desastre aéreo de Munique em 1958",
+        "Venceu a Copa do Mundo de 1966 e a Copa dos Campeões de 1968 pelo Manchester United",
+      ],
+      es: [
+        "Nacido en Ashington, Inglaterra",
+        "Sobrevivió al accidente aéreo de Múnich en 1958",
+        "Ganó el Mundial de 1966 y la Copa de Europa de 1968 con el Manchester United",
+      ],
+    },
+    options: ["Bobby Charlton", "Geoff Hurst", "George Best", "Jack Charlton"],
+    answer: "Bobby Charlton",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Newcastle, England",
+        "Premier League's all-time top goalscorer",
+        "Played for Southampton, Blackburn Rovers and Newcastle United",
+      ],
+      pt: [
+        "Nascido em Newcastle, Inglaterra",
+        "Maior artilheiro da história da Premier League",
+        "Jogou por Southampton, Blackburn Rovers e Newcastle United",
+      ],
+      es: [
+        "Nacido en Newcastle, Inglaterra",
+        "Máximo goleador histórico de la Premier League",
+        "Jugó en el Southampton, el Blackburn Rovers y el Newcastle United",
+      ],
+    },
+    options: ["Alan Shearer", "Ian Wright", "Les Ferdinand", "Teddy Sheringham"],
+    answer: "Alan Shearer",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Leicester, England",
+        "Won the Golden Boot at the 1986 World Cup",
+        "Played for Barcelona and Tottenham before becoming a TV presenter",
+      ],
+      pt: [
+        "Nascido em Leicester, Inglaterra",
+        "Venceu a Chuteira de Ouro na Copa do Mundo de 1986",
+        "Jogou por Barcelona e Tottenham antes de virar apresentador de TV",
+      ],
+      es: [
+        "Nacido en Leicester, Inglaterra",
+        "Ganó la Bota de Oro en el Mundial de 1986",
+        "Jugó en el Barcelona y el Tottenham antes de convertirse en presentador de televisión",
+      ],
+    },
+    options: ["Gary Lineker", "Peter Beardsley", "Chris Waddle", "John Barnes"],
+    answer: "Gary Lineker",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Chester, England",
+        "Won the Ballon d'Or in 2001",
+        "Scored a famous solo goal against Argentina at the 1998 World Cup",
+      ],
+      pt: [
+        "Nascido em Chester, Inglaterra",
+        "Venceu a Bola de Ouro em 2001",
+        "Marcou um gol solo famoso contra a Argentina na Copa do Mundo de 1998",
+      ],
+      es: [
+        "Nacido en Chester, Inglaterra",
+        "Ganó el Balón de Oro en 2001",
+        "Anotó un famoso gol en solitario ante Argentina en el Mundial de 1998",
+      ],
+    },
+    options: ["Michael Owen", "Emile Heskey", "Robbie Fowler", "Andy Cole"],
+    answer: "Michael Owen",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Budapest, Hungary",
+        "Nicknamed the 'Galloping Major'",
+        "Scored four goals in the 1960 European Cup final for Real Madrid",
+      ],
+      pt: [
+        "Nascido em Budapeste, Hungria",
+        "Apelidado de 'Major Galopante'",
+        "Marcou quatro gols na final da Copa dos Campeões de 1960 pelo Real Madrid",
+      ],
+      es: [
+        "Nacido en Budapest, Hungría",
+        "Apodado el 'Mayor Galopante'",
+        "Anotó cuatro goles en la final de la Copa de Europa de 1960 con el Real Madrid",
+      ],
+    },
+    options: ["Ferenc Puskas", "Sandor Kocsis", "Nandor Hidegkuti", "Zoltan Czibor"],
+    answer: "Ferenc Puskas",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Lourenco Marques, Mozambique, but represented Portugal",
+        "Nicknamed the 'Black Panther'",
+        "Top scorer at the 1966 World Cup, leading Portugal to third place",
+      ],
+      pt: [
+        "Nascido em Lourenço Marques, Moçambique, mas representou Portugal",
+        "Apelidado de 'Pantera Negra'",
+        "Artilheiro da Copa do Mundo de 1966, levando Portugal ao terceiro lugar",
+      ],
+      es: [
+        "Nacido en Lourenco Marques, Mozambique, pero represento a Portugal",
+        "Apodado la 'Pantera Negra'",
+        "Maximo goleador del Mundial de 1966, llevando a Portugal al tercer puesto",
+      ],
+    },
+    options: ["Eusebio", "Antonio Simoes", "Jose Torres", "Mario Coluna"],
+    answer: "Eusebio",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Joeuf, France",
+        "Won the Ballon d'Or three years in a row (1983-1985)",
+        "Captained France to the Euro 1984 title and starred for Juventus",
+      ],
+      pt: [
+        "Nascido em Joeuf, França",
+        "Venceu a Bola de Ouro três anos seguidos (1983-1985)",
+        "Foi capitão da França na Eurocopa de 1984 e se destacou na Juventus",
+      ],
+      es: [
+        "Nacido en Joeuf, Francia",
+        "Ganó el Balón de Oro tres años seguidos (1983-1985)",
+        "Fue capitán de Francia en la Eurocopa de 1984 y brilló en la Juventus",
+      ],
+    },
+    options: ["Michel Platini", "Jean Tigana", "Alain Giresse", "Bernard Genghini"],
+    answer: "Michel Platini",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Utrecht, Netherlands",
+        "Won the Ballon d'Or three times",
+        "Scored an iconic volley in the Euro 1988 final for the Netherlands",
+      ],
+      pt: [
+        "Nascido em Utrecht, Holanda",
+        "Venceu a Bola de Ouro três vezes",
+        "Marcou um voleio icônico na final da Eurocopa de 1988 pela Holanda",
+      ],
+      es: [
+        "Nacido en Utrecht, Países Bajos",
+        "Ganó el Balón de Oro tres veces",
+        "Anotó una icónica volea en la final de la Eurocopa 1988 con los Países Bajos",
+      ],
+    },
+    options: ["Marco van Basten", "Ruud Gullit", "Frank Rijkaard", "Dennis Bergkamp"],
+    answer: "Marco van Basten",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Amsterdam, Netherlands",
+        "Won the Ballon d'Or in 1987",
+        "Part of AC Milan's famous Dutch trio alongside van Basten and Rijkaard",
+      ],
+      pt: [
+        "Nascido em Amsterdã, Holanda",
+        "Venceu a Bola de Ouro em 1987",
+        "Parte do famoso trio holandês do AC Milan ao lado de van Basten e Rijkaard",
+      ],
+      es: [
+        "Nacido en Amsterdam, Países Bajos",
+        "Ganó el Balón de Oro en 1987",
+        "Parte del famoso trío neerlandés del AC Milan junto a van Basten y Rijkaard",
+      ],
+    },
+    options: ["Ruud Gullit", "Marco van Basten", "Frank Rijkaard", "Edgar Davids"],
+    answer: "Ruud Gullit",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Caldogno, Italy",
+        "Nicknamed 'Il Divin Codino' (The Divine Ponytail)",
+        "Won the Ballon d'Or in 1993",
+      ],
+      pt: [
+        "Nascido em Caldogno, Itália",
+        "Apelidado de 'Il Divin Codino' (O Rabo de Cavalo Divino)",
+        "Venceu a Bola de Ouro em 1993",
+      ],
+      es: [
+        "Nacido en Caldogno, Italia",
+        "Apodado 'Il Divin Codino' (La Coleta Divina)",
+        "Ganó el Balón de Oro en 1993",
+      ],
+    },
+    options: ["Roberto Baggio", "Alessandro Del Piero", "Gianfranco Zola", "Salvatore Schillaci"],
+    answer: "Roberto Baggio",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Naples, Italy",
+        "Won the Ballon d'Or in 2006, a rare feat for a defender",
+        "Captained Italy to the 2006 World Cup title",
+      ],
+      pt: [
+        "Nascido em Nápoles, Itália",
+        "Venceu a Bola de Ouro em 2006, feito raro para um zagueiro",
+        "Foi capitão da Itália na conquista da Copa do Mundo de 2006",
+      ],
+      es: [
+        "Nacido en Nápoles, Italia",
+        "Ganó el Balón de Oro en 2006, una hazaña poco común para un defensor",
+        "Fue capitán de Italia en la conquista del Mundial de 2006",
+      ],
+    },
+    options: ["Fabio Cannavaro", "Alessandro Nesta", "Paolo Maldini", "Marco Materazzi"],
+    answer: "Fabio Cannavaro",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Monrovia, Liberia",
+        "The only African player to win the Ballon d'Or (1995)",
+        "Later became President of Liberia",
+      ],
+      pt: [
+        "Nascido em Monróvia, Libéria",
+        "O único jogador africano a vencer a Bola de Ouro (1995)",
+        "Depois se tornou presidente da Libéria",
+      ],
+      es: [
+        "Nacido en Monrovia, Liberia",
+        "El único jugador africano en ganar el Balón de Oro (1995)",
+        "Después se convirtió en presidente de Liberia",
+      ],
+    },
+    options: ["George Weah", "Didier Drogba", "Samuel Eto'o", "Jay-Jay Okocha"],
+    answer: "George Weah",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Brasilia, Brazil",
+        "Won the Ballon d'Or in 2007",
+        "Starred for AC Milan before joining Real Madrid",
+      ],
+      pt: [
+        "Nascido em Brasília, Brasil",
+        "Venceu a Bola de Ouro em 2007",
+        "Foi destaque no AC Milan antes de se transferir ao Real Madrid",
+      ],
+      es: [
+        "Nacido en Brasilia, Brasil",
+        "Ganó el Balón de Oro en 2007",
+        "Brilló en el AC Milan antes de fichar por el Real Madrid",
+      ],
+    },
+    options: ["Kaka", "Ronaldinho", "Robinho", "Alexandre Pato"],
+    answer: "Kaka",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Recife, Brazil",
+        "Won the Ballon d'Or in 1999",
+        "Won the 2002 World Cup with Brazil",
+      ],
+      pt: [
+        "Nascido em Recife, Brasil",
+        "Venceu a Bola de Ouro em 1999",
+        "Venceu a Copa do Mundo de 2002 pelo Brasil",
+      ],
+      es: [
+        "Nacido en Recife, Brasil",
+        "Ganó el Balón de Oro en 1999",
+        "Ganó el Mundial de 2002 con Brasil",
+      ],
+    },
+    options: ["Rivaldo", "Ronaldinho", "Romario", "Edmundo"],
+    answer: "Rivaldo",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Sao Paulo, Brazil",
+        "Only player to appear in three straight World Cup finals (1994, 1998 and 2002)",
+        "Captained Brazil to the 2002 World Cup title",
+      ],
+      pt: [
+        "Nascido em São Paulo, Brasil",
+        "Único jogador a disputar três finais de Copa do Mundo seguidas (1994, 1998 e 2002)",
+        "Foi capitão do Brasil na conquista da Copa do Mundo de 2002",
+      ],
+      es: [
+        "Nacido en Sao Paulo, Brasil",
+        "Único jugador en disputar tres finales de Mundial seguidas (1994, 1998 y 2002)",
+        "Fue capitán de Brasil en la conquista del Mundial de 2002",
+      ],
+    },
+    options: ["Cafu", "Roberto Carlos", "Dida", "Lucio"],
+    answer: "Cafu",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Garca, Brazil",
+        "Famous for his thunderous free kicks, including an iconic one against France in 1997",
+        "Legendary left-back for Real Madrid",
+      ],
+      pt: [
+        "Nascido em Garça, Brasil",
+        "Famoso pelas cobranças de falta potentes, incluindo uma icônica contra a França em 1997",
+        "Lateral-esquerdo lendário do Real Madrid",
+      ],
+      es: [
+        "Nacido en Garca, Brasil",
+        "Famoso por sus potentes tiros libres, incluido uno icónico ante Francia en 1997",
+        "Lateral izquierdo legendario del Real Madrid",
+      ],
+    },
+    options: ["Roberto Carlos", "Cafu", "Marcelo", "Maicon"],
+    answer: "Roberto Carlos",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Santa Marta, Colombia",
+        "Instantly recognizable for his wild blonde afro hairstyle",
+        "Legendary playmaker and captain of Colombia in the 1990s",
+      ],
+      pt: [
+        "Nascido em Santa Marta, Colômbia",
+        "Reconhecível na hora pelo cabelo black power loiro e desalinhado",
+        "Meia lendário e capitão da Colômbia nos anos 1990",
+      ],
+      es: [
+        "Nacido en Santa Marta, Colombia",
+        "Reconocible al instante por su alborotado afro rubio",
+        "Mediocampista legendario y capitán de Colombia en la década de 1990",
+      ],
+    },
+    options: ["Carlos Valderrama", "Rene Higuita", "Freddy Rincon", "Faustino Asprilla"],
+    answer: "Carlos Valderrama",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Plovdiv, Bulgaria",
+        "Won the Ballon d'Or in 1994",
+        "Barcelona legend who was joint top scorer at the 1994 World Cup",
+      ],
+      pt: [
+        "Nascido em Plovdiv, Bulgária",
+        "Venceu a Bola de Ouro em 1994",
+        "Lenda do Barcelona, foi artilheiro dividido na Copa do Mundo de 1994",
+      ],
+      es: [
+        "Nacido en Plovdiv, Bulgaria",
+        "Ganó el Balón de Oro en 1994",
+        "Leyenda del Barcelona, fue maximo goleador compartido en el Mundial de 1994",
+      ],
+    },
+    options: ["Hristo Stoichkov", "Dimitar Berbatov", "Krasimir Balakov", "Stiliyan Petrov"],
+    answer: "Hristo Stoichkov",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Osijek, Croatia",
+        "Won the Golden Boot at the 1998 World Cup with six goals",
+        "Helped Croatia reach the semifinals in their first World Cup as an independent nation",
+      ],
+      pt: [
+        "Nascido em Osijek, Croácia",
+        "Venceu a Chuteira de Ouro na Copa do Mundo de 1998 com seis gols",
+        "Ajudou a Croácia a chegar às semifinais em sua primeira Copa como nação independente",
+      ],
+      es: [
+        "Nacido en Osijek, Croacia",
+        "Ganó la Bota de Oro en el Mundial de 1998 con seis goles",
+        "Ayudó a Croacia a llegar a semifinales en su primer Mundial como nación independiente",
+      ],
+    },
+    options: ["Davor Suker", "Zvonimir Boban", "Robert Prosinecki", "Aljosa Asanovic"],
+    answer: "Davor Suker",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Gladsaxe, Denmark",
+        "Won the treble with Manchester United in 1999",
+        "Won the surprise Euro 1992 title with Denmark",
+      ],
+      pt: [
+        "Nascido em Gladsaxe, Dinamarca",
+        "Venceu a tríplice coroa com o Manchester United em 1999",
+        "Venceu o surpreendente título da Eurocopa de 1992 pela Dinamarca",
+      ],
+      es: [
+        "Nacido en Gladsaxe, Dinamarca",
+        "Ganó el triplete con el Manchester United en 1999",
+        "Ganó el sorprendente título de la Eurocopa 1992 con Dinamarca",
+      ],
+    },
+    options: ["Peter Schmeichel", "Kasper Schmeichel", "Michael Laudrup", "Brian Laudrup"],
+    answer: "Peter Schmeichel",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Santpedor, Spain",
+        "Was the midfield anchor of Barcelona's 'Dream Team' as a player",
+        "Later became one of the most successful managers in football history",
+      ],
+      pt: [
+        "Nascido em Santpedor, Espanha",
+        "Foi o volante do 'Dream Team' do Barcelona como jogador",
+        "Depois se tornou um dos técnicos mais vitoriosos da história do futebol",
+      ],
+      es: [
+        "Nacido en Santpedor, España",
+        "Fue el ancla del mediocampo del 'Dream Team' del Barcelona como jugador",
+        "Después se convirtió en uno de los entrenadores más exitosos de la historia del fútbol",
+      ],
+    },
+    options: ["Pep Guardiola", "Luis Enrique", "Pepe Reina", "Xavi Hernandez"],
+    answer: "Pep Guardiola",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Madrid, Spain",
+        "Real Madrid's all-time top scorer for over a decade",
+        "Won three Champions League titles with Real Madrid in the late 1990s and 2000s",
+      ],
+      pt: [
+        "Nascido em Madri, Espanha",
+        "Foi o maior artilheiro da história do Real Madrid por mais de uma década",
+        "Venceu três Champions League pelo Real Madrid entre o fim dos anos 1990 e os anos 2000",
+      ],
+      es: [
+        "Nacido en Madrid, España",
+        "Fue el máximo goleador histórico del Real Madrid durante más de una década",
+        "Ganó tres Champions League con el Real Madrid entre finales de los 90 y los 2000",
+      ],
+    },
+    options: ["Raul Gonzalez", "Fernando Hierro", "Michel Salgado", "Ivan Helguera"],
+    answer: "Raul Gonzalez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in La Pobla de Segur, Spain",
+        "Instantly recognizable for his long hair",
+        "Scored the winning goal in the 2010 World Cup semifinal against Germany",
+      ],
+      pt: [
+        "Nascido em La Pobla de Segur, Espanha",
+        "Reconhecível na hora pelo cabelo comprido",
+        "Marcou o gol da vitória na semifinal da Copa do Mundo de 2010 contra a Alemanha",
+      ],
+      es: [
+        "Nacido en La Pobla de Segur, España",
+        "Reconocible al instante por su pelo largo",
+        "Anotó el gol de la victoria en la semifinal del Mundial de 2010 ante Alemania",
+      ],
+    },
+    options: ["Carles Puyol", "Gerard Pique", "Carlos Marchena", "Oleguer"],
+    answer: "Carles Puyol",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Camas, Spain",
+        "Scored a dramatic last-minute equalizer in the 2014 Champions League final",
+        "Real Madrid's long-time captain and Spain's most-capped player",
+      ],
+      pt: [
+        "Nascido em Camas, Espanha",
+        "Marcou um gol de empate dramático nos acréscimos da final da Champions League de 2014",
+        "Capitão histórico do Real Madrid e jogador com mais partidas pela seleção espanhola",
+      ],
+      es: [
+        "Nacido en Camas, España",
+        "Anotó un dramático gol del empate en el último minuto en la final de la Champions League de 2014",
+        "Capitán histórico del Real Madrid y jugador con más partidos con la selección española",
+      ],
+    },
+    options: ["Sergio Ramos", "Gerard Pique", "Carles Puyol", "Pepe"],
+    answer: "Sergio Ramos",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Goppingen, Germany",
+        "Won the 1990 World Cup with West Germany",
+        "Played for Inter Milan, Tottenham and Bayern Munich before becoming a coach",
+      ],
+      pt: [
+        "Nascido em Göppingen, Alemanha",
+        "Venceu a Copa do Mundo de 1990 pela Alemanha Ocidental",
+        "Jogou por Inter de Milão, Tottenham e Bayern de Munique antes de virar técnico",
+      ],
+      es: [
+        "Nacido en Göppingen, Alemania",
+        "Ganó el Mundial de 1990 con Alemania Occidental",
+        "Jugó en el Inter de Milán, el Tottenham y el Bayern Múnich antes de ser entrenador",
+      ],
+    },
+    options: ["Jurgen Klinsmann", "Rudi Voller", "Karl-Heinz Rummenigge", "Andreas Brehme"],
+    answer: "Jurgen Klinsmann",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Opole, Poland, but represents Germany",
+        "The all-time leading goalscorer in World Cup history",
+        "Known for his signature front-flip goal celebration",
+      ],
+      pt: [
+        "Nascido em Opole, Polônia, mas representa a Alemanha",
+        "Maior artilheiro da história das Copas do Mundo",
+        "Conhecido pela comemoração de gol com o mortal para frente",
+      ],
+      es: [
+        "Nacido en Opole, Polonia, pero representa a Alemania",
+        "Máximo goleador histórico en la historia de los Mundiales",
+        "Conocido por su característica celebración de gol con salto mortal hacia adelante",
+      ],
+    },
+    options: ["Miroslav Klose", "Lukas Podolski", "Mario Gomez", "Thomas Muller"],
+    answer: "Miroslav Klose",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "Legendary playmaker known for his elegant, unhurried style",
+        "Won multiple Copa Libertadores titles with Boca Juniors",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Meia lendário conhecido pelo estilo elegante e sem pressa",
+        "Venceu várias Libertadores pelo Boca Juniors",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Mediocampista legendario conocido por su estilo elegante y pausado",
+        "Ganó varias Copas Libertadores con Boca Juniors",
+      ],
+    },
+    options: ["Juan Roman Riquelme", "Pablo Aimar", "Andres D'Alessandro", "Ariel Ortega"],
+    answer: "Juan Roman Riquelme",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Rio de Janeiro, Brazil",
+        "Nicknamed the 'White Pele'",
+        "Flamengo legend widely considered one of the greatest players never to win a World Cup",
+      ],
+      pt: [
+        "Nascido no Rio de Janeiro, Brasil",
+        "Apelidado de 'Pelé Branco'",
+        "Ídolo do Flamengo, considerado um dos maiores jogadores que nunca venceram uma Copa do Mundo",
+      ],
+      es: [
+        "Nacido en Rio de Janeiro, Brasil",
+        "Apodado el 'Pelé Blanco'",
+        "Ídolo del Flamengo, considerado uno de los mejores jugadores que nunca ganaron un Mundial",
+      ],
+    },
+    options: ["Zico", "Socrates", "Falcao", "Junior"],
+    answer: "Zico",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Belem, Brazil",
+        "Captained Brazil's iconic 1982 World Cup team",
+        "Was also a qualified medical doctor",
+      ],
+      pt: [
+        "Nascido em Belém, Brasil",
+        "Foi capitão da icônica seleção brasileira de 1982",
+        "Também era médico formado",
+      ],
+      es: [
+        "Nacido en Belem, Brasil",
+        "Fue capitán del icónico equipo brasileño de 1982",
+        "También era médico titulado",
+      ],
+    },
+    options: ["Socrates", "Zico", "Falcao", "Eder"],
+    answer: "Socrates",
+  },
 ];
 
 // ============ LINEUP MODE DATA ============
