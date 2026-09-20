@@ -4319,23 +4319,27 @@ export default function SoccerQuiz() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // Edge-swipe to go back, like iOS/Instagram/X: a rightward drag starting
-  // within a thin strip along the left edge triggers whichever back/menu
-  // button is currently on screen, reusing its exact click handler (and
-  // any side effects like leaving a room or forfeiting a duel) instead of
+  // Swipe right to go back, like iOS/Instagram/X: a left-to-right drag
+  // starting ANYWHERE on screen triggers whichever back/menu button is
+  // currently mounted, reusing its exact click handler (and any side
+  // effects like leaving a room or forfeiting a duel) instead of
   // duplicating that navigation logic here. The page itself is dragged
   // along with the finger (direct DOM style writes, not React state, so
   // it stays at 60fps) and eases the rest of the way out or snaps back
-  // on release, instead of jumping straight to the new screen.
+  // on release, instead of jumping straight to the new screen. A small
+  // dead zone plus a horizontal-vs-vertical check keep ordinary taps and
+  // vertical scrolling (e.g. the leaderboard list) from being mistaken
+  // for a swipe.
   useEffect(() => {
     const el = swipePageRef.current;
     if (!el) return;
-    const EDGE_ZONE = 24;
-    const MIN_DX = 70;
+    const DEAD_ZONE = 10;
+    const MIN_DX = 90;
     const SLIDE_MS = 200;
     let startX = null;
     let startY = null;
-    let dragging = false;
+    let tracking = false; // finger is down, gesture not yet classified
+    let swiping = false; // confirmed rightward drag, page is following it
     let dx = 0;
 
     function settle(transform, after) {
@@ -4350,34 +4354,40 @@ export default function SoccerQuiz() {
 
     function onTouchStart(e) {
       const touch = e.touches[0];
-      if (!touch || touch.clientX > EDGE_ZONE) return;
+      if (!touch) return;
       if (!document.getElementById("gtpBackBtn")) return;
       startX = touch.clientX;
       startY = touch.clientY;
-      dragging = true;
+      tracking = true;
+      swiping = false;
       dx = 0;
       el.style.transition = "none";
-      el.style.willChange = "transform";
     }
     function onTouchMove(e) {
-      if (!dragging) return;
+      if (!tracking) return;
       const touch = e.touches[0];
       if (!touch) return;
       const moveX = touch.clientX - startX;
       const moveY = touch.clientY - startY;
-      if (Math.abs(moveY) > Math.abs(moveX) + 15) {
-        // Turned into a vertical scroll - bail without navigating.
-        dragging = false;
-        el.style.transition = "";
-        el.style.transform = "";
-        return;
+
+      if (!swiping) {
+        if (Math.abs(moveX) < DEAD_ZONE && Math.abs(moveY) < DEAD_ZONE) return;
+        if (Math.abs(moveY) > Math.abs(moveX) || moveX <= 0) {
+          // Vertical scroll or a leftward drag - not a "back" gesture.
+          tracking = false;
+          return;
+        }
+        swiping = true;
+        el.style.willChange = "transform";
       }
+
       dx = Math.max(0, moveX);
       el.style.transform = `translateX(${dx}px)`;
     }
     function onTouchEnd() {
-      if (!dragging) return;
-      dragging = false;
+      tracking = false;
+      if (!swiping) return;
+      swiping = false;
       el.style.willChange = "";
       if (dx > MIN_DX) {
         settle("translateX(100%)", () => {
