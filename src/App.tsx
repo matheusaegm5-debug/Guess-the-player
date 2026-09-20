@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import QRCode from "qrcode";
 import { supabase } from "./lib/supabaseClient";
 
 // ============ CLUES MODE DATA ============
@@ -3356,6 +3357,7 @@ const TRANSLATIONS = {
     roomNotFound: "Room not found or already started.",
     roomCodeLabel: "ROOM CODE",
     roomShareHint: "Share this code with your friends",
+    roomQrHint: "Or scan to join instantly",
     roomCopyBtn: "COPY CODE",
     roomCodeCopiedMsg: "Copied!",
     roomPlayersLabel: "PLAYERS",
@@ -3508,6 +3510,7 @@ const TRANSLATIONS = {
     roomNotFound: "Sala não encontrada ou já começou.",
     roomCodeLabel: "CÓDIGO DA SALA",
     roomShareHint: "Compartilhe esse código com seus amigos",
+    roomQrHint: "Ou escaneie para entrar na hora",
     roomCopyBtn: "COPIAR CÓDIGO",
     roomCodeCopiedMsg: "Copiado!",
     roomPlayersLabel: "JOGADORES",
@@ -3660,6 +3663,7 @@ const TRANSLATIONS = {
     roomNotFound: "Sala no encontrada o ya comenzó.",
     roomCodeLabel: "CÓDIGO DE SALA",
     roomShareHint: "Comparte este código con tus amigos",
+    roomQrHint: "O escanea para entrar al instante",
     roomCopyBtn: "COPIAR CÓDIGO",
     roomCodeCopiedMsg: "¡Copiado!",
     roomPlayersLabel: "JUGADORES",
@@ -4137,6 +4141,39 @@ function StatItem({ icon, label }) {
   );
 }
 
+function RoomQrCode({ value, size = 140 }) {
+  const [dataUrl, setDataUrl] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    QRCode.toDataURL(value, {
+      width: size * 2,
+      margin: 1,
+      color: { dark: "#101820", light: "#FFFFFF" },
+    })
+      .then((url) => {
+        if (!cancelled) setDataUrl(url);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [value, size]);
+
+  if (!dataUrl) {
+    return <div style={{ width: size, height: size }} />;
+  }
+  return (
+    <img
+      src={dataUrl}
+      alt="QR code"
+      width={size}
+      height={size}
+      style={{ borderRadius: 12 }}
+    />
+  );
+}
+
 function RoomLeaderboard({
   players,
   myUserId,
@@ -4511,6 +4548,7 @@ export default function SoccerQuiz() {
   const [roomActive, setRoomActive] = useState(false);
   const [roomCountdown, setRoomCountdown] = useState(3);
   const [pendingRoomQuestions, setPendingRoomQuestions] = useState(null);
+  const [pendingRoomCode, setPendingRoomCode] = useState(null);
 
   useEffect(() => {
     if (!authUser) {
@@ -4712,12 +4750,11 @@ export default function SoccerQuiz() {
     setScreen("roomLobby");
   }
 
-  async function handleJoinRoom(e) {
-    e.preventDefault();
+  async function joinRoomByCode(rawCode) {
     if (!authUser || !profile) return;
     setRoomBusy(true);
     setRoomError("");
-    const code = roomCodeInput.trim();
+    const code = rawCode.trim();
     const { data: foundRoom } = await supabase
       .from("rooms")
       .select("*")
@@ -4749,6 +4786,32 @@ export default function SoccerQuiz() {
     setRoomCodeInput("");
     setScreen("roomLobby");
   }
+
+  async function handleJoinRoom(e) {
+    e.preventDefault();
+    joinRoomByCode(roomCodeInput);
+  }
+
+  // A room's QR code encodes a link back to this same page with
+  // ?room=<code>. On load, pick that up once and strip it from the URL
+  // (so refreshing/reopening doesn't try to rejoin), then head to the
+  // multiplayer screen to sign in if needed.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("room");
+    if (!code) return;
+    setPendingRoomCode(code);
+    window.history.replaceState(null, "", window.location.pathname);
+    setScreen("multiplayer");
+  }, []);
+
+  // Once signed in with a nickname, finish joining the room the QR code
+  // pointed at.
+  useEffect(() => {
+    if (pendingRoomCode && authUser && profile) {
+      joinRoomByCode(pendingRoomCode);
+      setPendingRoomCode(null);
+    }
+  }, [pendingRoomCode, authUser, profile]);
 
   function allPlayersReady() {
     if (!room) return true;
@@ -7739,6 +7802,22 @@ export default function SoccerQuiz() {
           >
             {roomCodeCopied ? t.roomCodeCopiedMsg : t.roomCopyBtn}
           </button>
+
+          <div
+            style={{
+              ...styles.modeCard,
+              marginTop: 20,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <RoomQrCode
+              value={`${window.location.origin}${window.location.pathname}?room=${room.code}`}
+            />
+            <p style={{ ...styles.lightSubtitle, margin: 0, fontSize: 13 }}>{t.roomQrHint}</p>
+          </div>
 
           <div style={{ ...styles.lightEyebrow, fontSize: 13, marginTop: 24 }}>
             {t.currentModeLabel}
