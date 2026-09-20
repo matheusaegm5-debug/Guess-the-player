@@ -4280,6 +4280,7 @@ export default function SoccerQuiz() {
 
   const [soundEnabled, setSoundEnabled] = useState(true);
   const audioCtxRef = useRef(null);
+  const swipePageRef = useRef(null);
 
   // --- Multiplayer auth state ---
   const [authUser, setAuthUser] = useState(null);
@@ -4322,44 +4323,78 @@ export default function SoccerQuiz() {
   // within a thin strip along the left edge triggers whichever back/menu
   // button is currently on screen, reusing its exact click handler (and
   // any side effects like leaving a room or forfeiting a duel) instead of
-  // duplicating that navigation logic here.
+  // duplicating that navigation logic here. The page itself is dragged
+  // along with the finger (direct DOM style writes, not React state, so
+  // it stays at 60fps) and eases the rest of the way out or snaps back
+  // on release, instead of jumping straight to the new screen.
   useEffect(() => {
+    const el = swipePageRef.current;
+    if (!el) return;
     const EDGE_ZONE = 24;
-    const MIN_DX = 60;
-    const MAX_DY = 60;
+    const MIN_DX = 70;
+    const SLIDE_MS = 200;
     let startX = null;
     let startY = null;
-    let armed = false;
+    let dragging = false;
+    let dx = 0;
+
+    function settle(transform, after) {
+      el.style.transition = `transform ${SLIDE_MS}ms ease-out`;
+      el.style.transform = transform;
+      window.setTimeout(() => {
+        el.style.transition = "none";
+        el.style.transform = "";
+        if (after) after();
+      }, SLIDE_MS);
+    }
 
     function onTouchStart(e) {
       const touch = e.touches[0];
-      if (!touch) return;
+      if (!touch || touch.clientX > EDGE_ZONE) return;
+      if (!document.getElementById("gtpBackBtn")) return;
       startX = touch.clientX;
       startY = touch.clientY;
-      armed = startX <= EDGE_ZONE;
+      dragging = true;
+      dx = 0;
+      el.style.transition = "none";
+      el.style.willChange = "transform";
     }
-    function onTouchEnd(e) {
-      const wasArmed = armed;
-      const fromX = startX;
-      const fromY = startY;
-      armed = false;
-      startX = null;
-      startY = null;
-      if (!wasArmed || fromX === null) return;
-      const touch = e.changedTouches[0];
+    function onTouchMove(e) {
+      if (!dragging) return;
+      const touch = e.touches[0];
       if (!touch) return;
-      const dx = touch.clientX - fromX;
-      const dy = Math.abs(touch.clientY - fromY);
-      if (dx > MIN_DX && dy < MAX_DY) {
-        document.getElementById("gtpBackBtn")?.click();
+      const moveX = touch.clientX - startX;
+      const moveY = touch.clientY - startY;
+      if (Math.abs(moveY) > Math.abs(moveX) + 15) {
+        // Turned into a vertical scroll - bail without navigating.
+        dragging = false;
+        el.style.transition = "";
+        el.style.transform = "";
+        return;
+      }
+      dx = Math.max(0, moveX);
+      el.style.transform = `translateX(${dx}px)`;
+    }
+    function onTouchEnd() {
+      if (!dragging) return;
+      dragging = false;
+      el.style.willChange = "";
+      if (dx > MIN_DX) {
+        settle("translateX(100%)", () => {
+          document.getElementById("gtpBackBtn")?.click();
+        });
+      } else {
+        settle("");
       }
     }
 
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
     return () => {
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
     };
   }, []);
 
@@ -5621,6 +5656,7 @@ export default function SoccerQuiz() {
 
   return (
     <div
+      ref={swipePageRef}
       style={
         [
           "start",
