@@ -6577,7 +6577,7 @@ export default function SoccerQuiz() {
 
       {screen === "clues" && currentQuestion && (
         <div style={styles.gameWrap}>
-          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6687,7 +6687,7 @@ export default function SoccerQuiz() {
 
       {screen === "lineup" && currentLineup && (
         <div style={styles.gameWrap}>
-          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6865,7 +6865,7 @@ export default function SoccerQuiz() {
 
       {screen === "clubs" && currentClubsQuestion && (
         <div style={styles.gameWrap}>
-          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -6984,7 +6984,7 @@ export default function SoccerQuiz() {
 
       {screen === "year" && currentYearQuestion && (
         <div style={styles.gameWrap}>
-          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           <div style={styles.scoreboard}>
@@ -7091,7 +7091,7 @@ export default function SoccerQuiz() {
 
       {screen === "random" && currentRandomItem && (
         <div style={styles.gameWrap}>
-          <button id="gtpBackBtn" style={styles.menuBtn} onClick={goToMenuFromGame}>
+          <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
           {duelActive && (
