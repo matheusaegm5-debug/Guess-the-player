@@ -3134,6 +3134,321 @@ const QUESTION_POOL = [
     options: ["Socrates", "Zico", "Falcao", "Eder"],
     answer: "Socrates",
   },
+  {
+    clues: {
+      en: [
+        "Born in Bell Ville, Argentina",
+        "Top scorer of the 1978 World Cup, which Argentina won at home",
+        "Nicknamed 'El Matador', starred for Valencia",
+      ],
+      pt: [
+        "Nascido em Bell Ville, Argentina",
+        "Artilheiro da Copa do Mundo de 1978, que a Argentina venceu em casa",
+        "Apelidado de 'El Matador', brilhou no Valencia",
+      ],
+      es: [
+        "Nacido en Bell Ville, Argentina",
+        "Goleador del Mundial de 1978, que Argentina ganó en casa",
+        "Apodado 'El Matador', brilló en el Valencia",
+      ],
+    },
+    options: ["Mario Kempes", "Daniel Passarella", "Ossie Ardiles", "Leopoldo Luque"],
+    answer: "Mario Kempes",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Chacabuco, Argentina",
+        "Captained Argentina to the 1978 World Cup title",
+        "Attacking center-back for River Plate and Fiorentina",
+      ],
+      pt: [
+        "Nascido em Chacabuco, Argentina",
+        "Capitaneou a Argentina ao título da Copa do Mundo de 1978",
+        "Zagueiro de perfil ofensivo no River Plate e na Fiorentina",
+      ],
+      es: [
+        "Nacido en Chacabuco, Argentina",
+        "Capitaneó a Argentina hacia el título del Mundial de 1978",
+        "Defensor central de perfil ofensivo en River Plate y Fiorentina",
+      ],
+    },
+    options: ["Daniel Passarella", "Oscar Ruggeri", "Jose Luis Brown", "Roberto Perfumo"],
+    answer: "Daniel Passarella",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Brest, France, but represents Argentina",
+        "Holds Serie A's single-season scoring record with 36 goals for Napoli",
+        "Also played for Real Madrid and Juventus",
+      ],
+      pt: [
+        "Nascido em Brest, França, mas representa a Argentina",
+        "Detém o recorde de gols em uma temporada da Serie A, com 36 gols pelo Napoli",
+        "Também jogou por Real Madrid e Juventus",
+      ],
+      es: [
+        "Nacido en Brest, Francia, pero representa a Argentina",
+        "Posee el récord de goles en una temporada de la Serie A, con 36 goles para el Napoli",
+        "También jugó en el Real Madrid y la Juventus",
+      ],
+    },
+    options: ["Gonzalo Higuain", "Carlos Tevez", "Hernan Crespo", "Sergio Aguero"],
+    answer: "Gonzalo Higuain",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "Nicknamed 'El Apache'",
+        "Starred for Boca Juniors, Manchester United, Manchester City and Juventus",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Apelidado de 'El Apache'",
+        "Brilhou por Boca Juniors, Manchester United, Manchester City e Juventus",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Apodado 'El Apache'",
+        "Brilló en Boca Juniors, Manchester United, Manchester City y Juventus",
+      ],
+    },
+    options: ["Carlos Tevez", "Gonzalo Higuain", "Sergio Aguero", "Diego Milito"],
+    answer: "Carlos Tevez",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "Elegant defensive midfielder famous for a nutmeg assist against Manchester United in 2000",
+        "Starred for Real Madrid and AC Milan",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Volante elegante, famoso por uma assistência de caneta contra o Manchester United em 2000",
+        "Brilhou no Real Madrid e no AC Milan",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Volante elegante, famoso por una asistencia con un caño ante el Manchester United en 2000",
+        "Brilló en el Real Madrid y el AC Milan",
+      ],
+    },
+    options: ["Fernando Redondo", "Esteban Cambiasso", "Javier Mascherano", "Leonardo Astrada"],
+    answer: "Fernando Redondo",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Florida, Argentina",
+        "Scored twice in the 2005 Champions League final for AC Milan",
+        "Also played for Parma, Lazio, Inter and Chelsea",
+      ],
+      pt: [
+        "Nascido em Florida, Argentina",
+        "Marcou duas vezes na final da Champions League de 2005 pelo AC Milan",
+        "Também jogou por Parma, Lazio, Inter e Chelsea",
+      ],
+      es: [
+        "Nacido en Florida, Argentina",
+        "Marcó dos goles en la final de la Champions League de 2005 con el AC Milan",
+        "También jugó en Parma, Lazio, Inter y Chelsea",
+      ],
+    },
+    options: ["Hernan Crespo", "Gabriel Batistuta", "Gonzalo Higuain", "Diego Milito"],
+    answer: "Hernan Crespo",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Henderson, Argentina",
+        "Known for his iconic long blonde hair",
+        "Scored a famous solo goal against Brazil at the 1990 World Cup",
+      ],
+      pt: [
+        "Nascido em Henderson, Argentina",
+        "Conhecido por seus icônicos cabelos loiros e compridos",
+        "Marcou um famoso gol solitário contra o Brasil na Copa do Mundo de 1990",
+      ],
+      es: [
+        "Nacido en Henderson, Argentina",
+        "Conocido por su icónico cabello rubio y largo",
+        "Marcó un famoso gol en solitario ante Brasil en el Mundial de 1990",
+      ],
+    },
+    options: ["Claudio Caniggia", "Gabriel Batistuta", "Abel Balbo", "Ramon Medina Bello"],
+    answer: "Claudio Caniggia",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "As a player, was involved in David Beckham's red card at the 1998 World Cup",
+        "Later became a legendary manager at Atletico Madrid",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Como jogador, esteve envolvido no cartão vermelho de David Beckham na Copa do Mundo de 1998",
+        "Mais tarde se tornou um técnico lendário no Atletico Madrid",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Como jugador, estuvo involucrado en la expulsión de David Beckham en el Mundial de 1998",
+        "Más tarde se convirtió en un entrenador legendario del Atletico Madrid",
+      ],
+    },
+    options: ["Diego Simeone", "Fernando Redondo", "Matias Almeyda", "Diego Cagna"],
+    answer: "Diego Simeone",
+  },
+  {
+    clues: {
+      en: [
+        "Born in La Rioja, Argentina",
+        "Nicknamed 'El Burrito'",
+        "River Plate legend who played in three World Cups (1994, 1998, 2002)",
+      ],
+      pt: [
+        "Nascido em La Rioja, Argentina",
+        "Apelidado de 'El Burrito'",
+        "Lenda do River Plate que disputou três Copas do Mundo (1994, 1998, 2002)",
+      ],
+      es: [
+        "Nacido en La Rioja, Argentina",
+        "Apodado 'El Burrito'",
+        "Leyenda de River Plate que disputó tres Mundiales (1994, 1998, 2002)",
+      ],
+    },
+    options: ["Ariel Ortega", "Juan Roman Riquelme", "Pablo Aimar", "Marcelo Gallardo"],
+    answer: "Ariel Ortega",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "Won the 1986 World Cup as a defender",
+        "Played for River Plate, Velez Sarsfield and Real Madrid",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Conquistou a Copa do Mundo de 1986 como zagueiro",
+        "Jogou por River Plate, Velez Sarsfield e Real Madrid",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Ganó el Mundial de 1986 como defensor",
+        "Jugó en River Plate, Velez Sarsfield y Real Madrid",
+      ],
+    },
+    options: ["Oscar Ruggeri", "Jose Luis Brown", "Daniel Passarella", "Nery Pumpido"],
+    answer: "Oscar Ruggeri",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Las Parejas, Argentina",
+        "Won the 1986 World Cup and scored in the final",
+        "Later became a famous football writer and Real Madrid director",
+      ],
+      pt: [
+        "Nascido em Las Parejas, Argentina",
+        "Conquistou a Copa do Mundo de 1986 e marcou na final",
+        "Mais tarde se tornou um famoso escritor de futebol e diretor do Real Madrid",
+      ],
+      es: [
+        "Nacido en Las Parejas, Argentina",
+        "Ganó el Mundial de 1986 y marcó en la final",
+        "Más tarde se convirtió en un famoso escritor de fútbol y directivo del Real Madrid",
+      ],
+    },
+    options: ["Jorge Valdano", "Jorge Burruchaga", "Ricardo Giusti", "Julio Olarticoechea"],
+    answer: "Jorge Valdano",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Cordoba, Argentina",
+        "Won the 1978 World Cup",
+        "Tottenham Hotspur legend as both player and later manager",
+      ],
+      pt: [
+        "Nascido em Cordoba, Argentina",
+        "Conquistou a Copa do Mundo de 1978",
+        "Lenda do Tottenham Hotspur como jogador e, depois, como técnico",
+      ],
+      es: [
+        "Nacido en Cordoba, Argentina",
+        "Ganó el Mundial de 1978",
+        "Leyenda del Tottenham Hotspur como jugador y, luego, como entrenador",
+      ],
+    },
+    options: ["Ossie Ardiles", "Ricardo Villa", "Daniel Bertoni", "Mario Kempes"],
+    answer: "Ossie Ardiles",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Santa Rosa, Argentina",
+        "Won the 2022 World Cup",
+        "Played for Brighton before moving to Liverpool",
+      ],
+      pt: [
+        "Nascido em Santa Rosa, Argentina",
+        "Conquistou a Copa do Mundo de 2022",
+        "Jogou pelo Brighton antes de se transferir para o Liverpool",
+      ],
+      es: [
+        "Nacido en Santa Rosa, Argentina",
+        "Ganó el Mundial de 2022",
+        "Jugó en el Brighton antes de pasar al Liverpool",
+      ],
+    },
+    options: ["Alexis Mac Allister", "Enzo Fernandez", "Rodrigo De Paul", "Leandro Paredes"],
+    answer: "Alexis Mac Allister",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Sarandi, Argentina",
+        "Won the 2022 World Cup",
+        "Played for Udinese before moving to Atletico Madrid",
+      ],
+      pt: [
+        "Nascido em Sarandi, Argentina",
+        "Conquistou a Copa do Mundo de 2022",
+        "Jogou pelo Udinese antes de se transferir para o Atletico Madrid",
+      ],
+      es: [
+        "Nacido en Sarandi, Argentina",
+        "Ganó el Mundial de 2022",
+        "Jugó en el Udinese antes de pasar al Atletico Madrid",
+      ],
+    },
+    options: ["Rodrigo De Paul", "Alexis Mac Allister", "Leandro Paredes", "Guido Rodriguez"],
+    answer: "Rodrigo De Paul",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "Won the 2022 World Cup",
+        "Central defender for Valencia, Manchester City and Benfica",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Conquistou a Copa do Mundo de 2022",
+        "Zagueiro central de Valencia, Manchester City e Benfica",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Ganó el Mundial de 2022",
+        "Defensor central de Valencia, Manchester City y Benfica",
+      ],
+    },
+    options: ["Nicolas Otamendi", "Cristian Romero", "German Pezzella", "Marcos Rojo"],
+    answer: "Nicolas Otamendi",
+  },
 ];
 
 // ============ LINEUP MODE DATA ============
