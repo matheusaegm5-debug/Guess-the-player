@@ -6193,7 +6193,6 @@ export default function SoccerQuiz() {
               </form>
             ) : authUser && profile ? (
               <div style={styles.authLoggedInCard}>
-                <span style={styles.authMessage}>{t.authLoggedInAs}</span>
                 {editingNickname ? (
                   <form
                     style={{ ...styles.authForm, marginTop: 4 }}
@@ -6267,7 +6266,12 @@ export default function SoccerQuiz() {
                       {t.searchingText}
                     </p>
                     <button
-                      style={{ ...styles.authSubmitBtn, marginTop: 8, background: "#AAB4BE" }}
+                      style={{
+                        ...styles.authSubmitBtn,
+                        marginTop: 8,
+                        background: "#D9432E",
+                        boxShadow: "0 4px 0 #A8301F",
+                      }}
                       onClick={cancelSearch}
                     >
                       {t.cancelSearchBtn}
