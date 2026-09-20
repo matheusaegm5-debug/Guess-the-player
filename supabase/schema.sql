@@ -421,3 +421,34 @@ begin
       add constraint room_players_q_index_range check (q_index >= 0);
   end if;
 end $$;
+
+-- ============ ROOM MODE CHANGE ============
+-- Lets the host swap the room's mode while everyone's still in the lobby
+-- deciding. Resets every player's ready flag back to false so a mode
+-- change can't happen after everyone's already confirmed ready without
+-- them noticing and re-confirming for the new mode. Runs as security
+-- definer for the same reason restart_room does: a player can only
+-- update their own room_players row under RLS, but the host needs to
+-- reset everyone's ready flag at once.
+create or replace function public.change_room_mode(p_room_id uuid, p_mode text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not exists (
+    select 1 from public.rooms where id = p_room_id and host_id = auth.uid()
+  ) then
+    raise exception 'only the host can change this room''s mode';
+  end if;
+
+  update public.room_players
+  set ready = false
+  where room_id = p_room_id;
+
+  update public.rooms
+  set mode = p_mode
+  where id = p_room_id;
+end;
+$$;

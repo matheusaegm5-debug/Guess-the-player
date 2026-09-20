@@ -4984,18 +4984,17 @@ export default function SoccerQuiz() {
     if (!isRoomHost || !room) return;
     setRoomBusy(true);
     setRoomError("");
-    const { data: updatedRoom, error } = await supabase
-      .from("rooms")
-      .update({ mode: selectedMode })
-      .eq("id", room.id)
-      .select()
-      .single();
+    // RPC also resets everyone's ready flag - otherwise a mode swapped in
+    // after players already marked themselves ready would go unnoticed.
+    const { error } = await supabase.rpc("change_room_mode", {
+      p_room_id: room.id,
+      p_mode: selectedMode,
+    });
     setRoomBusy(false);
     if (error) {
       setRoomError(error.message || t.authGenericError);
       return;
     }
-    setRoom(updatedRoom);
     setRoomModeRegion(null);
     setScreen("roomLobby");
   }
