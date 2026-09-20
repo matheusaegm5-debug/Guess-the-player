@@ -1370,6 +1370,615 @@ const QUESTION_POOL = [
     options: ["Keylor Navas", "Joel Campbell", "Bryan Ruiz", "Celso Borges"],
     answer: "Keylor Navas",
   },
+  {
+    clues: {
+      en: [
+        "Born in Lanus, Argentina",
+        "Scored both the 'Hand of God' and the 'Goal of the Century' in the same 1986 World Cup match",
+        "Led Napoli to their first two Serie A titles",
+      ],
+      pt: [
+        "Nascido em Lanús, Argentina",
+        "Marcou o gol da 'Mão de Deus' e o 'Gol do Século' na mesma partida da Copa de 1986",
+        "Levou o Napoli aos seus dois primeiros títulos da Serie A",
+      ],
+      es: [
+        "Nacido en Lanús, Argentina",
+        "Anotó el gol de 'La Mano de Dios' y el 'Gol del Siglo' en el mismo partido del Mundial de 1986",
+        "Llevó al Napoli a sus dos primeros títulos de la Serie A",
+      ],
+    },
+    options: ["Diego Maradona", "Diego Simeone", "Gabriel Batistuta", "Mario Kempes"],
+    answer: "Diego Maradona",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Quilmes, Argentina",
+        "Manchester City's all-time top scorer",
+        "Scored the iconic title-winning goal in the 93rd minute in 2012",
+      ],
+      pt: [
+        "Nascido em Quilmes, Argentina",
+        "Maior artilheiro da história do Manchester City",
+        "Marcou o gol icônico do título aos 93 minutos em 2012",
+      ],
+      es: [
+        "Nacido en Quilmes, Argentina",
+        "Máximo goleador histórico del Manchester City",
+        "Anotó el icónico gol del título en el minuto 93 en 2012",
+      ],
+    },
+    options: ["Sergio Aguero", "Carlos Tevez", "Gonzalo Higuain", "Lautaro Martinez"],
+    answer: "Sergio Aguero",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Reconquista, Argentina",
+        "Nicknamed 'Batigol'",
+        "Legendary Fiorentina striker known for his powerful shot",
+      ],
+      pt: [
+        "Nascido em Reconquista, Argentina",
+        "Apelidado de 'Batigol'",
+        "Atacante lendário da Fiorentina, conhecido pelo chute potente",
+      ],
+      es: [
+        "Nacido en Reconquista, Argentina",
+        "Apodado 'Batigol'",
+        "Delantero legendario de la Fiorentina, conocido por su potente disparo",
+      ],
+    },
+    options: ["Gabriel Batistuta", "Hernan Crespo", "Diego Milito", "Martin Palermo"],
+    answer: "Gabriel Batistuta",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Buenos Aires, Argentina",
+        "Holds Inter Milan's all-time appearance record",
+        "Captained Inter for over a decade, including the 2010 treble",
+      ],
+      pt: [
+        "Nascido em Buenos Aires, Argentina",
+        "Detém o recorde de jogos pela Inter de Milão",
+        "Foi capitão da Inter por mais de uma década, incluindo a tríplice coroa de 2010",
+      ],
+      es: [
+        "Nacido en Buenos Aires, Argentina",
+        "Posee el récord de partidos con el Inter de Milán",
+        "Fue capitán del Inter durante más de una década, incluido el triplete de 2010",
+      ],
+    },
+    options: ["Javier Zanetti", "Esteban Cambiasso", "Walter Samuel", "Nicolas Burdisso"],
+    answer: "Javier Zanetti",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Marseille, France",
+        "Scored twice in the 1998 World Cup final",
+        "Won the 2002 Champions League with a spectacular volley for Real Madrid",
+      ],
+      pt: [
+        "Nascido em Marselha, França",
+        "Marcou dois gols na final da Copa do Mundo de 1998",
+        "Venceu a Champions League de 2002 com um voleio espetacular pelo Real Madrid",
+      ],
+      es: [
+        "Nacido en Marsella, Francia",
+        "Anotó dos goles en la final del Mundial de 1998",
+        "Ganó la Champions League de 2002 con una espectacular volea para el Real Madrid",
+      ],
+    },
+    options: ["Zinedine Zidane", "Michel Platini", "David Trezeguet", "Robert Pires"],
+    answer: "Zinedine Zidane",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Les Ulis, France",
+        "Arsenal's all-time top scorer",
+        "Key member of Arsenal's unbeaten 'Invincibles' season in 2003-04",
+      ],
+      pt: [
+        "Nascido em Les Ulis, França",
+        "Maior artilheiro da história do Arsenal",
+        "Peça-chave na temporada invicta dos 'Invincibles' do Arsenal em 2003-04",
+      ],
+      es: [
+        "Nacido en Les Ulis, Francia",
+        "Máximo goleador histórico del Arsenal",
+        "Pieza clave en la temporada invicta de los 'Invincibles' del Arsenal en 2003-04",
+      ],
+    },
+    options: ["Thierry Henry", "Nicolas Anelka", "David Trezeguet", "Patrick Vieira"],
+    answer: "Thierry Henry",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Boulogne-sur-Mer, France",
+        "Won the treble with Bayern Munich in 2013",
+        "Known for his dribbling skill despite a distinctive facial scar",
+      ],
+      pt: [
+        "Nascido em Boulogne-sur-Mer, França",
+        "Venceu a tríplice coroa com o Bayern de Munique em 2013",
+        "Conhecido pelo drible habilidoso e por uma cicatriz marcante no rosto",
+      ],
+      es: [
+        "Nacido en Boulogne-sur-Mer, Francia",
+        "Ganó el triplete con el Bayern Múnich en 2013",
+        "Conocido por su habilidad para el regate y una cicatriz distintiva en el rostro",
+      ],
+    },
+    options: ["Franck Ribery", "Samir Nasri", "Karim Benzema", "Florent Malouda"],
+    answer: "Franck Ribery",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Munich, Germany",
+        "Nicknamed 'Der Kaiser'",
+        "Won the World Cup as both a player (1974) and a manager (1990)",
+      ],
+      pt: [
+        "Nascido em Munique, Alemanha",
+        "Apelidado de 'Der Kaiser'",
+        "Venceu a Copa do Mundo como jogador (1974) e como técnico (1990)",
+      ],
+      es: [
+        "Nacido en Múnich, Alemania",
+        "Apodado 'Der Kaiser'",
+        "Ganó el Mundial como jugador (1974) y como entrenador (1990)",
+      ],
+    },
+    options: ["Franz Beckenbauer", "Gerd Muller", "Lothar Matthaus", "Karl-Heinz Rummenigge"],
+    answer: "Franz Beckenbauer",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Gelsenkirchen, Germany",
+        "Pioneered the modern 'sweeper-keeper' style",
+        "Won the 2014 World Cup and multiple titles with Bayern Munich",
+      ],
+      pt: [
+        "Nascido em Gelsenkirchen, Alemanha",
+        "Pioneiro do estilo moderno de goleiro-líbero",
+        "Venceu a Copa do Mundo de 2014 e vários títulos com o Bayern de Munique",
+      ],
+      es: [
+        "Nacido en Gelsenkirchen, Alemania",
+        "Pionero del estilo moderno de portero-líbero",
+        "Ganó el Mundial de 2014 y varios títulos con el Bayern Múnich",
+      ],
+    },
+    options: ["Manuel Neuer", "Marc-Andre ter Stegen", "Oliver Kahn", "Bernd Leno"],
+    answer: "Manuel Neuer",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Greifswald, Germany",
+        "Won six Champions League titles with Real Madrid",
+        "Won the 2014 World Cup with Germany",
+      ],
+      pt: [
+        "Nascido em Greifswald, Alemanha",
+        "Venceu seis Champions League pelo Real Madrid",
+        "Venceu a Copa do Mundo de 2014 pela Alemanha",
+      ],
+      es: [
+        "Nacido en Greifswald, Alemania",
+        "Ganó seis Champions League con el Real Madrid",
+        "Ganó el Mundial de 2014 con Alemania",
+      ],
+    },
+    options: ["Toni Kroos", "Ilkay Gundogan", "Julian Draxler", "Leon Goretzka"],
+    answer: "Toni Kroos",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Gelsenkirchen, Germany",
+        "Creative playmaker who won the 2014 World Cup",
+        "Played for Real Madrid and Arsenal",
+      ],
+      pt: [
+        "Nascido em Gelsenkirchen, Alemanha",
+        "Meia criativo que venceu a Copa do Mundo de 2014",
+        "Jogou por Real Madrid e Arsenal",
+      ],
+      es: [
+        "Nacido en Gelsenkirchen, Alemania",
+        "Mediocampista creativo que ganó el Mundial de 2014",
+        "Jugó en el Real Madrid y el Arsenal",
+      ],
+    },
+    options: ["Mesut Ozil", "Julian Draxler", "Marco Reus", "Ilkay Gundogan"],
+    answer: "Mesut Ozil",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Leytonstone, England",
+        "Famous for his precise long-range free kicks",
+        "Played for Manchester United, Real Madrid, LA Galaxy and PSG",
+      ],
+      pt: [
+        "Nascido em Leytonstone, Inglaterra",
+        "Famoso por suas cobranças de falta precisas de longa distância",
+        "Jogou por Manchester United, Real Madrid, LA Galaxy e PSG",
+      ],
+      es: [
+        "Nacido en Leytonstone, Inglaterra",
+        "Famoso por sus precisos tiros libres de larga distancia",
+        "Jugó en el Manchester United, el Real Madrid, el LA Galaxy y el PSG",
+      ],
+    },
+    options: ["David Beckham", "Michael Owen", "Paul Scholes", "Ryan Giggs"],
+    answer: "David Beckham",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Liverpool, England",
+        "Manchester United's all-time record goalscorer",
+        "Long-time England captain and record goalscorer",
+      ],
+      pt: [
+        "Nascido em Liverpool, Inglaterra",
+        "Maior artilheiro da história do Manchester United",
+        "Foi capitão e maior artilheiro histórico da seleção inglesa",
+      ],
+      es: [
+        "Nacido en Liverpool, Inglaterra",
+        "Máximo goleador histórico del Manchester United",
+        "Fue capitán y máximo goleador histórico de la selección inglesa",
+      ],
+    },
+    options: ["Wayne Rooney", "Michael Owen", "Frank Lampard", "Andy Cole"],
+    answer: "Wayne Rooney",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Whiston, England",
+        "Liverpool captain who led the famous comeback in the 2005 Champions League final",
+        "Spent almost his entire career at Liverpool",
+      ],
+      pt: [
+        "Nascido em Whiston, Inglaterra",
+        "Capitão do Liverpool que liderou a famosa virada na final da Champions League de 2005",
+        "Passou quase toda a carreira no Liverpool",
+      ],
+      es: [
+        "Nacido en Whiston, Inglaterra",
+        "Capitán del Liverpool que lideró la famosa remontada en la final de la Champions League de 2005",
+        "Pasó casi toda su carrera en el Liverpool",
+      ],
+    },
+    options: ["Steven Gerrard", "Frank Lampard", "Paul Scholes", "Jamie Carragher"],
+    answer: "Steven Gerrard",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Milan, Italy",
+        "Legendary AC Milan defender and long-time captain",
+        "Played at the top level into his forties",
+      ],
+      pt: [
+        "Nascido em Milão, Itália",
+        "Zagueiro lendário e capitão histórico do AC Milan",
+        "Jogou em alto nível até os quarenta anos",
+      ],
+      es: [
+        "Nacido en Milán, Italia",
+        "Defensor legendario y capitán histórico del AC Milan",
+        "Jugó al máximo nivel hasta los cuarenta años",
+      ],
+    },
+    options: ["Paolo Maldini", "Alessandro Nesta", "Fabio Cannavaro", "Franco Baresi"],
+    answer: "Paolo Maldini",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Rome, Italy",
+        "Spent his entire 25-year career at AS Roma",
+        "Won the 2006 World Cup with Italy",
+      ],
+      pt: [
+        "Nascido em Roma, Itália",
+        "Passou toda a carreira de 25 anos na AS Roma",
+        "Venceu a Copa do Mundo de 2006 pela Itália",
+      ],
+      es: [
+        "Nacido en Roma, Italia",
+        "Pasó toda su carrera de 25 años en la AS Roma",
+        "Ganó el Mundial de 2006 con Italia",
+      ],
+    },
+    options: ["Francesco Totti", "Alessandro Del Piero", "Antonio Cassano", "Daniele De Rossi"],
+    answer: "Francesco Totti",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Carrara, Italy",
+        "Long-time goalkeeper for Juventus and Italy",
+        "Won the 2006 World Cup",
+      ],
+      pt: [
+        "Nascido em Carrara, Itália",
+        "Goleiro histórico da Juventus e da seleção italiana",
+        "Venceu a Copa do Mundo de 2006",
+      ],
+      es: [
+        "Nacido en Carrara, Italia",
+        "Portero histórico de la Juventus y de la selección italiana",
+        "Ganó el Mundial de 2006",
+      ],
+    },
+    options: ["Gianluigi Buffon", "Francesco Toldo", "Gianluca Pagliuca", "Salvatore Sirigu"],
+    answer: "Gianluigi Buffon",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Amsterdam, Netherlands",
+        "Pioneer of 'Total Football' at Ajax and with the Dutch national team",
+        "Won three straight European Cups with Ajax in the 1970s",
+      ],
+      pt: [
+        "Nascido em Amsterdã, Holanda",
+        "Pioneiro do 'Futebol Total' no Ajax e na seleção holandesa",
+        "Venceu três Copas dos Campeões seguidas pelo Ajax nos anos 1970",
+      ],
+      es: [
+        "Nacido en Ámsterdam, Países Bajos",
+        "Pionero del 'Fútbol Total' en el Ajax y en la selección neerlandesa",
+        "Ganó tres Copas de Europa seguidas con el Ajax en la década de 1970",
+      ],
+    },
+    options: ["Johan Cruyff", "Marco van Basten", "Ruud Gullit", "Frank Rijkaard"],
+    answer: "Johan Cruyff",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Amsterdam, Netherlands",
+        "Nicknamed the 'Non-Flying Dutchman' for his fear of flying",
+        "Arsenal legend known for his elegant touch and famous turn goal vs Newcastle",
+      ],
+      pt: [
+        "Nascido em Amsterdã, Holanda",
+        "Apelidado de 'Holandês que não voa' por seu medo de avião",
+        "Lenda do Arsenal, conhecido pelo toque elegante e pelo gol famoso contra o Newcastle",
+      ],
+      es: [
+        "Nacido en Ámsterdam, Países Bajos",
+        "Apodado el 'Holandés que no vuela' por su miedo a volar",
+        "Leyenda del Arsenal, conocido por su toque elegante y su famoso gol ante el Newcastle",
+      ],
+    },
+    options: ["Dennis Bergkamp", "Patrick Kluivert", "Marc Overmars", "Clarence Seedorf"],
+    answer: "Dennis Bergkamp",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Arkel, Netherlands",
+        "Known for his ball control and Cruyff-turn-style dribbling",
+        "Played for Ajax before joining Barcelona",
+      ],
+      pt: [
+        "Nascido em Arkel, Holanda",
+        "Conhecido pelo controle de bola e por dribles ao estilo do giro de Cruyff",
+        "Jogou pelo Ajax antes de se transferir ao Barcelona",
+      ],
+      es: [
+        "Nacido en Arkel, Países Bajos",
+        "Conocido por su control de balón y regates al estilo del giro de Cruyff",
+        "Jugó en el Ajax antes de fichar por el Barcelona",
+      ],
+    },
+    options: ["Frenkie de Jong", "Donny van de Beek", "Georginio Wijnaldum", "Davy Klaassen"],
+    answer: "Frenkie de Jong",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Lisbon, Portugal",
+        "Sparked controversy with his transfer from Barcelona to Real Madrid in 2000",
+        "Won the Ballon d'Or in 2000",
+      ],
+      pt: [
+        "Nascido em Lisboa, Portugal",
+        "Gerou polêmica ao se transferir do Barcelona para o Real Madrid em 2000",
+        "Venceu a Bola de Ouro em 2000",
+      ],
+      es: [
+        "Nacido en Lisboa, Portugal",
+        "Generó polémica al fichar por el Real Madrid procedente del Barcelona en 2000",
+        "Ganó el Balón de Oro en 2000",
+      ],
+    },
+    options: ["Luis Figo", "Rui Costa", "Deco", "Nuno Gomes"],
+    answer: "Luis Figo",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Maia, Portugal",
+        "Creative midfielder and captain of Manchester United",
+        "Joined Man United from Sporting CP in 2020",
+      ],
+      pt: [
+        "Nascido em Maia, Portugal",
+        "Meia criativo e capitão do Manchester United",
+        "Foi para o Man United vindo do Sporting CP em 2020",
+      ],
+      es: [
+        "Nacido en Maia, Portugal",
+        "Mediocampista creativo y capitán del Manchester United",
+        "Fichó por el Man United procedente del Sporting CP en 2020",
+      ],
+    },
+    options: ["Bruno Fernandes", "Joao Moutinho", "William Carvalho", "Renato Sanches"],
+    answer: "Bruno Fernandes",
+  },
+  {
+    clues: {
+      en: [
+        "Born in La Louviere, Belgium",
+        "Chelsea legend who won the Europa League twice",
+        "Left Chelsea for Real Madrid in 2019",
+      ],
+      pt: [
+        "Nascido em La Louvière, Bélgica",
+        "Lenda do Chelsea, venceu a Liga Europa duas vezes",
+        "Deixou o Chelsea para se transferir ao Real Madrid em 2019",
+      ],
+      es: [
+        "Nacido en La Louvière, Bélgica",
+        "Leyenda del Chelsea, ganó la Europa League dos veces",
+        "Dejó el Chelsea para fichar por el Real Madrid en 2019",
+      ],
+    },
+    options: ["Eden Hazard", "Kevin De Bruyne", "Romelu Lukaku", "Axel Witsel"],
+    answer: "Eden Hazard",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Antwerp, Belgium",
+        "Prolific striker for Everton, Manchester United, Chelsea and Inter Milan",
+        "Belgium's all-time top scorer",
+      ],
+      pt: [
+        "Nascido em Antuérpia, Bélgica",
+        "Atacante prolífico por Everton, Manchester United, Chelsea e Inter de Milão",
+        "Maior artilheiro da história da seleção belga",
+      ],
+      es: [
+        "Nacido en Amberes, Bélgica",
+        "Delantero prolífico en Everton, Manchester United, Chelsea e Inter de Milán",
+        "Máximo goleador histórico de la selección belga",
+      ],
+    },
+    options: ["Romelu Lukaku", "Michy Batshuayi", "Christian Benteke", "Divock Origi"],
+    answer: "Romelu Lukaku",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Yaounde, Cameroon",
+        "Famous for his corner-flag dance goal celebrations",
+        "Became the oldest World Cup goalscorer at the 1994 tournament, aged 42",
+      ],
+      pt: [
+        "Nascido em Yaoundé, Camarões",
+        "Famoso pela dança comemorativa junto à bandeirinha de escanteio",
+        "Tornou-se o artilheiro mais velho de uma Copa do Mundo em 1994, aos 42 anos",
+      ],
+      es: [
+        "Nacido en Yaundé, Camerún",
+        "Famoso por su baile de celebración junto al banderín de córner",
+        "Se convirtió en el goleador más veterano de un Mundial en 1994, a los 42 años",
+      ],
+    },
+    options: ["Roger Milla", "Samuel Eto'o", "Patrick Mboma", "Rigobert Song"],
+    answer: "Roger Milla",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Vienna, Austria",
+        "Versatile defender who won multiple trebles with Bayern Munich",
+        "Joined Real Madrid on a free transfer in 2021",
+      ],
+      pt: [
+        "Nascido em Viena, Áustria",
+        "Defensor versátil que venceu várias tríplices coroas com o Bayern de Munique",
+        "Foi para o Real Madrid como agente livre em 2021",
+      ],
+      es: [
+        "Nacido en Viena, Austria",
+        "Defensor versátil que ganó varios tripletes con el Bayern Múnich",
+        "Fichó por el Real Madrid como agente libre en 2021",
+      ],
+    },
+    options: ["David Alaba", "Marko Arnautovic", "Marcel Sabitzer", "Konrad Laimer"],
+    answer: "David Alaba",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Plzen, Czech Republic",
+        "Legendary Chelsea goalkeeper known for wearing a protective headguard",
+        "Holds the Premier League record for most clean sheets",
+      ],
+      pt: [
+        "Nascido em Plzeň, República Tcheca",
+        "Goleiro lendário do Chelsea, conhecido por usar capacete protetor",
+        "Detém o recorde de jogos sem sofrer gols na Premier League",
+      ],
+      es: [
+        "Nacido en Plzeň, República Checa",
+        "Portero legendario del Chelsea, conocido por usar un casco protector",
+        "Posee el récord de partidos sin recibir goles en la Premier League",
+      ],
+    },
+    options: ["Petr Cech", "Tomas Rosicky", "Milan Baros", "Pavel Nedved"],
+    answer: "Petr Cech",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Basel, Switzerland",
+        "Midfielder who captained Arsenal before joining Bayer Leverkusen",
+        "Helped Leverkusen win an unbeaten league title in 2023-24",
+      ],
+      pt: [
+        "Nascido em Basileia, Suíça",
+        "Meio-campista que foi capitão do Arsenal antes de ir para o Bayer Leverkusen",
+        "Ajudou o Leverkusen a vencer o campeonato invicto em 2023-24",
+      ],
+      es: [
+        "Nacido en Basilea, Suiza",
+        "Centrocampista que fue capitán del Arsenal antes de fichar por el Bayer Leverkusen",
+        "Ayudó al Leverkusen a ganar la liga de forma invicta en 2023-24",
+      ],
+    },
+    options: ["Granit Xhaka", "Xherdan Shaqiri", "Breel Embolo", "Ricardo Rodriguez"],
+    answer: "Granit Xhaka",
+  },
+  {
+    clues: {
+      en: [
+        "Born in Settsu, Japan",
+        "Playmaker known for his powerful free kicks",
+        "Played for CSKA Moscow and AC Milan",
+      ],
+      pt: [
+        "Nascido em Settsu, Japão",
+        "Meia conhecido por suas cobranças de falta potentes",
+        "Jogou por CSKA Moscou e AC Milan",
+      ],
+      es: [
+        "Nacido en Settsu, Japón",
+        "Mediapunta conocido por sus potentes tiros libres",
+        "Jugó en el CSKA Moscú y el AC Milan",
+      ],
+    },
+    options: ["Keisuke Honda", "Shinji Kagawa", "Shinji Okazaki", "Takefusa Kubo"],
+    answer: "Keisuke Honda",
+  },
 ];
 
 // ============ LINEUP MODE DATA ============
