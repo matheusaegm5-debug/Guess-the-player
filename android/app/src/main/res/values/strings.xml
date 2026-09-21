@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Guess the Player</string>
+    <string name="title_activity_main">Guess the Player</string>
+    <string name="package_name">com.guesstheplayer.app</string>
+    <string name="custom_url_scheme">com.guesstheplayer.app</string>
+    <!-- AdMob TEST app ID — replace with your real AdMob app ID before publishing -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+</resources>
