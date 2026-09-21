@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import QRCode from "qrcode";
 import { supabase } from "./lib/supabaseClient";
+import { initAds, recordMatchFinished } from "./lib/ads";
 
 // ============ CLUES MODE DATA ============
 // clues are provided per language; options/answer are proper names (language-agnostic)
@@ -7068,6 +7069,11 @@ export default function SoccerQuiz() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
+  // Boots the AdMob SDK once on app launch (no-op on the web build).
+  useEffect(() => {
+    initAds();
+  }, []);
+
   // Swipe right to go back, like iOS/Instagram/X: a left-to-right drag
   // starting ANYWHERE on screen triggers whichever back/menu button is
   // currently mounted, reusing its exact click handler (and any side
@@ -7444,6 +7450,7 @@ export default function SoccerQuiz() {
   useEffect(() => {
     if (duelActive && currentMatch?.status === "finished" && screen !== "duelEnd") {
       setScreen("duelEnd");
+      recordMatchFinished();
     }
   }, [currentMatch?.status, duelActive]);
 
@@ -7804,6 +7811,7 @@ export default function SoccerQuiz() {
   useEffect(() => {
     if (roomActive && room?.status === "finished" && screen !== "roomEnd") {
       setScreen("roomEnd");
+      recordMatchFinished();
     }
   }, [room?.status, roomActive]);
 
@@ -8068,6 +8076,7 @@ export default function SoccerQuiz() {
   function nextClueQuestion() {
     if (qIndex + 1 >= questions.length) {
       setScreen("roundEnd");
+      recordMatchFinished();
       return;
     }
     setQIndex((i) => i + 1);
@@ -8114,6 +8123,7 @@ export default function SoccerQuiz() {
   function nextLineupQuestion() {
     if (lIndex + 1 >= lineups.length) {
       setScreen("roundEnd");
+      recordMatchFinished();
       return;
     }
     setLIndex((i) => i + 1);
@@ -8159,6 +8169,7 @@ export default function SoccerQuiz() {
   function nextClubsQuestion() {
     if (cqIndex + 1 >= clubsQuestions.length) {
       setScreen("roundEnd");
+      recordMatchFinished();
       return;
     }
     setCqIndex((i) => i + 1);
@@ -8201,6 +8212,7 @@ export default function SoccerQuiz() {
   function nextYearQuestion() {
     if (yqIndex + 1 >= yearQuestions.length) {
       setScreen("roundEnd");
+      recordMatchFinished();
       return;
     }
     setYqIndex((i) => i + 1);
@@ -8278,6 +8290,7 @@ export default function SoccerQuiz() {
         finishRoomPlayer();
       } else {
         setScreen("roundEnd");
+        recordMatchFinished();
       }
       return;
     }
