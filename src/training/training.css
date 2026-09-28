@@ -1,0 +1,215 @@
+:root {
+  --text: #4b5563;
+  --text-h: #0f172a;
+  --bg: #f6f7f9;
+  --surface: #fff;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.06);
+
+  font: 17px/1.55 system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #111318;
+    --surface: #1a1d24;
+    --border: #2a2e38;
+    --accent: #60a5fa;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 16px 64px;
+}
+
+h1,
+h2 {
+  color: var(--text-h);
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.1rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  margin: 0 0 8px;
+}
+
+/* ---------- Lista de apps ---------- */
+.hero {
+  margin-bottom: 28px;
+}
+
+.hero p {
+  margin-top: 6px;
+}
+
+.app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.12s, border-color 0.12s;
+}
+
+.app-card:hover,
+.app-card:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.app-badge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.app-badge.large {
+  width: 64px;
+  height: 64px;
+  font-size: 1.7rem;
+  border-radius: 16px;
+}
+
+.app-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-name {
+  color: var(--text-h);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.app-tagline {
+  font-size: 0.92rem;
+}
+
+.app-meta {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.app-arrow {
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
+@media (max-width: 520px) {
+  .app-meta {
+    display: none;
+  }
+}
+
+/* ---------- Página de treinamento ---------- */
+.back {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.back.bottom {
+  margin: 32px 0 0;
+}
+
+.training-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.explanation,
+.video-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-frame video,
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-frame.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg);
+  border: 2px dashed var(--border);
+  color: var(--text);
+}
+
+.video-frame.placeholder span {
+  font-size: 2rem;
+  opacity: 0.5;
+}
