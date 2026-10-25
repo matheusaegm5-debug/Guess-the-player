@@ -6933,7 +6933,7 @@ function RoomQrCode({ value, size = 140 }) {
 // Clubs, and Random mode guesses). onMouseDown + preventDefault on each
 // suggestion stops the input's blur from closing the dropdown before the
 // click registers, so tapping a suggestion fills the field reliably.
-function NameAutocompleteField({ value, onChange, onSubmit, placeholder, autoFocus }) {
+function NameAutocompleteField({ value, onChange, onSubmit, placeholder, onFocusChange }) {
   const [open, setOpen] = useState(false);
   const matches = open ? matchPlayerSuggestions(value) : [];
 
@@ -6946,8 +6946,14 @@ function NameAutocompleteField({ value, onChange, onSubmit, placeholder, autoFoc
           onChange(e.target.value);
           setOpen(true);
         }}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
+        onFocus={() => {
+          setOpen(true);
+          onFocusChange?.(true);
+        }}
+        onBlur={() => {
+          setOpen(false);
+          onFocusChange?.(false);
+        }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             setOpen(false);
@@ -6956,8 +6962,12 @@ function NameAutocompleteField({ value, onChange, onSubmit, placeholder, autoFoc
         }}
         placeholder={placeholder}
         style={{ ...styles.guessInput, width: "100%", boxSizing: "border-box" }}
-        autoFocus={autoFocus}
         autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="words"
+        spellCheck={false}
+        name="gtp-guess"
+        id="gtp-guess-input"
       />
       {matches.length > 0 && (
         <div style={styles.autocompleteDropdown}>
@@ -7123,6 +7133,11 @@ export default function SoccerQuiz() {
   const t = TRANSLATIONS[lang];
 
   const [soundEnabled, setSoundEnabled] = useState(true);
+  // True while a free-text player-name guess field (Lineup/Clubs/Random)
+  // is focused. On phones the keyboard eats roughly half the screen, so
+  // while it's open we collapse the scoreboard/hints above the input to
+  // keep the input and its autocomplete dropdown comfortably visible.
+  const [typingFocused, setTypingFocused] = useState(false);
   const audioCtxRef = useRef(null);
   const swipePageRef = useRef(null);
 
@@ -9590,7 +9605,7 @@ export default function SoccerQuiz() {
           <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
-          <div style={styles.scoreboard}>
+          <div style={typingFocused ? { ...styles.scoreboard, display: "none" } : styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
               <div style={styles.scoreboardValue}>{score}/100</div>
@@ -9668,7 +9683,7 @@ export default function SoccerQuiz() {
             </div>
           </div>
 
-          {!lAnswered && hintsUsed > 0 && (
+          {!lAnswered && hintsUsed > 0 && !typingFocused && (
             <div style={styles.card}>
               <div style={styles.cardLabel}>{t.hintsLabel}</div>
               <div style={styles.cluesList}>
@@ -9710,7 +9725,7 @@ export default function SoccerQuiz() {
                   onChange={setGuess}
                   onSubmit={submitLineupGuess}
                   placeholder={t.guessPlaceholder}
-                  autoFocus
+                  onFocusChange={setTypingFocused}
                 />
                 <button
                   style={{
@@ -9764,7 +9779,7 @@ export default function SoccerQuiz() {
           <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
-          <div style={styles.scoreboard}>
+          <div style={typingFocused ? { ...styles.scoreboard, display: "none" } : styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
               <div style={styles.scoreboardValue}>{score}/100</div>
@@ -9800,7 +9815,7 @@ export default function SoccerQuiz() {
             </div>
           </div>
 
-          {!clubsAnswered && clubsHintsUsed > 0 && (
+          {!clubsAnswered && clubsHintsUsed > 0 && !typingFocused && (
             <div style={styles.card}>
               <div style={styles.cardLabel}>{t.hintsLabel}</div>
               <div style={styles.cluesList}>
@@ -9827,7 +9842,7 @@ export default function SoccerQuiz() {
                   onChange={setClubsGuess}
                   onSubmit={submitClubsGuess}
                   placeholder={t.clubsGuessPlaceholder}
-                  autoFocus
+                  onFocusChange={setTypingFocused}
                 />
                 <button
                   style={{
@@ -9986,7 +10001,7 @@ export default function SoccerQuiz() {
           <button style={styles.menuBtn} onClick={goToMenuFromGame}>
             {t.menu}
           </button>
-          {duelActive && (
+          {duelActive && !typingFocused && (
             <div style={styles.duelScoreRow}>
               <div style={styles.duelScoreBlock}>
                 <div style={styles.scoreboardLabel}>{profile?.nickname ?? t.duelYouLabel}</div>
@@ -10006,10 +10021,10 @@ export default function SoccerQuiz() {
               </div>
             </div>
           )}
-          {roomActive && (
+          {roomActive && !typingFocused && (
             <RoomLeaderboard players={roomPlayers} myUserId={authUser?.id} />
           )}
-          <div style={styles.scoreboard}>
+          <div style={typingFocused ? { ...styles.scoreboard, display: "none" } : styles.scoreboard}>
             <div style={styles.scoreboardItem}>
               <div style={styles.scoreboardLabel}>{t.score}</div>
               <div style={styles.scoreboardValue}>{score}/100</div>
@@ -10171,7 +10186,7 @@ export default function SoccerQuiz() {
                 </div>
               </div>
 
-              {!randomAnswered && randomHintsUsed > 0 && (() => {
+              {!randomAnswered && randomHintsUsed > 0 && !typingFocused && (() => {
                 const hiddenP =
                   currentRandomItem.data.players[currentRandomItem.data.hiddenIndex];
                 return (
@@ -10217,7 +10232,7 @@ export default function SoccerQuiz() {
                       onChange={setRandomGuess}
                       onSubmit={submitRandomAnswer}
                       placeholder={t.guessPlaceholder}
-                      autoFocus
+                      onFocusChange={setTypingFocused}
                     />
                     <button
                       style={{
@@ -10266,7 +10281,7 @@ export default function SoccerQuiz() {
                 </div>
               </div>
 
-              {!randomAnswered && randomHintsUsed > 0 && (
+              {!randomAnswered && randomHintsUsed > 0 && !typingFocused && (
                 <div style={styles.card}>
                   <div style={styles.cardLabel}>{t.hintsLabel}</div>
                   <div style={styles.cluesList}>
@@ -10293,7 +10308,7 @@ export default function SoccerQuiz() {
                       onChange={setRandomGuess}
                       onSubmit={submitRandomAnswer}
                       placeholder={t.clubsGuessPlaceholder}
-                      autoFocus
+                      onFocusChange={setTypingFocused}
                     />
                     <button
                       style={{
