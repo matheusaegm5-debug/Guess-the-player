@@ -6508,6 +6508,48 @@ function isCloseEnough(guess, answer, altName) {
   return false;
 }
 
+// Every player name guessable by free text (Lineup, Clubs, and Random
+// mode), deduped by normalized name, so the name-autocomplete field can
+// suggest matches as the player types instead of requiring exact spelling.
+const ALL_GUESSABLE_PLAYERS = (() => {
+  const seen = new Map();
+  function add(name, short) {
+    if (!name) return;
+    const key = normalizeName(name);
+    if (!key || seen.has(key)) return;
+    seen.set(key, { full: name, short: short || null });
+  }
+  [LINEUP_POOL, BRAZIL_LINEUP_POOL].forEach((pool) => {
+    pool.forEach((team) => team.players.forEach((p) => add(p.name, p.shortName)));
+  });
+  [CLUBS_QUESTION_POOL, CLUBS_QUESTION_POOL_BRAZIL].forEach((pool) => {
+    pool.forEach((q) => add(q.name));
+  });
+  return Array.from(seen.values());
+})();
+
+// Matches typed text against ALL_GUESSABLE_PLAYERS: names starting with
+// the query (on any name part, or the short name) rank above names that
+// merely contain it elsewhere.
+function matchPlayerSuggestions(query, limit = 6) {
+  const q = normalizeName(query);
+  if (!q) return [];
+  const starts = [];
+  const contains = [];
+  for (const p of ALL_GUESSABLE_PLAYERS) {
+    const fullNorm = normalizeName(p.full);
+    const shortNorm = p.short ? normalizeName(p.short) : "";
+    const startsMatch = fullNorm.split(" ").some((part) => part.startsWith(q)) || shortNorm.startsWith(q);
+    if (startsMatch) {
+      starts.push(p);
+    } else if (fullNorm.includes(q) || shortNorm.includes(q)) {
+      contains.push(p);
+    }
+    if (starts.length >= limit) break;
+  }
+  return [...starts, ...contains].slice(0, limit);
+}
+
 // Strips common club prefixes/suffixes (FC Porto vs Porto, AC Milan vs
 // Milan) so the same club matches regardless of which form the data uses.
 function normalizeClubName(name) {
@@ -6884,6 +6926,58 @@ function RoomQrCode({ value, size = 140 }) {
       height={size}
       style={{ borderRadius: 12 }}
     />
+  );
+}
+
+// Free-text player-name input with a live suggestions dropdown (Lineup,
+// Clubs, and Random mode guesses). onMouseDown + preventDefault on each
+// suggestion stops the input's blur from closing the dropdown before the
+// click registers, so tapping a suggestion fills the field reliably.
+function NameAutocompleteField({ value, onChange, onSubmit, placeholder, autoFocus }) {
+  const [open, setOpen] = useState(false);
+  const matches = open ? matchPlayerSuggestions(value) : [];
+
+  return (
+    <div style={{ position: "relative", flex: 1 }}>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setOpen(false);
+            onSubmit();
+          }
+        }}
+        placeholder={placeholder}
+        style={{ ...styles.guessInput, width: "100%", boxSizing: "border-box" }}
+        autoFocus={autoFocus}
+        autoComplete="off"
+      />
+      {matches.length > 0 && (
+        <div style={styles.autocompleteDropdown}>
+          {matches.map((m) => (
+            <div
+              key={m.full}
+              style={styles.autocompleteItem}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onChange(m.full);
+                setOpen(false);
+              }}
+            >
+              <div style={styles.autocompleteItemName}>{m.short || m.full}</div>
+              {m.short && <div style={styles.autocompleteItemSub}>{m.full}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -9611,15 +9705,11 @@ export default function SoccerQuiz() {
           {!lAnswered && (
             <>
               <div style={styles.guessRow}>
-                <input
-                  type="text"
+                <NameAutocompleteField
                   value={guess}
-                  onChange={(e) => setGuess(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") submitLineupGuess();
-                  }}
+                  onChange={setGuess}
+                  onSubmit={submitLineupGuess}
                   placeholder={t.guessPlaceholder}
-                  style={styles.guessInput}
                   autoFocus
                 />
                 <button
@@ -9732,15 +9822,11 @@ export default function SoccerQuiz() {
           {!clubsAnswered && (
             <>
               <div style={styles.guessRow}>
-                <input
-                  type="text"
+                <NameAutocompleteField
                   value={clubsGuess}
-                  onChange={(e) => setClubsGuess(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") submitClubsGuess();
-                  }}
+                  onChange={setClubsGuess}
+                  onSubmit={submitClubsGuess}
                   placeholder={t.clubsGuessPlaceholder}
-                  style={styles.guessInput}
                   autoFocus
                 />
                 <button
@@ -10126,15 +10212,11 @@ export default function SoccerQuiz() {
               {!randomAnswered && (
                 <>
                   <div style={styles.guessRow}>
-                    <input
-                      type="text"
+                    <NameAutocompleteField
                       value={randomGuess}
-                      onChange={(e) => setRandomGuess(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") submitRandomAnswer();
-                      }}
+                      onChange={setRandomGuess}
+                      onSubmit={submitRandomAnswer}
                       placeholder={t.guessPlaceholder}
-                      style={styles.guessInput}
                       autoFocus
                     />
                     <button
@@ -10206,15 +10288,11 @@ export default function SoccerQuiz() {
               {!randomAnswered && (
                 <>
                   <div style={styles.guessRow}>
-                    <input
-                      type="text"
+                    <NameAutocompleteField
                       value={randomGuess}
-                      onChange={(e) => setRandomGuess(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") submitRandomAnswer();
-                      }}
+                      onChange={setRandomGuess}
+                      onSubmit={submitRandomAnswer}
                       placeholder={t.clubsGuessPlaceholder}
-                      style={styles.guessInput}
                       autoFocus
                     />
                     <button
@@ -11782,5 +11860,35 @@ const styles = {
     border: "1px solid rgba(11,111,39,0.18)",
     borderRadius: 12,
     padding: "0 14px",
+  },
+  autocompleteDropdown: {
+    position: "absolute",
+    top: "calc(100% + 6px)",
+    left: 0,
+    right: 0,
+    background: "#FFFFFF",
+    border: "1px solid rgba(11,111,39,0.18)",
+    borderRadius: 12,
+    boxShadow: "0 8px 20px rgba(16,24,32,0.15)",
+    overflow: "hidden",
+    zIndex: 5,
+    textAlign: "left",
+  },
+  autocompleteItem: {
+    padding: "10px 14px",
+    cursor: "pointer",
+    borderBottom: "1px solid rgba(11,111,39,0.1)",
+  },
+  autocompleteItemName: {
+    fontFamily: "'Inter', sans-serif",
+    fontWeight: 600,
+    fontSize: 15,
+    color: "#101820",
+  },
+  autocompleteItemSub: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 12,
+    color: "#6b7280",
+    marginTop: 2,
   },
 };
